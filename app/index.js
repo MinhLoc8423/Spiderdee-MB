@@ -1,25 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
-import {Link} from 'expo-router'
-import React from 'react'
 
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { ScrollView } from "react-native";
+import Header from "../components/Home/header";
+import React from "react";
+import SearchBar from "../components/Home/searchbar";
+import CategoryCard from "../components/Home/categorycard";
+import Body from "../components/Home/body";
 
 
 const HomeLayout = () => {
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+        <Header />
+        <SearchBar />
+        <CategoryCard/>
+        <Body/>
     </View>
-  )
-}
+  );
+};
 
 export default HomeLayout
 
 const styles = StyleSheet.create({
-    container :{
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
+    
 })
+  
