@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity, SafeAreaView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput, Image, Alert, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import React, { useState } from 'react';
 import { Link, router } from 'expo-router';
 import axios from 'axios';
@@ -16,6 +16,7 @@ const SingIn = () => {
     };
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="dark-content" />
             <Text style={styles.text}>Login to your account</Text>
             <Text style={styles.text1}>It’s great to see you again.</Text>
 
@@ -50,14 +51,14 @@ const SingIn = () => {
             <TouchableOpacity style={[styles.Pressable, { marginTop: 15 }]}>
                 <Text style={{ fontSize: 16, textAlign: 'center' }}>Sign Up with Google</Text>
                 <Image
-                    source={require("../../assets/images/gg.png")}
+                    source={require("../../assets/icons/logo-google-icon.png")}
                     style={{ marginEnd: 10 }} />
             </TouchableOpacity>
 
             <TouchableOpacity style={[styles.Pressable, { backgroundColor: '#1877F2', marginTop: 10 }]}>
                 <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Sign Up with Facebook</Text>
                 <Image
-                    source={require("../../assets/images/fb.png")}
+                    source={require("../../assets/icons/logo-facebook-icon.png")}
                     style={{ marginEnd: 10 }} />
             </TouchableOpacity>
 

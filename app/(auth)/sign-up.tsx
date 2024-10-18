@@ -77,14 +77,14 @@ const Signup = () => {
             <TouchableOpacity style={[styles.Pressable, { marginTop: 15 }]}>
                 <Text style={{ fontSize: 16, textAlign: 'center' }}>Sign Up with Google</Text>
                 <Image
-                    source={require("../../assets/images/gg.png")}
+                    source={require("../../assets/icons/logo-google-icon.png")}
                     style={{ marginEnd: 10 }} />
             </TouchableOpacity>
 
             <TouchableOpacity style={[styles.Pressable, { backgroundColor: '#1877F2', marginTop: 10 }]}>
                 <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Sign Up with Facebook</Text>
                 <Image
-                    source={require("../../assets/images/fb.png")}
+                    source={require("../../assets/icons/logo-facebook-icon.png")}
                     style={{ marginEnd: 10 }} />
             </TouchableOpacity>
 
