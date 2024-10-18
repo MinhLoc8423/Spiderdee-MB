@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, TextInput, View,Component, TouchableOpacity } from 'react-native'
+import { Pressable, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Link } from 'expo-router'
 

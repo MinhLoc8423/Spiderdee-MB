@@ -6,6 +6,7 @@ import axios from 'axios';  // Thêm axios
 
 const Signup = () => {
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [checkEmail, setCheckEmail] = useState(true);
     const [errorPassword, setErrorPassword] = useState('');
@@ -26,31 +27,12 @@ const Signup = () => {
         } else {
             setCheckEmail(true);
         }
-// || formData.name === ''
-        if (formData.password === '' ) {
+        // || formData.name === ''
+        if (formData.password === '') {
             setErrorPassword('Vui lòng nhập đầy đủ thông tin');
             return;
         } else {
             setErrorPassword('');
-        }
-
-        try {
-            const response = await axios.post('https://example.com/api/register', formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.status === 200) {
-                // Xử lý khi đăng ký thành công
-                Alert.alert('Đăng ký thành công', 'Tài khoản của bạn đã được tạo');
-                router.replace("/(auth)/sign-in");
-            } else {
-                // Xử lý lỗi từ server
-                Alert.alert('Lỗi đăng ký', response.data.message || 'Đăng ký thất bại');
-            }
-        } catch (error) {
-            Alert.alert('Lỗi kết nối', error.response?.data?.message || 'Không thể kết nối tới server. Vui lòng thử lại sau.');
         }
     };
 
@@ -64,6 +46,7 @@ const Signup = () => {
                 style={styles.TextInputName}
                 placeholder='Enter your full name'
                 onChangeText={(value) => setName(value)}
+
             />
             <Text style={{ color: 'red' }}>{errorPassword}</Text>
 
@@ -120,7 +103,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 32,
         fontWeight: '600',
-        fontStyle: 'General Sans',
         marginTop: 45
     },
     text1: {

@@ -40,7 +40,7 @@ const SingIn = () => {
                 <Text style={{ color: 'red' }}>{errorPassword}</Text>
             </View>
 
-            <Text style={styles.text2}>Forgot your password? <Link href={('/(auth)/forgotPassword')} style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Reset your password</Link> </Text>
+            <Text style={styles.text2}>Forgot your password? <Link href={('/(auth)/forgot-password')} style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Reset your password</Link> </Text>
 
             <TouchableOpacity style={[styles.Pressable, { backgroundColor: '#1A1A1A', marginTop: 30 }]} onPress={onSubmit}>
                 <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Login</Text>
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: '600',
         marginTop: 40,
-        fontStyle: 'General Sans'
     },
     text1: {
         fontSize: 16,
