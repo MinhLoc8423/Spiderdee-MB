@@ -2,7 +2,7 @@
 import { StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Tabs } from 'expo-router'
 import React from 'react'
-import TabBar from '../components/tabBar'
+import TabBar from '../../components/tabBar'
 
 
 const TabLayout = () => {

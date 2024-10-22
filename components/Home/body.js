@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   View,
   FlatList,
@@ -9,7 +9,9 @@ import {
   ScrollView,
   Text,
 } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
 import Card from "../card";
+import Filter from "./filter";
 
 const Body = () => {
   const productList = [
@@ -75,6 +77,16 @@ const Body = () => {
 
   const renderItem = ({ item }) => <Card item={item} />;
 
+  const [selectedButtonIndex, setSelectedButtonIndex] = useState(null);
+
+  
+  const buttons = ['All', "Chair", "Sofa", "Table","Wardrobe"];
+
+  
+  const handlePress = (index) => {
+    setSelectedButtonIndex(index);
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -86,7 +98,7 @@ const Body = () => {
           <View>
             <TouchableOpacity
               style={styles.Button}
-              onPress={() => {
+              onPress={() => { NavigationContainer.navigate('Filter')
               }}
             >
               <Image
@@ -98,21 +110,25 @@ const Body = () => {
         </View>
         <View>
           <ScrollView horizontal={true} style={styles.containerCategories}>
-            <TouchableOpacity style={styles.Cardall}>
-              <Text>All</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.Card}>
-              <Text>Chair</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.Card}>
-              <Text>Table</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.Card}>
-              <Text>Sofa</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.Card}>
-              <Text>Wardrobe</Text>
-            </TouchableOpacity>
+          {buttons.map((buttonLabel, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[
+            styles.Card,
+            selectedButtonIndex === index ? styles.buttonPressed : styles.buttonNormal
+          ]}
+          onPress={() => handlePress(index)}
+        >
+          <Text
+            style={[
+              styles.text,
+              selectedButtonIndex === index ? styles.textPressed : styles.textNormal
+            ]}
+          >
+            {buttonLabel}
+          </Text>
+        </TouchableOpacity>
+        ))}
           </ScrollView>
         </View>
       </View>
@@ -167,15 +183,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     
   },
-  Cardall:{
-    width:60,
-    height:42,
-    borderRadius:10,
-    borderWidth:1,
-    alignItems:'center',
-    justifyContent:'center',
-    backgroundColor: '#E6E6E6'
-  },
   Card:{
     width:92,
     height:42,
@@ -184,8 +191,21 @@ const styles = StyleSheet.create({
     borderWidth:1,
     alignItems:'center',
     justifyContent:'center',
-    backgroundColor: '#E6E6E6'
-  }
+    backgroundColor: '#E6E6E6',
+    gap: 10,
+  },
+  buttonNormal: {
+    backgroundColor: "#E6E6E6",
+  },
+  buttonPressed: {
+    backgroundColor: "#1A1A1A",
+  },
+  textNormal: {
+    color: "#1A1A1A",
+  },
+  textPressed: {
+    color: "#FFFFFF",
+  },
 });
 
 export default Body;

@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, TextInput, Image, SafeAreaView, TouchableOpacity, FlatList } from 'react-native'
 import React, {useState} from 'react'
-import CardSearch from '../components/cardSearch';
+import CardSearch from '../../components/cardSearch';
 
 const Search = () => {
 
@@ -90,7 +90,7 @@ const Search = () => {
     <View>
         <SafeAreaView style={styles.container}>
         <TouchableOpacity style={{marginLeft:24}}>
-          <Image source={require('../constants/Image/Arrow.png')}
+          <Image source={require('../../constants/Image/Arrow.png')}
           style={styles.image2}/>
         </TouchableOpacity>
       <Text
@@ -108,16 +108,16 @@ const Search = () => {
       </Text>
       <TouchableOpacity style={{marginRight:24}} >
       <Image
-        source={require('../constants/Image/Bell.png')}
+        source={require('../../constants/Image/Bell.png')}
         style={styles.image}
       />
       </TouchableOpacity >
       </SafeAreaView>
       <View style={styles.containerSearcher}>
-      <Image source={require("../constants/Image/Search.png")} style={styles.image4}/>
+      <Image source={require("../../constants/Image/Search.png")} style={styles.image4}/>
       <TextInput placeholder="Search for furniture..." style={styles.input} value={userInput} onChangeText={handleSearch}/>
       <TouchableOpacity>
-      <Image source={require("../constants/Image/Mic.png")} style={styles.image3}/>
+      <Image source={require("../../constants/Image/Mic.png")} style={styles.image3}/>
       </TouchableOpacity>
       </View>
       <FlatList
