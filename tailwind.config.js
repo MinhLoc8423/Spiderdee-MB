@@ -17,7 +17,7 @@ module.exports = {
         GeneralMedium: ["GeneralSans-Medium", "sans-serif"],
         GeneralMediumItalic: ["GeneralSans-MediumItalic", "sans-serif"],
         GeneralRegular: ["GeneralSans-Regular", "sans-serif"],
-        GeneralSemibold: ["GeneralSans-Semibold", "sans-serif"],
+        GeneralSemibold: ["GeneralSemibold", "sans-serif"],
         GeneralSemiboldItalic: ["GeneralSans-SemiboldItalic", "sans-serif"],
       },
       colors: {

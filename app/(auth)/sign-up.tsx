@@ -1,95 +1,198 @@
-import { Pressable, StyleSheet, Text, View, TextInput, Image, SafeAreaView, Alert } from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput, Image, SafeAreaView, Alert, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Link, router } from 'expo-router';
-import axios from 'axios';  // Thêm axios
+import axios from 'axios';
+import InputComponent from '../../components/CustomInput';
+import { validateEmail, validatePassword, validatePhoneNumber } from '../../helpers/validate';
+import { register } from '../../api/auth';
 
 const Signup = () => {
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const [checkEmail, setCheckEmail] = useState(true);
-    const [errorPassword, setErrorPassword] = useState('');
-    // const [name, setName] = useState('');
 
-    const onSubmit = async () => {
-        let formData = {
-            email: email,
-            password: password,
-            // name: name,
-        };
+    const [firstName, setFirstName] = useState('Siderdee');
+    const [firstNameError, setFirstNameError] = useState('');
 
-        // Kiểm tra định dạng email
-        let regexEmail = new RegExp(/^(?:([^<]*?)\s*<)?((?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))>?$/);
-        if (!regexEmail.test(formData.email)) {
-            setCheckEmail(false);
-            return;
-        } else {
-            setCheckEmail(true);
+    const [lastname, setLastName] = useState('Manager');
+    const [lastNameError, setLastNameError] = useState('');
+
+    const [email, setEmail] = useState('admin3@spiderdee.com');
+    const [emailError, setEmailError] = useState('');
+
+    const [phone, setPhone] = useState('09273932323');
+    const [phoneError, setPhoneError] = useState('');
+
+
+    const [password, setPassword] = useState('Passwordvtvn123');
+    const [passwordError, setPasswordError] = useState('');
+
+    const [passwordConfirm, setPasswordConfirm] = useState('Passwordvtvn123');
+    const [passwordConfirmError, setPasswordConfirmError] = useState('');
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
+    const [showPassword1, setShowPassword1] = useState(false);
+    const [isFocused1, setIsFocused1] = useState(false);
+    const [isLoading, setLoading] = useState(false);
+
+    const handleRegister = async () => {
+        let hasError = false;
+        setLoading(true);
+        setFirstNameError("");
+        setLastNameError("");
+        setEmailError("");
+        setPasswordError("");
+        setPhoneError("");
+        setPasswordConfirmError("");
+
+        if(!firstName) {
+            setFirstNameError("Please enter your first name.");
+            hasError = true;
         }
-        // || formData.name === ''
-        if (formData.password === '') {
-            setErrorPassword('Vui lòng nhập đầy đủ thông tin');
+        if(!lastname) {
+            setLastNameError("Please enter your last name.");
+            hasError = true;
+        }
+        if(!validatePhoneNumber(phone)) {
+            setPhoneError("Please enter your phone number.");
+            hasError = true;
+        }
+
+        if (!validateEmail(email)) {
+            setEmailError("Please enter a valid email address.");
+            hasError = true;
+        }
+
+        if (!validatePassword(password)) {
+            setPasswordError("Please enter a valid password.");
+            hasError = true;
+        }
+
+        if (!validatePassword(passwordConfirm)) {
+            setPasswordConfirmError("Please enter a valid password confirm.");
+            hasError = true;
+        }
+
+        if (password !== passwordConfirm) {
+            setPasswordError("Passwrods do not match.");
+            setPasswordConfirmError("Passwrods do not match.");
+            hasError = true;
+        }
+
+        if (hasError) {
+            setLoading(false);
             return;
-        } else {
-            setErrorPassword('');
+        }
+
+        try {
+            const userData = await register(firstName, lastname, email, password, phone);
+            console.log(userData);
+            if (!userData) {
+                setEmailError("Email already exists");
+            } else {
+                // await AsyncStorage.setItem('accessTokenUser', userData.token);
+                router.replace('/(tabs)/home');
+            }
+        } catch (error) {
+            Alert.alert('An unexpected error occurred. Please try again later.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.text}>Create an account</Text>
-            <Text style={styles.text1}>Let’s create your account.</Text>
+        <SafeAreaView style={{ backgroundColor: "#FFFFFF" }}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                automaticallyAdjustKeyboardInsets={true}
+                style={styles.container}
+            >
+                <Text style={styles.text}>Create an account</Text>
+                <Text style={styles.text1} className='mb-6'>Let’s create your account.</Text>
 
-            <Text style={[styles.text1, { fontWeight: '500', marginTop: 20 }]}>Full Name</Text>
-            <TextInput
-                style={styles.TextInputName}
-                placeholder='Enter your full name'
-                onChangeText={(value) => setName(value)}
+                <InputComponent label='Email' value={email} placeholder={'Please enter your email'} setValue={setEmail} error={emailError} />
 
-            />
-            <Text style={{ color: 'red' }}>{errorPassword}</Text>
+                <InputComponent label='First Name' value={firstName} placeholder={'Please enter your first name'} setValue={setFirstName} error={firstNameError} />
 
-            <Text style={[styles.text1, { fontWeight: '500', marginTop: 20 }]}>Email</Text>
-            <TextInput
-                style={styles.TextInputName}
-                placeholder='Enter your email address'
-                onChangeText={(value) => setEmail(value)}
-            />
-            <Text style={{ color: 'red' }}>{!checkEmail ? 'Sai định dạng Email' : ''}</Text>
+                <InputComponent label='Last Name' value={lastname} placeholder={'Please enter your last name'} setValue={setLastName} error={lastNameError} />
 
-            <Text style={[styles.text1, { fontWeight: '500', marginTop: 20 }]}>Password</Text>
-            <TextInput
-                style={styles.TextInputName}
-                placeholder='Enter your password'
-                secureTextEntry
-                onChangeText={(value) => setPassword(value)}
-            />
-            <Text style={{ color: 'red' }}>{errorPassword}</Text>
+                <InputComponent label='Phone Number' value={phone} placeholder={'Please enter your phone number'} setValue={setPhone} error={phoneError} keyboardType="numeric" />
 
-            <Text style={styles.text2}>By signing up you agree to our <Text style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Terms, Privacy Policy, and Cookie Use</Text></Text>
+                <View className='my-1.5 '>
+                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Password</Text>
+                    <View className={`flex-row items-center border rounded-xl h-[50] px-5 ${isFocused ? 'border-primary-900' : (passwordError ? 'border-danger' : 'border-primary-100')}`}>
+                        <TextInput
+                            style={{ fontFamily: 'GeneralMedium', flex: 1 }} // Make TextInput take remaining space
+                            className='text-sm'
+                            placeholder='Enter your password'
+                            value={password}
+                            secureTextEntry={!showPassword}
+                            onChangeText={(value) => setPassword(value)}
+                            onFocus={() => setIsFocused(true)}
+                            onBlur={() => setIsFocused(false)}
+                        />
+                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)} className='ml-2'>
+                            <Image
+                                source={showPassword ? require('../../assets/icons/eye-on-icon.png') : require('../../assets/icons/eye-off-icon.png')}
+                                className='h-6 w-6'
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    {passwordError && (<Text style={{ color: 'red', fontFamily: 'GeneralMedium' }}>{passwordError}</Text>)}
+                </View>
 
-            <TouchableOpacity style={[styles.Pressable, { backgroundColor: '#1A1A1A', marginTop: 30 }]} onPress={() => onSubmit()}>
-                <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Create an Account</Text>
-            </TouchableOpacity>
+                <View className='my-1.5'>
+                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Password Confirm</Text>
+                    <View className={`flex-row items-center border rounded-xl h-[50] px-5 ${isFocused1 ? 'border-primary-900' : (passwordConfirmError ? 'border-danger' : 'border-primary-100')}`}>
+                        <TextInput
+                            style={{ fontFamily: 'GeneralMedium', flex: 1 }} // Make TextInput take remaining space
+                            className='text-sm'
+                            placeholder='Enter your password'
+                            value={passwordConfirm}
+                            secureTextEntry={!showPassword1}
+                            onChangeText={(value) => setPasswordConfirm(value)}
+                            onFocus={() => setIsFocused1(true)}
+                            onBlur={() => setIsFocused1(false)}
+                        />
+                        <TouchableOpacity onPress={() => setShowPassword1(!showPassword1)} className='ml-2'>
+                            <Image
+                                source={showPassword1 ? require('../../assets/icons/eye-on-icon.png') : require('../../assets/icons/eye-off-icon.png')}
+                                className='h-6 w-6'
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    {passwordConfirmError && (<Text style={{ color: 'red', fontFamily: 'GeneralMedium' }}>{passwordConfirmError}</Text>)}
+                </View>
 
-            <Text style={styles.textOr}>Or</Text>
-            <TouchableOpacity style={[styles.Pressable, { marginTop: 15 }]}>
-                <Text style={{ fontSize: 16, textAlign: 'center' }}>Sign Up with Google</Text>
-                <Image
-                    source={require("../../assets/icons/logo-google-icon.png")}
-                    style={{ marginEnd: 10 }} />
-            </TouchableOpacity>
+                <Text style={styles.text2}>By signing up you agree to our <Text style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Terms, Privacy Policy, and Cookie Use</Text></Text>
 
-            <TouchableOpacity style={[styles.Pressable, { backgroundColor: '#1877F2', marginTop: 10 }]}>
-                <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Sign Up with Facebook</Text>
-                <Image
-                    source={require("../../assets/icons/logo-facebook-icon.png")}
-                    style={{ marginEnd: 10 }} />
-            </TouchableOpacity>
+                <TouchableOpacity disabled={isLoading} style={[styles.Pressable, { backgroundColor: '#1A1A1A', marginTop: 30 }]} onPress={handleRegister}>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Create an Account</Text>
+                </TouchableOpacity>
 
-            <Text style={[styles.text2, { textAlign: 'center', marginTop: 10 }]}>Already have an account? <Link href={('/(auth)/sign-in')} style={{ color: '#1A1A1A', fontWeight: 600 }}>Log In</Link></Text>
-        </SafeAreaView>
+                <View className='flex-row items-center mb-5 mt-5'>
+                    <View className='flex-1 h-px bg-gray-300' />
+                    <Text className='px-2 text-gray-500'>Or</Text>
+                    <View className='flex-1 h-px bg-gray-300' />
+                </View>
+
+                <TouchableOpacity style={[styles.Pressable]}>
+                    <Text style={{ fontSize: 16, textAlign: 'center' }}>Sign Up with Google</Text>
+                    <Image
+                        source={require("../../assets/icons/logo-google-icon.png")}
+                        style={{ marginEnd: 10 }} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.Pressable, { backgroundColor: '#1877F2', marginTop: 10 }]}>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Sign Up with Facebook</Text>
+                    <Image
+                        source={require("../../assets/icons/logo-facebook-icon.png")}
+                        style={{ marginEnd: 10 }} />
+                </TouchableOpacity>
+
+                <Text style={[styles.text2, { textAlign: 'center', marginTop: 20, marginBottom: 50 }]} className='mb-5'>Already have an account? <Link href={('/(auth)/sign-in')} style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Log In</Link></Text>
+            </ScrollView>
+        </SafeAreaView >
     );
 };
 
@@ -97,8 +200,8 @@ export default Signup;
 
 const styles = StyleSheet.create({
     container: {
-        marginEnd: 20,
-        marginStart: 20
+        marginEnd: 25,
+        marginStart: 25,
     },
     text: {
         fontSize: 32,
