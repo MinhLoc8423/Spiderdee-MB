@@ -39,15 +39,17 @@ const SingIn = () => {
 
         try {
             const userData = await login(email, password);
-            if (!userData) {
-                setEmailError("Incorrect email.");
-                setPasswordError("Incorrect password.");
-            } else {
                 // await AsyncStorage.setItem('accessTokenUser', userData.token);
                 router.replace('/(tabs)/home');
+        } catch (error: any) {
+            if (error.status === 401) {
+                setEmailError("Email or password is incorrect.");
+                setPasswordError("Email or password is incorrect.");
+
             }
-        } catch (error) {
-            Alert.alert('An unexpected error occurred. Please try again later.');
+            else{
+                Alert.alert('An unexpected error occurred. Please try again later.');
+            }
         } finally {
             setLoading(false);
         }
@@ -102,7 +104,7 @@ const SingIn = () => {
                     style={[styles.Pressable, { marginTop: 30 }]} onPress={handleLogin} className={`w-full ${isLoading ? 'bg-primary-200' : 'bg-primary-900'} `}
                     disabled={isLoading}
                 >
-                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Login</Text>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Loading...' : "Login"}</Text>
                 </Pressable >
 
                 <View className='flex-row items-center mb-7 mt-7'>

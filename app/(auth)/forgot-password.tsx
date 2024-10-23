@@ -30,45 +30,50 @@ const ForgotPassword = () => {
       if (!userData) {
         setEmailError('Incorrect email.');
       } else {
-        router.replace('/(auth)/verification');
+        router.push({
+          pathname: '/(auth)/verification',
+          params: { email: email },
+        });
       }
-    } catch (error) {
-      Alert.alert('An unexpected error occurred. Please try again later.');
+    } catch (error: any) {
+      if (error.status === 404) {
+        setEmailError("User doesn't exist");
+      }
+      else {
+        Alert.alert('An unexpected error occurred. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <ScrollView
-      className="bg-primary-0"
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}>
-      <SafeAreaView style={styles.container}>
-        {/* Nút quay lại */}
-        <Text className='text-3xl mt-10' style={{ fontFamily: 'GeneralSemibold' }} onPress={() => router.back()} >
+    <SafeAreaView
+      className="bg-primary-0">
+      <ScrollView style={styles.container}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}>
+
+        <Text className='text-3xl mt-5' style={{ fontFamily: 'GeneralSemibold' }} onPress={() => router.back()} >
           <Image source={require('../../assets/icons/arrow-icon.png')} className="w-6 h-6" />
         </Text>
 
-        {/* Tiêu đề */}
         <Text className='text-4xl mt-3' style={{ fontFamily: 'GeneralSemibold' }}  >Forgot password</Text>
-        <Text style={[styles.subHeaderText, { fontFamily: 'GeneralRegular' }]}>
+        <Text style={{ fontFamily: 'GeneralRegular', color: '#808080', marginBottom: 15, marginTop: 5 }}>
           Enter your email for the verification process. We will send a 4-digit code to your email.
         </Text>
 
-        {/* Input Email */}
         <InputComponent label="Email" value={email} placeholder={'Please enter your email'} setValue={setEmail} error={emailError} />
 
-        {/* Nút Gửi Code */}
         <Pressable
-          style={[styles.Pressable, { marginTop: 30 }]}
+          style={[styles.Pressable, { marginTop: 20 }]}
           onPress={handleSendOTP}
           className={`w-full ${isLoading ? 'bg-primary-200' : 'bg-primary-900'}`}
           disabled={isLoading}>
-          <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Send Code</Text>
+          <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Loading...' : "Send Code"}</Text>
         </Pressable>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -87,13 +92,11 @@ const styles = StyleSheet.create({
   },
   subHeaderText: {
     fontSize: 16,
-    fontWeight: '400',
     color: '#808080',
     marginBottom: 20, // Khoảng cách dưới cùng
   },
   Pressable: {
     borderRadius: 10,
-    width: 341,
     height: 52,
     borderWidth: 1,
     borderColor: '#E6E6E6',

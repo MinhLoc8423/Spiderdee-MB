@@ -44,15 +44,15 @@ const Signup = () => {
         setPhoneError("");
         setPasswordConfirmError("");
 
-        if(!firstName) {
+        if (!firstName) {
             setFirstNameError("Please enter your first name.");
             hasError = true;
         }
-        if(!lastname) {
+        if (!lastname) {
             setLastNameError("Please enter your last name.");
             hasError = true;
         }
-        if(!validatePhoneNumber(phone)) {
+        if (!validatePhoneNumber(phone)) {
             setPhoneError("Please enter your phone number.");
             hasError = true;
         }
@@ -74,7 +74,7 @@ const Signup = () => {
 
         if (password !== passwordConfirm) {
             setPasswordError("Passwrods do not match.");
-            setPasswordConfirmError("Passwrods do not match.");
+            setPasswordConfirmError("Passwrods and confirm passwords do not match.");
             hasError = true;
         }
 
@@ -92,8 +92,13 @@ const Signup = () => {
                 // await AsyncStorage.setItem('accessTokenUser', userData.token);
                 router.replace('/(tabs)/home');
             }
-        } catch (error) {
-            Alert.alert('An unexpected error occurred. Please try again later.');
+        } catch (error: any) {
+            if (error.status === 400) {
+                setEmailError("Email already exists");
+            }
+            else{
+                Alert.alert('An unexpected error occurred. Please try again later.');
+            }
         } finally {
             setLoading(false);
         }
@@ -166,9 +171,13 @@ const Signup = () => {
 
                 <Text style={styles.text2}>By signing up you agree to our <Text style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Terms, Privacy Policy, and Cookie Use</Text></Text>
 
-                <TouchableOpacity disabled={isLoading} style={[styles.Pressable, { backgroundColor: '#1A1A1A', marginTop: 30 }]} onPress={handleRegister}>
-                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Create an Account</Text>
-                </TouchableOpacity>
+                <Pressable
+                    style={[styles.Pressable, { marginTop: 30 }]}
+                    onPress={handleRegister}
+                    className={`w-full ${isLoading ? 'bg-primary-200' : 'bg-primary-900'}`}
+                    disabled={isLoading}>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Loading...' : "Register"}</Text>
+                </Pressable>
 
                 <View className='flex-row items-center mb-5 mt-5'>
                     <View className='flex-1 h-px bg-gray-300' />
@@ -228,7 +237,6 @@ const styles = StyleSheet.create({
     },
     Pressable: {
         borderRadius: 10,
-        width: 341,
         height: 52,
         borderWidth: 2,
         borderColor: '#E6E6E6',
