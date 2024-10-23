@@ -34,7 +34,7 @@ const Filter = () => {
         </View>
         <View style={styles.sortContainer}>
           <Text style={styles.text}>Sort By</Text>
-          <ScrollView horizontal={true} marginTop={12}>
+          <ScrollView horizontal={true} marginTop={12} width={341}>
             {buttons.map((buttonLabel, index) => (
               <TouchableOpacity
                 key={index}
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   button: {
+    marginLeft: 5,
     width: 180,
     height: 45,
     borderRadius: 10,

@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 const Card = ({ item }) => {
   return (
-    <View style={styles.cardContainer}>
+    <TouchableOpacity style={styles.cardContainer}>
       {/* Product Image */}
       <View style={styles.imageContainer}>
         <Image
@@ -21,7 +21,7 @@ const Card = ({ item }) => {
         <Text style={styles.productTitle}>{item.name}</Text>
         <Text style={styles.productPrice}>{item.price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

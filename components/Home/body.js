@@ -142,6 +142,7 @@ const Body = () => {
         contentContainerStyle={styles.flatListContainer}
       />
        </View>
+       <Filter/>
     </View>
   );
 };
