@@ -10,6 +10,7 @@ const AuthLayout = () => {
             <Stack.Screen name="resetPassword" options={{ title: "Sign Up Page" }} />
             <Stack.Screen name="rivew" options={{ title: "Review" }} />
             <Stack.Screen name="productdetail" options={{ title: "Details" }} />
+            <Stack.Screen name="carfCard" options={{ title: "Details" }} />
 
 
 

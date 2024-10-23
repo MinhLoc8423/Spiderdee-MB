@@ -4,7 +4,7 @@ import { Redirect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Page = () => {
-    return <Redirect href="/(auth)/sign-in" />;
+    return <Redirect href="/(root)/(tabs)/account" />;
 }
 
 export default Page

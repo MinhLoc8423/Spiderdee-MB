@@ -13,13 +13,40 @@ const SingIn = () => {
             email: email,
             password: password,
         };
+    
+        try {
+            // Thay đổi URL thành đúng endpoint API
+            const response = await axios.post('https://example.com/api/login', formData, {
+                headers: {
+                    'Content-Type': 'application/json',  // Đảm bảo server nhận đúng định dạng JSON
+                }
+            });
+    
+            if (response.data.success) {
+                // Đăng nhập thành công
+                router.replace("/(root)/(tabs)/home", { relativeToDirectory: true });
+            } else {
+                // Hiển thị lỗi
+                Alert.alert('Login Failed', response.data.message);
+            }
+        } catch (error) {
+            if (error.response) {
+                // Lỗi từ server (như 404, 500, 405)
+                console.error('Error Response:', error.response);
+                Alert.alert('Error', `Request failed with status code ${error.response.status}`);
+            } else {
+                // Lỗi kết nối mạng hoặc lỗi khác
+                console.error('Error:', error.message);
+                Alert.alert('Error', 'Something went wrong. Please try again later.');
+            }
+        }
     };
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.text}>Login to your account</Text>
             <Text style={styles.text1}>It’s great to see you again.</Text>
 
-            <Text style={[styles.text1, { fontWeight: '500', marginTop: 20 }]}>Email</Text>
+            <Text className="font-semibold text-base mt-5 text-black" >Email</Text>
             <View>
                 <TextInput
                     style={styles.TextInputName}
@@ -51,7 +78,7 @@ const SingIn = () => {
                 <Text style={{ fontSize: 16, textAlign: 'center' }}>Sign Up with Google</Text>
                 <Image
                     source={require("../../assets/images/gg.png")}
-                    style={{ marginEnd: 10 }} />
+                    style={{ marginEnd: 10  }} />
             </TouchableOpacity>
 
             <TouchableOpacity style={[styles.Pressable, { backgroundColor: '#1877F2', marginTop: 10 }]}>

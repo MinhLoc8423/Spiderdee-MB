@@ -9,13 +9,13 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [checkEmail, setCheckEmail] = useState(true);
     const [errorPassword, setErrorPassword] = useState('');
-    // const [name, setName] = useState('');
+    const [name, setName] = useState('');
 
     const onSubmit = async () => {
         let formData = {
             email: email,
             password: password,
-            // name: name,
+            name: name,
         };
 
         // Kiểm tra định dạng email
@@ -26,8 +26,8 @@ const Signup = () => {
         } else {
             setCheckEmail(true);
         }
-// || formData.name === ''
-        if (formData.password === '' ) {
+
+        if (formData.password === '' || formData.name === '') {
             setErrorPassword('Vui lòng nhập đầy đủ thông tin');
             return;
         } else {
