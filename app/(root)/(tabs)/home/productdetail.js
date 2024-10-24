@@ -31,7 +31,7 @@ const productdetail = () => {
                     style={styles.ImageStar}
                     source={require("../../../../assets/images/Heart.png")}
                 />
-                <Link href={"/(auth)/rivew"} style={{ marginStart: 5, fontWeight: '600' }}>
+                <Link href={"/(root)/home/Review"} style={{ marginStart: 5, fontWeight: '600' }}>
                     4.0/5 (45 reviews)
                 </Link>
             </View>
