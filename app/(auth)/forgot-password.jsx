@@ -35,7 +35,7 @@ const ForgotPassword = () => {
           params: { email: email },
         });
       }
-    } catch (error: any) {
+    } catch (error) {
       if (error.status === 404) {
         setEmailError("User doesn't exist");
       }

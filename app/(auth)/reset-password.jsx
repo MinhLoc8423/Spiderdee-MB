@@ -6,7 +6,7 @@ import { resetPassword } from '../../api/auth';
 
 const ResetPassword = () => {
 
-    const { otpToken } = useLocalSearchParams<{ otpToken: string }>();
+    const { otpToken } = useLocalSearchParams();
 
     const [password, setPassword] = useState('Passwordvtvn123');
     const [passwordError, setPasswordError] = useState('');
@@ -52,7 +52,7 @@ const ResetPassword = () => {
             const userData = await resetPassword(password, otpToken);
             Alert.alert('Password changed successfully!');
             router.replace('/(auth)/sign-in');
-        } catch (error: any) {
+        } catch (error) {
             if (error.status === 400) {
                 Alert.alert(error.message);
             }
@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     },
     Pressable: {
         borderRadius: 10,
-        width: 341,
         height: 52,
         borderWidth: 1,
         borderColor: '#E6E6E6',

@@ -41,7 +41,7 @@ const SingIn = () => {
             const userData = await login(email, password);
                 // await AsyncStorage.setItem('accessTokenUser', userData.token);
                 router.replace('/(tabs)/home');
-        } catch (error: any) {
+        } catch (error) {
             if (error.status === 401) {
                 setEmailError("Email or password is incorrect.");
                 setPasswordError("Email or password is incorrect.");
