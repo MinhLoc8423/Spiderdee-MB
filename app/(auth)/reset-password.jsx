@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     },
     Pressable: {
         borderRadius: 10,
-        width: 341,
         height: 52,
         borderWidth: 1,
         borderColor: '#E6E6E6',
