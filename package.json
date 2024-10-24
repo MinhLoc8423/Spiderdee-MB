@@ -17,16 +17,19 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-native-community/datetimepicker": "^8.2.0",
+    "@react-native-community/slider": "^4.5.4",
     "@react-native-picker/picker": "^2.8.1",
     "@react-navigation/native": "^6.0.2",
     "axios": "^1.7.7",
     "expo": "~51.0.28",
     "expo-constants": "~16.0.2",
+    "expo-dev-client": "~4.0.28",
     "expo-font": "~12.0.10",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.23",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
+    "expo-web-browser": "~13.0.3",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -37,9 +40,7 @@
     "react-native-screens": "3.31.1",
     "react-native-stars": "^1.2.2",
     "react-native-vector-icons": "^10.2.0",
-    "react-native-web": "~0.19.10",
-    "expo-web-browser": "~13.0.3",
-    "expo-dev-client": "~4.0.28"
+    "react-native-web": "~0.19.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
