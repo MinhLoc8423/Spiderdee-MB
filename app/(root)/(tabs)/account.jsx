@@ -10,7 +10,7 @@ const App = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [gender, setGender] = useState('Male');
 
-  const onChangeDate = (event: any, selectedDate: Date | undefined) => {//+
+  const onChangeDate = (event, selectedDate) => {//+
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
     setDate(currentDate);

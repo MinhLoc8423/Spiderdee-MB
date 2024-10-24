@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TextInputProps, Image } from 'react-native';
+import { View, Text, TextInput, Image } from 'react-native';
 
-interface InputComponentProps {
-    label: string;
-    value: string;
-    placeholder: string;
-    setValue: (value: string) => void;
-    error: string;
-    keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad'; // Thêm prop keyboardType tùy chọn
-}
-
-const InputComponent: React.FC<InputComponentProps> = ({ label, value, placeholder, setValue, error, keyboardType = 'default' }) => {
-    const [isFocused, setIsFocused] = useState<boolean>(false);
+const InputComponent = ({ label, value, placeholder, setValue, error, keyboardType = 'default' }) => {
+    const [isFocused, setIsFocused] = useState(false);
 
     return (
-        <View className='my-1.5 '>
+        <View className='my-1.5'>
             <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>{label}</Text>
             <View className={`flex-row items-center border rounded-xl h-[50] px-5 ${isFocused ? 'border-primary-900' : (error ? 'border-danger' : 'border-primary-100')}`}>
                 <TextInput
@@ -39,7 +30,7 @@ const InputComponent: React.FC<InputComponentProps> = ({ label, value, placehold
                 )}
             </View>
             {error && ( <Text style={{ color: 'red', fontFamily: 'GeneralMedium' }}>{error}</Text>)}
-        </View >
+        </View>
     );
 };
 

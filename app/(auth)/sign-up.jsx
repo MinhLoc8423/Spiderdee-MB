@@ -92,7 +92,7 @@ const Signup = () => {
                 // await AsyncStorage.setItem('accessTokenUser', userData.token);
                 router.replace('/(auth)/sign-in');
             }
-        } catch (error: any) {
+        } catch (error) {
             if (error.status === 400) {
                 setEmailError("Email already exists");
             }

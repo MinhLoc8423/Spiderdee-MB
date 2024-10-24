@@ -8,7 +8,7 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
         <View style={styles.container}>
             <View style={styles.viewContainerProcduct}>
                 <Image
-                    source={require("../assets/images/ban.jpg")}
+                    source={require("../assets/images/table-image.jpg")}
                     style={{ width: 83, height: 79, marginStart: 10, marginTop: 13 }}
                 />
                 <View style={[styles.CardContent, { marginStart: 10, marginTop: 13 }]}>

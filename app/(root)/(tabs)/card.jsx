@@ -3,7 +3,8 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react
 import { Link, router } from 'expo-router';
 import Feather from 'react-native-vector-icons/Feather';
 
-import CartItem from '../../../components/carfCard';
+
+import CartItem from '../../../components/CartItem';
 
 const CartScreen = () => {
   const [cartItems, setCartItems] = useState([
@@ -19,6 +20,7 @@ const CartScreen = () => {
   const increaseQuantity = (id) => {
     setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
   };
+
 
   const decreaseQuantity = (id) => {
     setCartItems(
@@ -39,7 +41,7 @@ const CartScreen = () => {
       
       {cartItems.length === 0 ? (
         <View style={styles.emptyCart}>
-          <Image source={require('../../../assets/images/EmptyCart.png')}/>
+          <Image source={require('../../../assets/images/empty-cart-image.png')}/>
            
         </View>
       ) 

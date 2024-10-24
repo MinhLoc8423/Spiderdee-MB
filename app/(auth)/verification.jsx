@@ -4,10 +4,10 @@ import { sendOTP, verifyOTP } from '../../api/auth';
 import { router, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ForgotPassword: React.FC = () => {
-  const { email } = useLocalSearchParams<{ email: string }>();
+const ForgotPassword = () => {
+  const { email } = useLocalSearchParams();
 
-  const [otp, setOtp] = useState<{ digit1: string; digit2: string; digit3: string; digit4: string }>({
+  const [otp, setOtp] = useState({
     digit1: '',
     digit2: '',
     digit3: '',
@@ -20,38 +20,38 @@ const ForgotPassword: React.FC = () => {
 
   // Tạo refs cho từng TextInput
   const inputRefs = {
-    digit1: useRef<TextInput>(null),
-    digit2: useRef<TextInput>(null),
-    digit3: useRef<TextInput>(null),
-    digit4: useRef<TextInput>(null),
+    digit1: useRef(null),
+    digit2: useRef(null),
+    digit3: useRef(null),
+    digit4: useRef(null),
   };
 
-  const handleChange = (value: string, field: keyof typeof otp) => {
+  const handleChange = (value, field) => {
     const numericValue = value.replace(/[^0-9]/g, '');
     const currentIndex = parseInt(field.slice(-1));
 
     // Chỉ cho phép nhập mã vào ô hiện tại hoặc ô tiếp theo nếu ô hiện tại đã được điền
     if (numericValue.length === 1) {
       // Kiểm tra xem ô trước đó đã được điền chưa
-      const prevField = `digit${currentIndex - 1}` as keyof typeof otp;
+      const prevField = `digit${currentIndex - 1}`;
       if (currentIndex === 1 || otp[prevField] !== '') {
         setOtp((prevState) => ({ ...prevState, [field]: numericValue }));
 
         // Tự động focus vào input tiếp theo
         if (field !== 'digit4') {
-          const nextField = `digit${currentIndex + 1}` as keyof typeof otp;
+          const nextField = `digit${currentIndex + 1}`;
           inputRefs[nextField].current?.focus();
         }
       }
     }
   };
 
-  const handleKeyPress = (key: string, field: keyof typeof otp) => {
+  const handleKeyPress = (key, field) => {
     if (key === 'Backspace') {
       // Kiểm tra xem trường hiện tại có trống không
       if (otp[field] === '') {
         if (field !== 'digit1') {
-          const prevField = `digit${parseInt(field.slice(-1)) - 1}` as keyof typeof otp;
+          const prevField = `digit${parseInt(field.slice(-1)) - 1}`;
           setOtp((prevState) => ({ ...prevState, [field]: '' })); // Xóa input hiện tại
           inputRefs[prevField].current?.focus(); // Chuyển focus về input trước
         }
@@ -62,19 +62,18 @@ const ForgotPassword: React.FC = () => {
     }
   };
 
-
   const handleSendOTP = async () => {
     if (!canResend) return; // Nếu không được phép resend thì thoát hàm
 
     setLoading(true);
-    setCanResend(false)
+    setCanResend(false);
     setOtpError('');
 
     try {
       await sendOTP(email); // Gửi mã OTP tới email
       setCanResend(false); // Đặt trạng thái không cho phép resend
       setCountdown(180); // Đặt thời gian đếm ngược 3 phút (180 giây)
-    } catch (error: any) {
+    } catch (error) {
       Alert.alert('An unexpected error occurred. Please try again later.');
     } finally {
       setLoading(false);
@@ -82,7 +81,7 @@ const ForgotPassword: React.FC = () => {
   };
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer;
     if (countdown > 0) {
       timer = setInterval(() => {
         setCountdown(prev => prev - 1); // Giảm thời gian đếm ngược
@@ -112,16 +111,15 @@ const ForgotPassword: React.FC = () => {
     try {
       const otpCode = Object.values(otp).join('');
       const userData = await verifyOTP(email, otpCode);
-      console.log('Verify OTP response: ', userData.data.token)
+      console.log('Verify OTP response: ', userData.data.token);
       router.replace({
         pathname: '/(auth)/reset-password',
         params: { otpToken: userData.data.token },
       });
-    } catch (error: any) {
+    } catch (error) {
       if (error.status === 400) {
         setOtpError(error.message);
-      }
-      else {
+      } else {
         Alert.alert('An unexpected error occurred. Please try again later.');
       }
     } finally {
@@ -151,12 +149,12 @@ const ForgotPassword: React.FC = () => {
           {['digit1', 'digit2', 'digit3', 'digit4'].map((field, index) => (
             <View key={index} style={styles.otpInputWrapper}>
               <TextInput
-                ref={inputRefs[field as keyof typeof otp]}
+                ref={inputRefs[field]}
                 style={styles.otpInput}
                 keyboardType="numeric"
-                value={otp[field as keyof typeof otp]}
-                onChangeText={(value) => handleChange(value, field as keyof typeof otp)}
-                onKeyPress={({ nativeEvent }) => handleKeyPress(nativeEvent.key, field as keyof typeof otp)}
+                value={otp[field]}
+                onChangeText={(value) => handleChange(value, field)}
+                onKeyPress={({ nativeEvent }) => handleKeyPress(nativeEvent.key, field)}
                 maxLength={1}
               />
             </View>

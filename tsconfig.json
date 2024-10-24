@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/(root)/(tabs)/account.tsx", "app/(auth)/sign-in.tsx", "app/(root)/(tabs)/card.js"  ]
+, "app/(root)/(tabs)/account.jsx", "app/(auth)/sign-in.jsx", "app/(root)/(tabs)/card.jsx", "components/CartItem.jsx", "components/CustomInput.jsx", "constants/endpoints.js", "helpers/axios.js", "helpers/validate.js", "app/index.jsx", "app/+not-found.jsx", "app/_layout.jsx", "app/(root)/(tabs)/search.jsx", "app/(root)/(tabs)/save.jsx", "app/(root)/(tabs)/home.jsx", "app/(root)/(tabs)/_layout.jsx", "app/(auth)/verification.jsx", "app/(auth)/sign-up.jsx", "app/(auth)/reset-password.jsx", "app/(auth)/onboarding.jsx", "app/(auth)/forgot-password.jsx", "app/(auth)/_layout.jsx", "api/auth.js", "api/user.js"  ]
 }

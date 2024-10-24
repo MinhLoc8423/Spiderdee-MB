@@ -1,8 +1,7 @@
 import axiosInstance from '../helpers/axios';
 import { API_ENDPOINTS } from '../constants/endpoints';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const login = async (email: String, password: String) => {
+export const login = async (email, password) => {
   try {
     const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, { email, password });
     console.log('Login response: ', response.data)
@@ -13,7 +12,7 @@ export const login = async (email: String, password: String) => {
   }
 };
 
-export const register = async (first_name: String, last_name: String, email: String, password: String, phone_number: String,) => {
+export const register = async (first_name, last_name, email, password, phone_number,) => {
   try {
     const response = await axiosInstance.post(API_ENDPOINTS.REGISTER, { first_name, last_name, email, password, phone_number });
     console.log('Register response: ', response.data)
@@ -24,7 +23,7 @@ export const register = async (first_name: String, last_name: String, email: Str
   }
 };
 
-export const sendOTP = async (email: String) => {
+export const sendOTP = async (email) => {
   try {
     const response = await axiosInstance.post(API_ENDPOINTS.SENDOTP, { email });
     console.log('Send OTP response: ', response.data)
@@ -35,7 +34,7 @@ export const sendOTP = async (email: String) => {
   }
 };
 
-export const verifyOTP = async (email: String, otp: String) => {
+export const verifyOTP = async (email, otp) => {
   try {
     const response = await axiosInstance.post(API_ENDPOINTS.VERIFYOTP, { email, otp });
     console.log('Verify OTP response: ', response.data)
@@ -46,7 +45,7 @@ export const verifyOTP = async (email: String, otp: String) => {
   }
 };
 
-export const resetPassword = async (newPassword: String, otpToken: String) => {
+export const resetPassword = async (newPassword, otpToken) => {
   try {
     const response = await axiosInstance.post(API_ENDPOINTS.RESTPASSWORD, { newPassword, otpToken });
     console.log('Reset password response: ', response.data)
