@@ -2,9 +2,18 @@
 export const API_BASE_URL = 'http://192.168.1.2:3000/';
 
 export const API_ENDPOINTS = {
+  // Auth endpoints
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
   SENDOTP: '/auth/send-otp',
   VERIFYOTP: '/auth/verify-otp',
   RESTPASSWORD: '/auth/reset-password',
+
+  // Category endpoints
+  CATEGORIES: '/api/categories',
+
+  // Product endpoints
+  PRODUCTS: '/api/products',
+  PRODUCTSSEARCH: '/api/products/search',
 };
+

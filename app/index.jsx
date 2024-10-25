@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwtDecode from 'jwt-decode';
 
 const SplashScreenComponent = () => {
     const router = useRouter();
@@ -29,10 +30,17 @@ const SplashScreenComponent = () => {
     useEffect(() => {
         const hideSplashScreen = async () => {
             if (loaded) {
-                const token = await AsyncStorage.getItem('accessTokenUser');
+                const token = null; //await AsyncStorage.getItem('accessTokenUser');
+                console.log(token);
+                let isTokenValid = false;
+                if (token) {
+                    const decodedToken = jwtDecode(token);
+                    const currentTime = Date.now() / 1000; 
+                    isTokenValid = decodedToken.exp > currentTime; 
+                }
                 await SplashScreen.hideAsync();
                 const timer = setTimeout(() => {
-                    if (token) {
+                    if (isTokenValid) {
                         router.replace('/(tabs)/home');
                     } else {
                         router.replace('/(auth)/onboarding');

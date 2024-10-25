@@ -25,10 +25,12 @@
     "expo-dev-client": "~4.0.28",
     "expo-font": "~12.0.10",
     "expo-linking": "~6.3.1",
+    "expo-navigation-bar": "~3.0.7",
     "expo-router": "~3.5.23",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
     "expo-web-browser": "~13.0.3",
+    "jwt-decode": "^4.0.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -39,8 +41,7 @@
     "react-native-screens": "3.31.1",
     "react-native-stars": "^1.2.2",
     "react-native-vector-icons": "^10.2.0",
-    "react-native-web": "~0.19.10",
-    "expo-navigation-bar": "~3.0.7"
+    "react-native-web": "~0.19.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
