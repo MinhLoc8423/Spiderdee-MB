@@ -1,6 +1,11 @@
 import { Stack } from "expo-router";
+import * as NavigationBar from 'expo-navigation-bar';
+import { Platform } from "react-native";
 
 const RootLayout = () => {
+  if (Platform.OS === "android") {
+    NavigationBar.setBackgroundColorAsync("#1A1A1A"); 
+  }
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />

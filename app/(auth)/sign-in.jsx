@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateEmail, validatePassword } from '../../helpers/validate';
 
 const SingIn = () => {
-    const [email, setEmail] = useState('admin1@spiderdee.co');
+    const [email, setEmail] = useState('admin1@spiderdee.com');
     const [password, setPassword] = useState('Passwordvtvn123');
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
