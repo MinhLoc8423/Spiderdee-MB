@@ -11,6 +11,8 @@ const RootLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(root)/(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(product-detail)/[id]/index" options={{ headerShown: false }} />
+      <Stack.Screen name="(product-detail)/[id]/review/index" options={{ headerShown: false }} /> 
       <Stack.Screen name="+not-found" />
     </Stack>
   )

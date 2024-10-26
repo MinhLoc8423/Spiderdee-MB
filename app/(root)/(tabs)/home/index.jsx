@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAllCategories } from "../../../../api/category";
 import { getAllProducts, searchProducts } from "../../../../api/product";
+import { router } from "expo-router";
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
@@ -25,11 +26,16 @@ const HomePage = () => {
   };
 
   const handleFilter = async (category) => {
-    let name = '';
+    let name = "";
     let categoryf = category;
-    let min_price = '';
-    let max_price = '';
-    const productsData = await searchProducts(name, categoryf, min_price, max_price);
+    let min_price = "";
+    let max_price = "";
+    const productsData = await searchProducts(
+      name,
+      categoryf,
+      min_price,
+      max_price
+    );
     setProducts(productsData.data);
     console.log(productsData);
   };
@@ -130,21 +136,26 @@ const HomePage = () => {
 
         {/* Product Grid */}
         <ScrollView
-        className="bg-black"
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         >
           <View className="flex-row flex-wrap">
             {products.map((product, index) => (
-              <TouchableOpacity key={index} className="w-1/2 p-2">
-                <View>
+              <TouchableOpacity key={index}
+                onPress={() => router.push({
+                  pathname: "/(product-detail)/[id]",
+                  params: { id: product._id },
+                })}
+               className="w-1/2"
+               >
+                <View className="p-2 bg-white rounded-lg shadow-lg">
                   <Image
                     source={{ uri: product.image }}
                     className="w-full h-44 rounded-lg"
                   />
                   <Text
                     style={{ fontFamily: "GeneralSemibold" }}
-                    className="mt-2  text-base"
+                    className="mt-2 text-base"
                   >
                     {product.name}
                   </Text>
@@ -154,7 +165,7 @@ const HomePage = () => {
                   >
                     ${product.price.toLocaleString()}
                   </Text>
-                  <TouchableOpacity className="absolute top-2 right-2 bg-primary-0 rounded-lg p-2 ">
+                  <TouchableOpacity className="absolute top-4 right-4 bg-primary-0 rounded-lg p-2 ">
                     <Image
                       source={require("../../../../assets/icons/heart-icon.png")}
                       className="w-4 h-4"
@@ -165,8 +176,8 @@ const HomePage = () => {
             ))}
           </View>
         </ScrollView>
-
         {/* Product Grid */}
+
       </ScrollView>
     </SafeAreaView>
   );
