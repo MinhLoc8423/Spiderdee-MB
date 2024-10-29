@@ -12,6 +12,17 @@ export const getAllProducts = async () => {
     }
 };
 
+export const getProductById = async (id) => {
+    try {
+        const response = await axiosInstance.get(API_ENDPOINTS.PRODUCTS+`${id}`);
+        console.log('Products by id response: ', response.data);
+        return response.data;
+    } catch (error) {
+        console.log('Products by id error: ', error);
+        throw error;
+    }
+};
+
 export const searchProducts = async (name, category, min_price, max_price) => {
     try {
         const response = await axiosInstance.get(API_ENDPOINTS.PRODUCTSSEARCH+`?name=${name}&category=${category}&min_price=${min_price}&max_price=${max_price}`);
@@ -22,3 +33,4 @@ export const searchProducts = async (name, category, min_price, max_price) => {
         throw error;
     }
 };
+

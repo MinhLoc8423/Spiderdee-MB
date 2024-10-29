@@ -5,7 +5,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
     return (
+<View>
+        
         <View style={styles.container}>
+
             <View style={styles.viewContainerProcduct}>
                 <Image
                     source={require("../assets/images/table-image.jpg")}
@@ -44,12 +47,13 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
                 </View>
                 <TouchableOpacity>
                     <FomFontAwesome name={"trash-o"} color={"red"} size={20}
-                        style={{ marginEnd: 10, marginTop: 13, right:9 }}
+                        style={{ marginEnd: 10, marginTop: 13, right: 9 }}
                         // onPress={() => handleRemoveItem(item.id)}
                         onPress={() => onRemove(item.id)}
                     />
                 </TouchableOpacity>
             </View>
+        </View>
         </View>
     );
 }
@@ -60,8 +64,8 @@ export default CartItem
 
 const styles = StyleSheet.create({
     container: {
-        marginStart: 20,
-        marginEnd: 20,
+        flex: 1,
+
 
     },
     viewContainerProcduct: {

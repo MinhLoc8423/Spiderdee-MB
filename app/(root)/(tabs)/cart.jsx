@@ -38,7 +38,34 @@ const CartScreen = () => {
 
   return (
     <View style={styles.container}>
-      
+      <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingTop: 40,
+            paddingBottom: 23,
+            marginEnd:20,
+            marginStart:20
+          }}
+        >
+          <TouchableOpacity onPress={() => router.back()}>
+            <Image
+              source={require("../../../assets/icons/arrow-icon.png")}
+              style={{ width: 24, height: 24 }}
+            />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 24, fontFamily: "GeneralSemibold" }}>
+            Details
+          </Text>
+          <TouchableOpacity>
+            <Image
+              source={require("../../../assets/icons/bell-icon.png")}
+              style={{ width: 24, height: 24 }}
+            />
+          </TouchableOpacity>
+        </View>
+
       {cartItems.length === 0 ? (
         <View style={styles.emptyCart}>
           <Image source={require('../../../assets/images/empty-cart-image.png')}/>
@@ -73,7 +100,7 @@ const CartScreen = () => {
               <Text style={styles.price}>${totalAmount + 80}</Text>
             </View> 
             <TouchableOpacity style={styles.Pressable}>
-        <Link href={"/(root)/(tabs)/home"} style={{ fontSize: 16, textAlign: 'center', color:'#FFFFFF', left:20 }}>Go To Checkout</Link>
+        <Link href={"/(root)/(tabs)/home"} style={{ fontSize: 16, textAlign: 'center', color:'#FFFFFF', left:20,}}>Go To Checkout</Link>
         <Feather name={"arrow-right"} color={"white"} right={120} size={24}/>
       </TouchableOpacity>
         </>
@@ -85,7 +112,7 @@ const CartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   
+    marginBottom:10
   },
   emptyCart:{
     alignItems:'center',
@@ -132,8 +159,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'center',
     backgroundColor: '#1A1A1A',
-    marginVertical: 30,
     
+    marginTop:30
     
     
   },

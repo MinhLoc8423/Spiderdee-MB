@@ -1,16 +1,31 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
+import { getProductById } from "../../../api/product";
+
+
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const ProductDetails = () => {
   const id = useLocalSearchParams();
-  console.log(id);
+  const [product, setProduct] = useState({});
   const [selectedSize, setSelectedSize] = useState(null);
+
+  const data = async () => {
+    const data = await getProductById(id.id);
+    setProduct(data.data);
+  }
+  
+  useEffect(() => {
+    data();
+  }, []);
+
 
   const handleSizeSelect = (size) => {
     setSelectedSize(size);
   };
+ 
 
   return (
     <SafeAreaView
@@ -48,15 +63,12 @@ const ProductDetails = () => {
         <View style={{ paddingVertical: 8 }}>
           <Image
             source={{
-              uri: "https://nhaxinh.com/wp-content/uploads/2021/11/nha-xinh-ghe-an-phong-an-749x800.jpg",
+              uri: (product.image),
             }}
             style={{ width: "100%", height: 300, borderRadius: 8 }}
           />
           <TouchableOpacity className="absolute top-5 right-4 bg-primary-0 rounded-lg p-2 ">
-            <Image
-              source={require("../../../assets/icons/heart-icon.png")}
-              className="w-6 h-6"
-            />
+            <AntDesign name={"hearto"} size={20}/>
           </TouchableOpacity>
         </View>
 
@@ -70,7 +82,7 @@ const ProductDetails = () => {
               fontFamily: "GeneralSemibold",
             }}
           >
-            Regular Fit Slogan
+            {(product.name)}
           </Text>
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}
@@ -86,7 +98,7 @@ const ProductDetails = () => {
               }}
             >
               4.0/5
-            </Text>
+              </Text>
             <Text
               style={{
                 color: "#6B7280",
@@ -105,8 +117,7 @@ const ProductDetails = () => {
               fontFamily: "GeneralRegular",
             }}
           >
-            The name says it all, the right size slightly snugs the body leaving
-            enough room for comfort in the sleeves and waist.
+            {(product.description)}
           </Text>
 
           {/* Size Options */}
@@ -184,7 +195,7 @@ const ProductDetails = () => {
               Price
             </Text>
             <Text style={{ fontSize: 24, fontFamily: "GeneralSemibold" }}>
-              $1,190
+              {product.price}
             </Text>
           </View>
           <TouchableOpacity
@@ -196,7 +207,8 @@ const ProductDetails = () => {
               paddingVertical: 16,
               borderRadius: 10,
             }}
-          >
+            
+            >
             <Image
               source={require("../../../assets/icons/bag-icon.png")}
               style={{
