@@ -1,5 +1,5 @@
 // export const API_BASE_URL = 'https://spiderdee-be.vercel.app/';
-export const API_BASE_URL = 'http://192.168.1.2:3000/';
+export const API_BASE_URL = 'https://modern-cockatoo-musical.ngrok-free.app/';
 
 export const API_ENDPOINTS = {
   // Auth endpoints
@@ -15,5 +15,10 @@ export const API_ENDPOINTS = {
   // Product endpoints
   PRODUCTS: '/api/products',
   PRODUCTSSEARCH: '/api/products/search',
+  // User endpoints
+  USERS: '/api/users/',
+  // Order endpoints
+  ORDERS: 'api/orders/',
+  
 };
 

@@ -30,13 +30,13 @@ const SplashScreenComponent = () => {
     useEffect(() => {
         const hideSplashScreen = async () => {
             if (loaded) {
-                const token = null; //await AsyncStorage.getItem('accessTokenUser');
+                const token = await AsyncStorage.getItem('accessTokenUser');
                 console.log(token);
                 let isTokenValid = false;
                 if (token) {
-                    const decodedToken = jwtDecode(token);
-                    const currentTime = Date.now() / 1000; 
-                    isTokenValid = decodedToken.exp > currentTime; 
+                    // const decodedToken = jwtDecode(token);
+                    // const currentTime = Date.now() / 1000; 
+                    isTokenValid = false //decodedToken.exp > currentTime; 
                 }
                 await SplashScreen.hideAsync();
                 const timer = setTimeout(() => {
