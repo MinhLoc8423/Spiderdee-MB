@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link, router } from 'expo-router';
 import Feather from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
 
 
 import CartItem from '../../../components/CartItem';
 
 const CartScreen = () => {
+  const navigation = useNavigation();
   const [cartItems, setCartItems] = useState([
     { id: 1, name: 'Regular Fit Slogan', size: 'L', price: 1190, quantity: 2, image: 'https://via.placeholder.com/100' },
     { id: 2, name: 'Regular Fit Polo', size: 'M', price: 1100, quantity: 1, image: 'https://via.placeholder.com/100' },
@@ -72,7 +74,7 @@ const CartScreen = () => {
               <Text style={styles.textPriceTotal}>Total: </Text>
               <Text style={styles.price}>${totalAmount + 80}</Text>
             </View> 
-            <TouchableOpacity style={styles.Pressable}>
+            <TouchableOpacity style={styles.Pressable} onPress={() => navigation.navigate('checkout')}>
         <Link href={"/(root)/(tabs)/home"} style={{ fontSize: 16, textAlign: 'center', color:'#FFFFFF', left:20 }}>Go To Checkout</Link>
         <Feather name={"arrow-right"} color={"white"} right={120} size={24}/>
       </TouchableOpacity>
