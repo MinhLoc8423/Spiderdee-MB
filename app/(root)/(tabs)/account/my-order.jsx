@@ -16,15 +16,12 @@ import {jwtDecode} from "jwt-decode";
 
 const MyOrder = () => {
 
-const [orderData, orderDataSet] = useState([]);
-
-
 const fetchData = async () =>{
   
   const orderData = await getAllOrders();
   console.log('orderData: ', orderData);
   }
- useEffect(fetchData, []);
+ 
 
   return (
     <SafeAreaView>
