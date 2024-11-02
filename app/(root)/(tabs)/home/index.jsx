@@ -1,184 +1,146 @@
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import {
   View,
   Text,
-  ScrollView,
   Image,
   TouchableOpacity,
   TextInput,
+  FlatList,
+  Pressable,
 } from "react-native";
-import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAllCategories } from "../../../../api/category";
 import { getAllProducts, searchProducts } from "../../../../api/product";
 import { router } from "expo-router";
+import { AuthContext } from "../../../../store/contexts/AuthContext";
+import ProductItem from "../../../../components/ProductItem";
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { user } = useContext(AuthContext);
 
-  const fetchData = async () => {
-    const productsData = await getAllProducts();
-    console.log(productsData);
-    const categoriesData = await getAllCategories();
-    setCategories(categoriesData.data);
-    setProducts(productsData.data);
-  };
+  // Fetch data from APIs
+  const fetchData = useCallback(async () => {
+    try {
+      const [productsData, categoriesData] = await Promise.all([
+        getAllProducts(),
+        getAllCategories(),
+      ]);
+      setCategories(categoriesData.data);
+      setProducts(productsData.data);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  }, []);
 
-  const handleFilter = async (category) => {
-    let name = "";
-    let categoryf = category;
-    let min_price = "";
-    let max_price = "";
-    const productsData = await searchProducts(
-      name,
-      categoryf,
-      min_price,
-      max_price
-    );
-    setProducts(productsData.data);
-    console.log(productsData);
-  };
+  // Handle product filtering based on category
+  const handleFilter = useCallback(async (categoryId) => {
+    try {
+      const productsData = await searchProducts("", categoryId, "", "");
+      setProducts(productsData.data);
+    } catch (error) {
+      console.error("Error filtering products: ", error);
+    }
+  }, []);
 
   useEffect(() => {
     fetchData();
   }, []);
 
+  // Render category item
+  const renderCategoryItem = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => {
+        handleFilter(item._id);
+        setSelectedCategory(item.name);
+      }}
+      className={`px-4 py-2 mr-2 h-9 rounded-lg border border-primary-100 items-center ${
+        selectedCategory === item.name ? "bg-black" : "bg-primary-0"
+      }`}
+    >
+      <Text
+        className={`${
+          selectedCategory === item.name ? "text-white" : "text-gray-600"
+        } font-medium`}
+      >
+        {item.name}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  // Render product item
+  const renderProductItem = ({ item }) => {
+    return <ProductItem item={item} />;
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-primary-0 px-6">
-      <ScrollView
+      <View className="flex-row justify-between items-center w-full mt-3">
+        <Text className="text-3xl font-semibold">Discover</Text>
+        <TouchableOpacity
+          onPress={() => router.push("/(root)/(tabs)/home/notification")}
+          className="flex items-center"
+        >
+          <Image
+            source={require("../../../../assets/icons/bell-icon.png")}
+            className="w-6 h-6"
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View
+        style={{ height: 56 }}
+        className="my-4 flex-row items-center space-x-2"
+      >
+        <Pressable
+          onPress={() => router.push("/(root)/(tabs)/search")}
+          className="flex-1 flex-row items-center border border-primary-100 rounded-lg px-4 py-[10]"
+        >
+          <Image
+            source={require("../../../../assets/icons/search-icon.png")}
+            className="w-6 h-6"
+            style={{ tintColor: "#999999" }}
+          />
+          <TextInput
+            onPress={() => router.push("/(root)/(tabs)/search")}
+            placeholder="Search for clothes..."
+            className="ml-2 flex-1 text-primary-900 text-base"
+            style={{
+              fontFamily: "GeneralRegular",
+              paddingVertical: 0,
+              lineHeight: 20,
+            }}
+          />
+        </Pressable>
+        <TouchableOpacity className="bg-primary-900 rounded-lg p-[10] flex items-center justify-center">
+          <Image
+            source={require("../../../../assets/icons/filter-icon.png")}
+            className="w-6 h-6"
+            style={{ tintColor: "#FFFFFF" }}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={[{ _id: "", name: "All" }, ...categories]}
+        keyExtractor={(category) => category._id}
+        className="h-9"
+        style={{ height: 50 }}
+        renderItem={renderCategoryItem}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+
+      <FlatList
+        data={products}
+        keyExtractor={(item) => item._id}
+        renderItem={renderProductItem}
+        numColumns={2}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-      >
-        {/* Header */}
-        <View className="flex-row justify-between items-center w-full mt-5">
-          <Text style={{ fontFamily: "GeneralSemibold" }} className="text-3xl">
-            Discover
-          </Text>
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="flex items-center"
-          >
-            <Image
-              source={require("../../../../assets/icons/bell-icon.png")}
-              className="w-6 h-6"
-            />
-          </TouchableOpacity>
-        </View>
-        {/* Header */}
-
-        {/* Search and Filter Section */}
-        <View className="my-4 flex-row items-center space-x-2">
-          {/* Search Bar */}
-          <View className="flex-1 flex-row items-center border border-primary-100 rounded-lg px-4 py-2">
-            <Image
-              source={require("../../../../assets/icons/search-icon.png")}
-              className="w-6 h-6"
-              style={{ tintColor: "gray" }}
-            />
-            <TextInput
-              placeholder="Search for clothes..."
-              className="ml-2 flex-1 text-primary-400 text-base"
-              style={{
-                fontFamily: "GeneralRegular",
-                paddingVertical: 0,
-                lineHeight: 20,
-              }}
-            />
-          </View>
-
-          {/* Filter Button */}
-          <TouchableOpacity className="bg-primary-900 rounded-lg p-[10] flex items-center justify-center">
-            <Image
-              source={require("../../../../assets/icons/filter-icon.png")}
-              className="w-6 h-6"
-              style={{ tintColor: "#FFFFFF" }}
-            />
-          </TouchableOpacity>
-        </View>
-        {/* Search and Filter Section */}
-
-        {/* Categories */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className="mb-4"
-        >
-          {[{ _id: "", name: "All" }, ...categories].map(
-            (currentValue, index) => (
-              <TouchableOpacity
-                key={currentValue._id}
-                onPress={() => {
-                  handleFilter(currentValue._id);
-                  setSelectedCategory(currentValue.name);
-                }}
-                className={`px-4 py-2 mr-2 rounded-lg border border-primary-100 bg ${
-                  selectedCategory === currentValue.name
-                    ? "bg-black"
-                    : "bg-primary-0"
-                }`}
-              >
-                <Text
-                  style={{ fontFamily: "GeneralMedium" }}
-                  className={` ${
-                    selectedCategory === currentValue.name
-                      ? "text-white"
-                      : "text-gray-600"
-                  }`}
-                >
-                  {currentValue.name}
-                </Text>
-              </TouchableOpacity>
-            )
-          )}
-        </ScrollView>
-        {/* Categories */}
-
-        {/* Product Grid */}
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-        >
-          <View className="flex-row flex-wrap">
-            {products.map((product, index) => (
-              <TouchableOpacity key={index}
-                onPress={() => router.push({
-                  pathname: "/(product-detail)/[id]",
-                  params: { id: product._id },
-                })}
-               className="w-1/2"
-               >
-                <View className="p-2 bg-white rounded-lg shadow-lg">
-                  <Image
-                    source={{ uri: product.image }}
-                    className="w-full h-44 rounded-lg"
-                  />
-                  <Text
-                    style={{ fontFamily: "GeneralSemibold" }}
-                    className="mt-2 text-base"
-                  >
-                    {product.name}
-                  </Text>
-                  <Text
-                    style={{ fontFamily: "GeneralMedium" }}
-                    className="mt-1 text-gray-600 text-xs"
-                  >
-                    ${product.price.toLocaleString()}
-                  </Text>
-                  <TouchableOpacity className="absolute top-4 right-4 bg-primary-0 rounded-lg p-2 ">
-                    <Image
-                      source={require("../../../../assets/icons/heart-icon.png")}
-                      className="w-4 h-4"
-                    />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-        {/* Product Grid */}
-
-      </ScrollView>
+      />
     </SafeAreaView>
   );
 };

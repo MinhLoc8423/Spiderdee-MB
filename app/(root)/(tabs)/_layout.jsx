@@ -64,7 +64,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="save"
         options={{
-          title: "Save",
+          title: "Saved",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image

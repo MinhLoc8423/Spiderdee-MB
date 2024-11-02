@@ -1,5 +1,5 @@
 import axiosInstance from '../helpers/axios';
-import { API_ENDPOINTS } from '../constants/endpoints';
+import { API_ENDPOINTS } from '../constants/endPoints';
 
 export const getAllCategories = async () => {
     try {

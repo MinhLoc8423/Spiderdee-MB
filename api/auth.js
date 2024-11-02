@@ -1,7 +1,7 @@
 import axiosInstance from '../helpers/axios';
-import { API_ENDPOINTS } from '../constants/endpoints';
+import { API_ENDPOINTS } from '../constants/endPoints';
 
-export const login = async (email, password) => {
+export const loginLocal = async (email, password) => {
   try {
     const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, { email, password });
     console.log('Login response: ', response.data)

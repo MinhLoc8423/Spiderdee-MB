@@ -6,6 +6,7 @@ import { getProductById } from "../../../api/product";
 
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProductDetails = () => {
   const id = useLocalSearchParams();
@@ -15,7 +16,39 @@ const ProductDetails = () => {
   const data = async () => {
     const data = await getProductById(id.id);
     setProduct(data.data);
+    console.log(data.data);
   }
+  
+  const addToCart = async () => {
+    try {
+      const cartKey = "@Cart";
+      const existingCart = await AsyncStorage.getItem(cartKey);
+      const cartItems = existingCart ? JSON.parse(existingCart) : [];
+      
+      // Check if the item already exists in the cart
+      const existingItemIndex = cartItems.findIndex(item => item.id === product._id);
+      
+      if (existingItemIndex >= 0) {
+        // Update quantity if the item already exists
+        cartItems[existingItemIndex].quantity += 1; // or set it to selected quantity
+      } else {
+        const newItem = {
+          id: product._id,
+          name: product.name,
+          price: product.price,
+          quantity: 1, 
+          image: product.image,
+        };
+        cartItems.push(newItem);
+      }
+  
+      await AsyncStorage.setItem(cartKey, JSON.stringify(cartItems));
+      console.log("Cart updated: ", cartItems);
+    } catch (error) {
+      console.log("Add to cart error: ", error);
+    }
+  };
+  
   
   useEffect(() => {
     data();
@@ -86,7 +119,7 @@ const ProductDetails = () => {
           </Text>
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}
-            onPress={() => router.push("(product-detail)/[id]/review", id.id)}
+            onPress={() => router.push("/(root)/reviews/[id]", id.id)}
           >
             <Text style={{ color: "#FBBF24" }}>⭐</Text>
             <Text
@@ -199,6 +232,7 @@ const ProductDetails = () => {
             </Text>
           </View>
           <TouchableOpacity
+            onPress={addToCart}
             style={{
               flexDirection: "row",
               alignItems: "center",

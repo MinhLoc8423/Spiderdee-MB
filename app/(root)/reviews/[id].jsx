@@ -18,7 +18,7 @@ const App = () => {
         >
           <TouchableOpacity onPress={() => router.back()}>
             <Image
-              source={require("../../../../assets/icons/arrow-icon.png")}
+              source={require("../../../assets/icons/arrow-icon.png")}
               style={{ width: 24, height: 24 }}
             />
           </TouchableOpacity>
@@ -27,7 +27,7 @@ const App = () => {
           </Text>
           <TouchableOpacity>
             <Image
-              source={require("../../../../assets/icons/bell-icon.png")}
+              source={require("../../../assets/icons/bell-icon.png")}
               style={{ width: 24, height: 24 }}
             />
           </TouchableOpacity>

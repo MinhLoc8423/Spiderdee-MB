@@ -1,5 +1,5 @@
 import axiosInstance from '../helpers/axios';
-import { API_ENDPOINTS } from '../constants/endpoints';
+import { API_ENDPOINTS } from '../constants/endPoints';
 
 export const getAllProducts = async () => {
     try {
@@ -12,9 +12,9 @@ export const getAllProducts = async () => {
     }
 };
 
-export const getProductById = async (id) => {
+export const getProductById = async (product_id) => {
     try {
-        const response = await axiosInstance.get(API_ENDPOINTS.PRODUCTS+`${id}`);
+        const response = await axiosInstance.get(API_ENDPOINTS.PRODUCTS+`${product_id}`);
         console.log('Products by id response: ', response.data);
         return response.data;
     } catch (error) {

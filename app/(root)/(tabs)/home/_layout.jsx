@@ -6,6 +6,7 @@ const HomeLayout = () => {
   return (
    <Stack>
     <Stack.Screen name="index" options={{ title: "Home", headerShown: false }} />
+    <Stack.Screen name="notification" options={{ title: "Notification", headerShown: false }} />
    </Stack>
   )
 }

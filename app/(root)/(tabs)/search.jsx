@@ -1,227 +1,169 @@
-import { StyleSheet, Text, View, Pressable, Image, TextInput, FlatList, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { searchProducts } from '../../../api/product';
-import { router } from 'expo-router';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import {
+  StyleSheet,
+  View,
+  Image,
+  TextInput,
+  FlatList,
+  Text,
+} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { searchProducts } from "../../../api/product";
+import Header from "../../../components/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CartSearch } from "../../../components/CardSearch";
 
 const Search = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [recentSearches, setRecentSearches] = useState(['Modern', 'Casual clothes', 'Hoodie', 'Nike shoes black', 'V-neck t-shirt', 'Winter clothes']);
-  
+  const [recentSearches, setRecentSearches] = useState(["Jeans", "Casual clothes", "Hoodie", "Nike shoes black", "V-neck tshirt", "Winter clothes"]);
+  const inputRef = useRef(null);
+
   const handleSearch = (query) => {
     setSearchQuery(query);
-    if (query.trim()) {
-      fetchSearchResults(query);
-    } else {
-      setSearchResults([]);
-    }
   };
 
-  const clearRecentSearches = () => setRecentSearches([]);
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (searchQuery.trim()) {
+        const data = await searchProducts(searchQuery, "", "", "");
+        setSearchResults(data.data);
+      } else {
+        setSearchResults([]);
+      }
+    };
+    fetchResults();
+  }, [searchQuery]);
 
-  const fetchSearchResults = async (query) => {
-    try {
-      const data = await searchProducts(query, "", "", "");
-      setSearchResults(data.data);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus(); 
     }
-  };
+  }, []);
 
-  const renderRecentSearchItem = (item) => (
-    <View style={styles.recentSearchItem}>
-      <Text onPress={() =>setSearchQuery(item)} style={styles.recentSearchText}>{item}</Text>
-      <TouchableOpacity onPress={() => setRecentSearches(recentSearches.filter(i => i !== item))}>
-        <AntDesign name={"closecircleo"} size={17} color={'#C0C0C0'} />
-      </TouchableOpacity>
+  const renderResultItem = ({ item }) => <CartSearch item={item} />;
+
+  const renderEmptyResults = () => (
+    <View style={styles.emptyContainer}>
+      <Image
+        source={require("../../../assets/icons/search-duotone-icon.png")}
+        style={styles.emptyImage}
+      />
+      <Text style={styles.emptyText}>No Results Found!</Text>
+      <Text style={styles.emptySubText}>
+        Try a similar word or something more general.
+      </Text>
     </View>
   );
 
-  const renderResultItem = ({ item }) => (
-    <Pressable
-      style={styles.resultCard}
-      onPress={() => router.push({
-        pathname: "/(product-detail)/[id]",
-        params: { id: item._id },
-      })}
-    >
-      <Image source={{ uri: item.image }} style={styles.resultImage} />
-      <View style={styles.resultInfo}>
-        <Text style={styles.resultTitle}>{item.title}</Text>
-        <Text style={styles.resultName}>{item.name}</Text>
-        <Text style={styles.resultPrice}>${item.price}</Text>
-
-      </View>
-    </Pressable>
+  const renderRecentSearches = () => (
+    <View style={styles.recentContainer}>
+      <Text style={styles.recentTitle}>Top Saller</Text>
+      {recentSearches.map((item, index) => (
+        <View key={index} style={styles.recentItem}>
+          <Text onPress={() => handleSearch(item)} style={styles.recentText}>{item}</Text>
+        </View>
+      ))}
+    </View>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>Search</Text>
+    <SafeAreaView className="flex-1 bg-primary-0 px-6">
+      <Header title="Search" />
 
-      <View style={styles.searchBox}>
+      <View
+        className="max-h-14 flex-row items-center border border-primary-100 rounded-lg px-4"
+        style={{ height: 56 }}
+      >
+        <Image
+          source={require("../../../assets/icons/search-icon.png")}
+          className="w-6 h-6"
+          style={{ tintColor: "#999999" }}
+        />
         <TextInput
-          style={styles.searchInput}
           placeholder="Search for clothes..."
+          className="ml-2 text-primary-900 text-base w-full"
+          ref={inputRef}
           value={searchQuery}
           onChangeText={handleSearch}
+          style={{
+            fontFamily: "GeneralMedium",
+            color: "#1A1A1A",
+            lineHeight: 20,
+          }}
         />
       </View>
 
-      {searchResults.length === 0 && searchQuery ? (
-        <View style={styles.noResults}>
-          <Text style={styles.noResultsText}>No Results Found!</Text>
-          <Text style={styles.suggestionText}>Try a similar word or something more general.</Text>
-        </View>
+      {searchQuery.trim() ? (
+        <FlatList
+          data={searchResults}
+          renderItem={renderResultItem}
+          keyExtractor={(item) => item._id}
+          ListEmptyComponent={renderEmptyResults}
+          showsVerticalScrollIndicator={false}
+          style={styles.resultList}
+        />
       ) : (
-        <>
-          <View style={styles.recentSearches}>
-            <Text style={styles.recentSearchHeader}>Recent Searches</Text>
-            <Pressable onPress={clearRecentSearches}>
-              <Text style={styles.clearAll}>Clear all</Text>
-            </Pressable>
-          </View>
-          <FlatList
-            data={recentSearches}
-            renderItem={({ item }) => renderRecentSearchItem(item)}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.recentSearchList}
-          />
-
-          <FlatList
-            data={searchResults}
-            renderItem={renderResultItem}
-            keyExtractor={item => item._id}
-            showsVerticalScrollIndicator={false}
-            style={styles.resultList}
-          />
-        </>
+        renderRecentSearches()
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default Search;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 32,
-    backgroundColor: '#FFFFFF',
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  searchBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-
-
-  searchInput: {
-    flex: 1,
-    height: 40,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingLeft: 12,
-  },
-  recentSearches: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
-  },
-  recentSearchHeader: {
-    fontSize: 17,
-    fontWeight: '600',
-  },
-  clearAll: {
-    fontSize: 14,
-    color: '#000000',
-    textDecorationLine: 'underline',
-  },
-  recentSearchList: {
-    marginBottom: 16,
-    marginTop: 30
-  },
-  recentSearchItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 20,
-    borderEndColor: 1,
-  },
-
-  liner: {
-    borderColor: '#E6E6E6',
-    marginVertical: 20,
-  },
-  recentSearchText: {
-    fontSize: 14,
-
-  },
-  recentSearchRemove: {
-    fontSize: 14,
-    color: '#888',
-    marginLeft: 8,
-  },
   resultList: {
-    marginTop: 16,
   },
-  resultCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 116,
+  },
+  emptyImage: {
+    width: 80,
+    height: 80,
+    tintColor: "#999999",
+    marginBottom: 16,
+  },
+  emptyText: {
+    fontSize: 20,
+    fontFamily: "GeneralSemibold",
+    color: "#1A1A1A",
     marginBottom: 12,
-    padding: 8,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 2 },
   },
-  resultImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 6,
-  },
-  resultInfo: {
-    marginLeft: 12,
-
-  },
-  resultTitle: {
+  emptySubText: {
     fontSize: 16,
-    fontWeight: '500',
+    color: "#808080",
+    textAlign: "center",
+    fontFamily: "GeneralRegular",
+    paddingHorizontal: 32,
   },
-  resultPrice: {
-    fontSize: 11,
-    color: '#808080',
-    marginTop: 4,
-    fontWeight: '500'
+  recentContainer: {
+    marginTop: 17,
+    marginBottom: 17,
   },
-  resultName: {
-    fontSize: 14,
-    color: 'black',
-    marginTop: 4,
-    fontWeight: '700'
+  recentTitle: {
+    fontSize: 20,
+    fontFamily: "GeneralSemibold",
+    marginBottom: 12,
+    color: "#1A1A1A",
   },
-  noResults: {
-    alignItems: 'center',
-    marginTop: 40,
+  recentItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
   },
-  noResultsText: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#333',
-    marginBottom: 8,
+  recentText: {
+    fontSize: 16,
+    fontFamily: "GeneralRegular",
+    color: "#1A1A1A",
   },
-  suggestionText: {
-    fontSize: 14,
-    color: '#666',
+  clearButton: {
+    fontSize: 16,
+    color: "#999999",
   },
 });
+  
