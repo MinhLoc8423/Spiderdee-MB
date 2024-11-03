@@ -3,15 +3,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { getProductById } from "../../../api/product";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import { CartContext } from "../../../store/contexts/CartContext";
 import { SaveItemContext } from "../../../store/contexts/SaveItemContext";
 
 const ProductDetails = () => {
   const id = useLocalSearchParams();
   const [product, setProduct] = useState({});
   const [selectedSize, setSelectedSize] = useState(null);
-  const { wishList, addToWishlist, removeFromWishlist } =
-    useContext(SaveItemContext);
+  const { addToCart } = useContext(CartContext);
+  const { wishList, addToWishlist, removeFromWishlist } = useContext(SaveItemContext);
   const isInWishlist = wishList.some(
     (wishItem) => wishItem?.product_id?._id === product._id
   );
@@ -20,6 +20,15 @@ const ProductDetails = () => {
     const response = await getProductById(id.id);
     response.data.price = response.data.price.toLocaleString();
     setProduct(response.data);
+  };
+
+  const handleAddToCart = () => {
+    if (selectedSize) {
+      addToCart(product, selectedSize);
+      alert("Đã thêm thành công vào giỏ hàng");
+    } else {
+      alert("Vui lòng chọn kích thước");
+    }
   };
 
   useEffect(() => {
@@ -231,33 +240,15 @@ const ProductDetails = () => {
             </Text>
           </View>
           <TouchableOpacity
+            onPress={handleAddToCart}
             style={{
-              flexDirection: "row",
-              alignItems: "center",
               backgroundColor: "black",
               paddingHorizontal: 59,
               paddingVertical: 16,
               borderRadius: 10,
             }}
           >
-            <Image
-              source={require("../../../assets/icons/bag-icon.png")}
-              style={{
-                width: 20,
-                height: 20,
-                marginRight: 8,
-                tintColor: "white",
-              }}
-            />
-            <Text
-              style={{
-                color: "white",
-                fontSize: 16,
-                fontFamily: "GeneralMedium",
-              }}
-            >
-              Add to Cart
-            </Text>
+            <Text style={{ color: "white", fontSize: 16 }}>Add to Cart</Text>
           </TouchableOpacity>
         </View>
       </View>

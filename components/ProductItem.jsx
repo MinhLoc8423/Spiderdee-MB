@@ -1,11 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { SaveItemContext } from "../store/contexts/SaveItemContext";
 
 const ProductItem = ({ item }) => {
   const router = useRouter();
-  const { wishList, addToWishlist, removeFromWishlist } = useContext(SaveItemContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const { wishList, addToWishlist, removeFromWishlist } =
+    useContext(SaveItemContext);
 
   // Kiểm tra xem sản phẩm đã có trong wishlist chưa
   const isInWishlist = wishList.some(
@@ -32,15 +34,17 @@ const ProductItem = ({ item }) => {
           ${item.price.toLocaleString()}
         </Text>
         <TouchableOpacity
+          disabled={isLoading}
           onPress={() => {
             if (isInWishlist) {
-              
+              setIsLoading(true);
               const wishlistItemId = wishList.find(
                 (wishItem) => wishItem?.product_id?._id === item._id
               )?._id;
               if (wishlistItemId) {
                 console.log("Removing from wishlist:", wishlistItemId);
                 removeFromWishlist(wishlistItemId);
+                setIsLoading(false);
               } else {
                 console.log("Wishlist item not found for removal.");
               }
@@ -48,6 +52,7 @@ const ProductItem = ({ item }) => {
               // Gọi addToWishlist với item._id
               console.log("Adding to wishlist:", item._id);
               addToWishlist(item._id);
+              setIsLoading(false);
             }
           }}
           className="absolute top-5 right-5 bg-primary-0 rounded-lg p-2"

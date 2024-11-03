@@ -2,6 +2,7 @@ import { Stack, router } from 'expo-router';
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../store/contexts/AuthContext';
 import { AuthProvider } from '../store/providers/AuthProvider';
+import { CartProvider } from '../store/providers/CartProvider';
 import { SaveItemProvider } from "../store/providers/SaveItemProvider";
 import * as SplashScreen from 'expo-splash-screen';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -10,7 +11,6 @@ import { useFonts } from 'expo-font';
 
 const RootLayout = () => {
   const { user, isLoading } = useContext(AuthContext);
-  console.log('User: ', user);
 
   useEffect(() => {
     SplashScreen.preventAutoHideAsync();
@@ -59,7 +59,9 @@ const RootLayout = () => {
 export default () => (
   <AuthProvider>
     <SaveItemProvider>
-      <RootLayout />
+      <CartProvider>
+        <RootLayout />
+      </CartProvider>
     </SaveItemProvider>
   </AuthProvider>
 );
