@@ -12,13 +12,10 @@ export const SaveItemProvider = ({ children }) => {
   const [wishList, dispatch] = useReducer(saveItemReducer, initialStateReducer);
   const { user } = useContext(AuthContext);
 
-  console.log(wishList, "wisthlist");
-
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
         const data = await getWishListByUser(user.id);
-        console.log("Fetched data from API:", data.data);
         dispatch({ type: "SET_SAVED_ITEMS", payload: data.data });
       } catch (error) {
         console.error("Error fetching wishlist:", error);
@@ -40,7 +37,6 @@ export const SaveItemProvider = ({ children }) => {
 
   const removeFromWishlist = async (wishlistItemId) => {
     try {
-      console.log("Remove from wishlist:", wishlistItemId);
       const data = await removeProductFromWishlist(wishlistItemId);
       dispatch({ type: "REMOVE_FROM_SAVED_ITEMS", payload: data.data._id });
     } catch (error) {

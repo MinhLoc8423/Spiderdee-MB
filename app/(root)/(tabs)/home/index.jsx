@@ -18,7 +18,7 @@ import ProductItem from "../../../../components/ProductItem";
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
   const { user } = useContext(AuthContext);
 
   // Fetch data from APIs
@@ -124,7 +124,7 @@ const HomePage = () => {
       </View>
 
       <FlatList
-        data={[{ _id: "", name: "All" }, ...categories]}
+        data={[{ _id: "", name: "Tất cả" }, ...categories]}
         keyExtractor={(category) => category._id}
         className="h-9"
         style={{ height: 50 }}

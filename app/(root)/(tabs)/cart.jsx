@@ -5,11 +5,12 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
+  StyleSheet
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // cho biểu tượng thùng rác
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "@/components/Header"; 
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MyCartScreen = () => {
   const [cartItems, setCartItems] = useState([]); // Khởi tạo danh sách giỏ hàng
@@ -108,19 +109,8 @@ const MyCartScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            /* Chức năng quay lại */
-          }}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Giỏ Hàng Của Tôi</Text>
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+     
+      <Header title={"Cart"} />
 
       <FlatList
         data={cartItems}
@@ -163,6 +153,8 @@ const MyCartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingStart: 24,
+    paddingEnd: 24,
     backgroundColor: "#fff",
   },
   header: {
@@ -191,7 +183,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 8,
-    marginRight: 10,
   },
   itemDetails: {
     flex: 1,
@@ -211,7 +202,6 @@ const styles = StyleSheet.create({
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 8,
   },
   quantityButton: {
     fontSize: 18,
@@ -223,7 +213,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   summaryContainer: {
-    padding: 16,
     borderTopWidth: 1,
     borderTopColor: "#ddd",
   },

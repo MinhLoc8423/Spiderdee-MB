@@ -1,70 +1,43 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { getProductById } from "../../../api/product";
-
-
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { SaveItemContext } from "../../../store/contexts/SaveItemContext";
 
 const ProductDetails = () => {
   const id = useLocalSearchParams();
   const [product, setProduct] = useState({});
   const [selectedSize, setSelectedSize] = useState(null);
+  const { wishList, addToWishlist, removeFromWishlist } =
+    useContext(SaveItemContext);
+  const isInWishlist = wishList.some(
+    (wishItem) => wishItem?.product_id?._id === product._id
+  );
 
-  const data = async () => {
-    const data = await getProductById(id.id);
-    setProduct(data.data);
-    console.log(data.data);
-  }
-  
-  const addToCart = async () => {
-    try {
-      const cartKey = "@Cart";
-      const existingCart = await AsyncStorage.getItem(cartKey);
-      const cartItems = existingCart ? JSON.parse(existingCart) : [];
-      
-      // Check if the item already exists in the cart
-      const existingItemIndex = cartItems.findIndex(item => item.id === product._id);
-      
-      if (existingItemIndex >= 0) {
-        // Update quantity if the item already exists
-        cartItems[existingItemIndex].quantity += 1; // or set it to selected quantity
-      } else {
-        const newItem = {
-          id: product._id,
-          name: product.name,
-          price: product.price,
-          quantity: 1, 
-          image: product.image,
-        };
-        cartItems.push(newItem);
-      }
-  
-      await AsyncStorage.setItem(cartKey, JSON.stringify(cartItems));
-      console.log("Cart updated: ", cartItems);
-    } catch (error) {
-      console.log("Add to cart error: ", error);
-    }
+  const fetchData = async () => {
+    const response = await getProductById(id.id);
+    response.data.price = response.data.price.toLocaleString();
+    setProduct(response.data);
   };
-  
-  
-  useEffect(() => {
-    data();
-  }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleSizeSelect = (size) => {
     setSelectedSize(size);
   };
- 
 
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 24 }}
     >
-      <ScrollView>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Header */}
         <View
           style={{
@@ -95,13 +68,35 @@ const ProductDetails = () => {
         {/* Product Image */}
         <View style={{ paddingVertical: 8 }}>
           <Image
-            source={{
-              uri: (product.image),
-            }}
+            source={{ uri: product.image }}
             style={{ width: "100%", height: 300, borderRadius: 8 }}
           />
-          <TouchableOpacity className="absolute top-5 right-4 bg-primary-0 rounded-lg p-2 ">
-            <AntDesign name={"hearto"} size={20}/>
+          <TouchableOpacity
+            onPress={() => {
+              if (isInWishlist) {
+                const wishlistItemId = wishList.find(
+                  (wishItem) => wishItem?.product_id?._id === product._id
+                )?._id;
+                if (wishlistItemId) {
+                  removeFromWishlist(wishlistItemId);
+                } else {
+                  console.log("Wishlist item not found for removal.");
+                }
+              } else {
+                addToWishlist(product._id);
+              }
+            }}
+            className="absolute top-5 right-5 bg-primary-0 rounded-lg p-2"
+          >
+            <Image
+              source={
+                isInWishlist
+                  ? require("../../../assets/icons/heart-filled-icon.png")
+                  : require("../../../assets/icons/heart-icon.png")
+              }
+              className="w-4 h-4"
+              style={{ tintColor: isInWishlist ? "#ED1010" : "#1A1A1A" }}
+            />
           </TouchableOpacity>
         </View>
 
@@ -115,7 +110,7 @@ const ProductDetails = () => {
               fontFamily: "GeneralSemibold",
             }}
           >
-            {(product.name)}
+            {product.name}
           </Text>
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}
@@ -131,7 +126,7 @@ const ProductDetails = () => {
               }}
             >
               4.0/5
-              </Text>
+            </Text>
             <Text
               style={{
                 color: "#6B7280",
@@ -150,7 +145,7 @@ const ProductDetails = () => {
               fontFamily: "GeneralRegular",
             }}
           >
-            {(product.description)}
+            {product.description}
           </Text>
 
           {/* Size Options */}
@@ -164,32 +159,36 @@ const ProductDetails = () => {
             Choose size
           </Text>
           <View style={{ flexDirection: "row", marginTop: 8 }}>
-            {["S", "M", "L"].map((size) => (
-              <TouchableOpacity
-                key={size}
-                onPress={() => handleSizeSelect(size)}
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderWidth: 1,
-                  borderRadius: 8,
-                  borderColor: selectedSize === size ? "black" : "#D1D5DB",
-                  backgroundColor:
-                    selectedSize === size ? "black" : "transparent",
-                  marginRight: 8,
-                }}
-              >
-                <Text
+            {Array.isArray(product.size) && product.size.length > 0 ? (
+              product.size.map((size) => (
+                <TouchableOpacity
+                  key={size}
+                  onPress={() => handleSizeSelect(size)}
                   style={{
-                    fontFamily: "GeneralMedium",
-                    fontSize: 20,
-                    color: selectedSize === size ? "white" : "#374151",
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    borderColor: selectedSize === size ? "black" : "#D1D5DB",
+                    backgroundColor:
+                      selectedSize === size ? "black" : "transparent",
+                    marginRight: 8,
                   }}
                 >
-                  {size}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={{
+                      fontFamily: "GeneralMedium",
+                      fontSize: 20,
+                      color: selectedSize === size ? "white" : "#374151",
+                    }}
+                  >
+                    {size}
+                  </Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text style={{ color: "#6B7280" }}>No sizes available</Text>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -227,12 +226,11 @@ const ProductDetails = () => {
             >
               Price
             </Text>
-            <Text style={{ fontSize: 24, fontFamily: "GeneralSemibold" }}>
-              {product.price}
+            <Text style={{ fontSize: 20, fontFamily: "GeneralSemibold" }}>
+              ${product.price}
             </Text>
           </View>
           <TouchableOpacity
-            onPress={addToCart}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -241,8 +239,7 @@ const ProductDetails = () => {
               paddingVertical: 16,
               borderRadius: 10,
             }}
-            
-            >
+          >
             <Image
               source={require("../../../assets/icons/bag-icon.png")}
               style={{

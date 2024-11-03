@@ -7,7 +7,10 @@ import { FlatList, StyleSheet } from "react-native";
 
 const SavedItemsScreen = () => {
   const { wishList } = useContext(SaveItemContext);
-  const items = wishList.map(item => item.product_id);
+  const items = wishList
+    .map(item => item.product_id);
+
+  console.log("items: ", items);
 
   const renderSaveItems = ({ item }) => {
     return <ProductItem item={item} />;
