@@ -15,7 +15,7 @@ import { CartSearch } from "../../../components/CardSearch";
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [recentSearches, setRecentSearches] = useState(["Jeans", "Casual clothes", "Hoodie", "Nike shoes black", "V-neck tshirt", "Winter clothes"]);
+  const [recentSearches, setRecentSearches] = useState(["Sofa", "Gường", "Thảm", "Tủ", "Bàn ghế", "Gương"]);
   const inputRef = useRef(null);
 
   const handleSearch = (query) => {
@@ -48,16 +48,16 @@ const Search = () => {
         source={require("../../../assets/icons/search-duotone-icon.png")}
         style={styles.emptyImage}
       />
-      <Text style={styles.emptyText}>No Results Found!</Text>
+      <Text style={styles.emptyText}>Không tìm thấy kết quả nào!</Text>
       <Text style={styles.emptySubText}>
-        Try a similar word or something more general.
+      Hãy thử một từ tương tự hoặc một từ tổng quát hơn.
       </Text>
     </View>
   );
 
   const renderRecentSearches = () => (
     <View style={styles.recentContainer}>
-      <Text style={styles.recentTitle}>Top Saller</Text>
+      <Text style={styles.recentTitle}>Sản phẩm tìm kiếm nhiều nhất</Text>
       {recentSearches.map((item, index) => (
         <View key={index} style={styles.recentItem}>
           <Text onPress={() => handleSearch(item)} style={styles.recentText}>{item}</Text>
@@ -68,7 +68,7 @@ const Search = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-primary-0 px-6">
-      <Header title="Search" />
+      <Header title="Tìm kiếm" />
 
       <View
         className="max-h-14 flex-row items-center border border-primary-100 rounded-lg px-4"
@@ -80,7 +80,7 @@ const Search = () => {
           style={{ tintColor: "#999999" }}
         />
         <TextInput
-          placeholder="Search for clothes..."
+          placeholder="Tìm kiếm nội thất..."
           className="ml-2 text-primary-900 text-base w-full"
           ref={inputRef}
           value={searchQuery}

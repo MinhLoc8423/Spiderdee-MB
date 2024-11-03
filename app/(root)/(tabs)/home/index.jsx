@@ -31,7 +31,7 @@ const HomePage = () => {
       setCategories(categoriesData.data);
       setProducts(productsData.data);
     } catch (error) {
-      console.error("Error fetching data: ", error);
+      console.error("Lỗi khi lấy dữ liệu: ", error);
     }
   }, []);
 
@@ -41,7 +41,7 @@ const HomePage = () => {
       const productsData = await searchProducts("", categoryId, "", "");
       setProducts(productsData.data);
     } catch (error) {
-      console.error("Error filtering products: ", error);
+      console.error("Lỗi khi lọc sản phẩm: ", error);
     }
   }, []);
 
@@ -105,7 +105,7 @@ const HomePage = () => {
           />
           <TextInput
             onPress={() => router.push("/(root)/(tabs)/search")}
-            placeholder="Search for clothes..."
+            placeholder="Tìm kiếm nội thất..."
             className="ml-2 flex-1 text-primary-900 text-base"
             style={{
               fontFamily: "GeneralRegular",

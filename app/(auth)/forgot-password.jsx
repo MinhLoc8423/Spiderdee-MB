@@ -16,7 +16,7 @@ const ForgotPassword = () => {
     setEmailError('');
 
     if (!validateEmail(email)) {
-      setEmailError('Please enter a valid email address.');
+      setEmailError('Vui lòng nhập địa chỉ email hợp lệ.');
       hasError = true;
     }
 
@@ -28,7 +28,7 @@ const ForgotPassword = () => {
     try {
       const userData = await sendOTP(email);
       if (!userData) {
-        setEmailError('Incorrect email.');
+        setEmailError('Email không đúng.');
       } else {
         router.push({
           pathname: '/(auth)/verification',
@@ -37,10 +37,10 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       if (error.status === 404) {
-        setEmailError("User doesn't exist");
+        setEmailError("Người dùng không tồn tại");
       }
       else {
-        Alert.alert('An unexpected error occurred. Please try again later.');
+        Alert.alert('Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.');
       }
     } finally {
       setLoading(false);
@@ -58,9 +58,9 @@ const ForgotPassword = () => {
           <Image source={require('../../assets/icons/arrow-icon.png')} className="w-6 h-6" />
         </Text>
 
-        <Text className='text-4xl mt-3' style={{ fontFamily: 'GeneralSemibold' }}  >Forgot password</Text>
+        <Text className='text-4xl mt-3' style={{ fontFamily: 'GeneralSemibold' }}  >Quên mật khẩu</Text>
         <Text style={{ fontFamily: 'GeneralRegular', color: '#808080', marginBottom: 15, marginTop: 5 }}>
-          Enter your email for the verification process. We will send a 4-digit code to your email.
+        Nhập email của bạn để xác minh. Chúng tôi sẽ gửi mã gồm 4 chữ số đến email của bạn.
         </Text>
 
         <InputComponent label="Email" value={email} placeholder={'Please enter your email'} setValue={setEmail} error={emailError} />
@@ -70,7 +70,7 @@ const ForgotPassword = () => {
           onPress={handleSendOTP}
           className={`w-full ${isLoading ? 'bg-primary-200' : 'bg-primary-900'}`}
           disabled={isLoading}>
-          <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Loading...' : "Send Code"}</Text>
+          <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Đang tải...' : "Gửi mã"}</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>

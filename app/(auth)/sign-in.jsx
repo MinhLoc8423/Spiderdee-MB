@@ -72,10 +72,10 @@ const SingIn = () => {
           style={{ fontFamily: "GeneralSemibold" }}
           className="text-3xl mt-3"
         >
-          Login to your account
+          Đăng nhập vào tài khoản của bạn
         </Text>
         <Text style={styles.text1} className="mb-5">
-          It’s great to see you again.
+        Thật vui khi được gặp lại bạn.
         </Text>
 
         <View className="my-1 ">
@@ -83,7 +83,7 @@ const SingIn = () => {
             style={{ fontFamily: "GeneralMedium" }}
             className="w-80 text-base"
           >
-            Email
+            E-mail
           </Text>
           <TextInput
             className={`border rounded-xl h-[50] px-5 text-sm ${
@@ -93,7 +93,7 @@ const SingIn = () => {
                 ? "border-danger"
                 : "border-primary-100"
             }`}
-            placeholder="Enter your email address"
+            placeholder="Vui lòng nhập E-mail"
             onChangeText={(value) => setEmail(value)}
             value={email}
             onFocus={() => setIsFocused(true)}
@@ -111,7 +111,7 @@ const SingIn = () => {
             style={{ fontFamily: "GeneralMedium" }}
             className="w-80 text-base"
           >
-            Password
+            Mật khẩu
           </Text>
           <View
             className={`flex-row items-center border rounded-xl h-[50] px-5 ${
@@ -125,7 +125,7 @@ const SingIn = () => {
             <TextInput
               style={{ fontFamily: "GeneralMedium", flex: 1 }} // Make TextInput take remaining space
               className="text-sm"
-              placeholder="Enter your password"
+              placeholder="Vui lòng nhập mật khẩu"
               value={password}
               secureTextEntry={!showPassword}
               onChangeText={(value) => setPassword(value)}
@@ -154,7 +154,7 @@ const SingIn = () => {
         </View>
 
         <Text style={[styles.text2]}>
-          Forgot your password?{" "}
+        Quên mật khẩu?{" "}
           <Link
             href={"/(auth)/forgot-password"}
             style={{
@@ -163,7 +163,7 @@ const SingIn = () => {
               textDecorationLine: "underline",
             }}
           >
-            Reset your password
+            Đặt lại mật khẩu của bạn
           </Link>{" "}
         </Text>
 
@@ -176,7 +176,7 @@ const SingIn = () => {
           disabled={isLoading}
         >
           <Text style={{ fontSize: 16, textAlign: "center", color: "#FFFFFF" }}>
-            {isLoading ? "Loading..." : "Login"}
+            {isLoading ? "Loading..." : "Đăng Nhập"}
           </Text>
         </Pressable>
 
@@ -188,7 +188,7 @@ const SingIn = () => {
 
         <Pressable style={[styles.Pressable]} className="w-full">
           <Text style={{ fontSize: 16, textAlign: "center" }}>
-            Sign Up with Google
+          Đăng nhập bằng Google
           </Text>
           <Image
             source={require("../../assets/icons/logo-google-icon.png")}
@@ -204,7 +204,7 @@ const SingIn = () => {
           className="w-full"
         >
           <Text style={{ fontSize: 16, textAlign: "center", color: "#FFFFFF" }}>
-            Sign Up with Facebook
+            Đăng nhập bằng Facebook
           </Text>
           <Image
             source={require("../../assets/icons/logo-facebook-icon.png")}
@@ -216,7 +216,7 @@ const SingIn = () => {
           href={"/(auth)/sign-up"}
           style={[styles.text2, { textAlign: "center", marginTop: 100 }]}
         >
-          Don’t have an account?{" "}
+          Bạn chưa có tài khoản?{" "}
           <Text
             style={{
               color: "#1A1A1A",
@@ -224,7 +224,7 @@ const SingIn = () => {
               textDecorationLine: "underline",
             }}
           >
-            Join
+            Đăng ký
           </Text>
         </Link>
       </ScrollView>

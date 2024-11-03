@@ -18,7 +18,7 @@ const SavedItemsScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-primary-0 px-6">
-      <Header title="Saved Items" />
+      <Header title="Các mục đã lưu" />
       <FlatList
         data={items}
         keyExtractor={(item) => item._id}
