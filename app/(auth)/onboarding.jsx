@@ -16,7 +16,7 @@ const OnboardingScreen = () => {
       {/* Text Section */}
       <View className='absolute top-20 left-5 right-5'>
         <Text className='text-5xl font-bold text-black'>
-          Define yourself{'\n'}in your unique way.
+        Hãy định nghĩa bản thân bạn{'\n'}theo cách độc đáo của bạn.
         </Text>
       </View>
 
@@ -26,7 +26,7 @@ const OnboardingScreen = () => {
           className='bg-black p-4 rounded-lg flex-row items-center justify-center'
           onPress={()=> router.push('/sign-in')}
         >
-          <Text className='text-white text-lg font-bold mr-2'>Get Started</Text>
+          <Text className='text-white text-lg font-bold mr-2'>Bắt đầu</Text>
           <Text className='text-white text-lg'>→</Text>
         </TouchableOpacity>
       </View>

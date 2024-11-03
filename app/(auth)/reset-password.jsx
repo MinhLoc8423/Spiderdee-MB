@@ -37,8 +37,8 @@ const ResetPassword = () => {
         }
 
         if (password !== passwordConfirm) {
-            setPasswordError("Passwrods do not match.");
-            setPasswordConfirmError("Passwrods do not match.");
+            setPasswordError("Mật khẩu không khớp.");
+            setPasswordConfirmError("Mật khẩu không khớp.");
             hasError = true;
         }
 
@@ -50,14 +50,14 @@ const ResetPassword = () => {
         try {
             console.log(password, otpToken);
             const userData = await resetPassword(password, otpToken);
-            Alert.alert('Password changed successfully!');
+            Alert.alert('Đã thay đổi mật khẩu thành công!');
             router.replace('/(auth)/sign-in');
         } catch (error) {
             if (error.status === 400) {
                 Alert.alert(error.message);
             }
             else {
-                Alert.alert('An unexpected error occurred. Please try again later.');
+                Alert.alert('Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.');
             }
         } finally {
             setLoading(false);
@@ -76,10 +76,10 @@ const ResetPassword = () => {
                     <Image source={require('../../assets/icons/arrow-icon.png')} className="w-6 h-6" />
                 </Text>
                 <Text className="text-4xl mt-3" style={{ fontFamily: 'GeneralSemibold' }}>
-                    Reset Password
+                Đặt lại mật khẩu
                 </Text>
                 <Text style={{ fontFamily: 'GeneralRegular', color: '#808080', marginBottom: 15, marginTop: 5, fontSize: 16 }}>
-                    Set the new password for your account so you can login and access all the features.
+                Đặt mật khẩu mới cho tài khoản của bạn để bạn có thể đăng nhập và truy cập tất cả các tính năng.
                 </Text>
 
                 <View className='my-1.5 '>
@@ -88,7 +88,7 @@ const ResetPassword = () => {
                         <TextInput
                             style={{ fontFamily: 'GeneralMedium', flex: 1 }} // Make TextInput take remaining space
                             className='text-sm'
-                            placeholder='Enter your password'
+                            placeholder='Nhập mật khẩu của bạn'
                             value={password}
                             secureTextEntry={!showPassword}
                             onChangeText={(value) => setPassword(value)}
@@ -106,12 +106,12 @@ const ResetPassword = () => {
                 </View>
 
                 <View className='my-1.5'>
-                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Password Confirm</Text>
+                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Xác nhận mật khẩu</Text>
                     <View className={`flex-row items-center border rounded-xl h-[50] px-5 ${isFocused1 ? 'border-primary-900' : (passwordConfirmError ? 'border-danger' : 'border-primary-100')}`}>
                         <TextInput
                             style={{ fontFamily: 'GeneralMedium', flex: 1 }} // Make TextInput take remaining space
                             className='text-sm'
-                            placeholder='Enter your password'
+                            placeholder='Nhập mật khẩu của bạn'
                             value={passwordConfirm}
                             secureTextEntry={!showPassword1}
                             onChangeText={(value) => setPasswordConfirm(value)}
@@ -134,7 +134,7 @@ const ResetPassword = () => {
                     className={`w-full ${isLoading ? 'bg-primary-200' : 'bg-primary-900'}`}
                     disabled={isLoading}
                 >
-                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Loading...' : "Reset Password"}</Text>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Đang tải...' : "Đặt lại mật khẩu"}</Text>
                 </Pressable>
             </ScrollView>
         </SafeAreaView>

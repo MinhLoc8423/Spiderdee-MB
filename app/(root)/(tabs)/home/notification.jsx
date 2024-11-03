@@ -6,7 +6,7 @@ import Header from "../../../../components/Header";
 export default function NotificationsScreen() {
   return (
     <SafeAreaView className="flex-1 bg-primary-0 px-6">
-      <Header title="Notifications" />
+      <Header title="Thông báo" />
 
       <View className="flex-1 items-center justify-center bg-white px-4 ">
         <Image
@@ -18,12 +18,12 @@ export default function NotificationsScreen() {
           style={{ fontFamily: "GeneralSemibold" }}
           className="text-xl text-center text-black pb-3"
         >
-          You haven’t gotten any notifications yet!
+          Bạn vẫn chưa nhận được thông báo nào!
         </Text>
         <Text 
         style={{ fontFamily: "GeneralRegular" }}
         className="text-lg text-center text-primary-500">
-          We’ll alert you when something cool happens.
+          Chúng tôi sẽ thông báo cho bạn khi có điều gì thú vị xảy ra.
         </Text>
       </View>
     </SafeAreaView>

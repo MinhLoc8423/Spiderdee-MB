@@ -30,7 +30,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="home"
         options={{
-          title: "Home",
+          title: "Trang chủ",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
@@ -47,7 +47,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
+          title: "Tìm kiếm",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
@@ -64,7 +64,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="save"
         options={{
-          title: "Saved",
+          title: "Yêu thích",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
@@ -81,7 +81,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="cart"
         options={{
-          title: "Cart",
+          title: "Giỏ hàng",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
@@ -98,7 +98,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="account"
         options={{
-          title: "Account",
+          title: "Tài khoản",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image

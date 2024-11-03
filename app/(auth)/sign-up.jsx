@@ -45,36 +45,36 @@ const Signup = () => {
         setPasswordConfirmError("");
 
         if (!firstName) {
-            setFirstNameError("Please enter your first name.");
+            setFirstNameError("Vui lòng nhập tên của bạn.");
             hasError = true;
         }
         if (!lastname) {
-            setLastNameError("Please enter your last name.");
+            setLastNameError("Vui lòng nhập họ của bạn.");
             hasError = true;
         }
         if (!validatePhoneNumber(phone)) {
-            setPhoneError("Please enter your phone number.");
+            setPhoneError("Vui lòng nhập số điện thoại của bạn.");
             hasError = true;
         }
 
         if (!validateEmail(email)) {
-            setEmailError("Please enter a valid email address.");
+            setEmailError("Vui lòng nhập địa chỉ email hợp lệ.");
             hasError = true;
         }
 
         if (!validatePassword(password)) {
-            setPasswordError("Please enter a valid password.");
+            setPasswordError("Vui lòng nhập mật khẩu hợp lệ.");
             hasError = true;
         }
 
         if (!validatePassword(passwordConfirm)) {
-            setPasswordConfirmError("Please enter a valid password confirm.");
+            setPasswordConfirmError("Vui lòng nhập mật khẩu hợp lệ để xác nhận.");
             hasError = true;
         }
 
         if (password !== passwordConfirm) {
-            setPasswordError("Passwrods do not match.");
-            setPasswordConfirmError("Passwrods and confirm passwords do not match.");
+            setPasswordError("Mật khẩu không khớp.");
+            setPasswordConfirmError("Mật khẩu và xác nhận mật khẩu không khớp nhau.");
             hasError = true;
         }
 
@@ -87,17 +87,17 @@ const Signup = () => {
             const userData = await register(firstName, lastname, email, password, phone);
             console.log(userData);
             if (!userData) {
-                setEmailError("Email already exists");
+                setEmailError("E-mail đã tồn tại");
             } else {
                 // await AsyncStorage.setItem('accessTokenUser', userData.token);
                 router.replace('/(auth)/sign-in');
             }
         } catch (error) {
             if (error.status === 400) {
-                setEmailError("Email already exists");
+                setEmailError("E-mail đã tồn tại");
             }
             else{
-                Alert.alert('An unexpected error occurred. Please try again later.');
+                Alert.alert('Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.');
             }
         } finally {
             setLoading(false);
@@ -112,24 +112,24 @@ const Signup = () => {
                 automaticallyAdjustKeyboardInsets={true}
                 style={styles.container}
             >
-                <Text style={styles.text}>Create an account</Text>
-                <Text style={styles.text1} className='mb-6'>Let’s create your account.</Text>
+                <Text style={styles.text}>Tạo tài khoản</Text>
+                <Text style={styles.text1} className='mb-6'>Hãy tạo tài khoản của bạn.</Text>
 
-                <InputComponent label='Email' value={email} placeholder={'Please enter your email'} setValue={setEmail} error={emailError} />
+                <InputComponent label='E-mail' value={email} placeholder={'Vui lòng nhập email của bạn'} setValue={setEmail} error={emailError} />
 
-                <InputComponent label='First Name' value={firstName} placeholder={'Please enter your first name'} setValue={setFirstName} error={firstNameError} />
+                <InputComponent label='Tên' value={firstName} placeholder={'Vui lòng nhập tên của bạn'} setValue={setFirstName} error={firstNameError} />
 
-                <InputComponent label='Last Name' value={lastname} placeholder={'Please enter your last name'} setValue={setLastName} error={lastNameError} />
+                <InputComponent label='Họ' value={lastname} placeholder={'Vui lòng nhập họ của bạn'} setValue={setLastName} error={lastNameError} />
 
-                <InputComponent label='Phone Number' value={phone} placeholder={'Please enter your phone number'} setValue={setPhone} error={phoneError} keyboardType="numeric" />
+                <InputComponent label='Số điện thoại' value={phone} placeholder={'Vui lòng nhập số điện thoại của bạn'} setValue={setPhone} error={phoneError} keyboardType="numeric" />
 
                 <View className='my-1.5 '>
-                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Password</Text>
+                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Mật khẩu</Text>
                     <View className={`flex-row items-center border rounded-xl h-[50] px-5 ${isFocused ? 'border-primary-900' : (passwordError ? 'border-danger' : 'border-primary-100')}`}>
                         <TextInput
                             style={{ fontFamily: 'GeneralMedium', flex: 1 }} // Make TextInput take remaining space
                             className='text-sm'
-                            placeholder='Enter your password'
+                            placeholder='Nhập mật khẩu'
                             value={password}
                             secureTextEntry={!showPassword}
                             onChangeText={(value) => setPassword(value)}
@@ -147,12 +147,12 @@ const Signup = () => {
                 </View>
 
                 <View className='my-1.5'>
-                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Password Confirm</Text>
+                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Nhập lại mật khẩu</Text>
                     <View className={`flex-row items-center border rounded-xl h-[50] px-5 ${isFocused1 ? 'border-primary-900' : (passwordConfirmError ? 'border-danger' : 'border-primary-100')}`}>
                         <TextInput
                             style={{ fontFamily: 'GeneralMedium', flex: 1 }} // Make TextInput take remaining space
                             className='text-sm'
-                            placeholder='Enter your password'
+                            placeholder='Nhập mật khẩu'
                             value={passwordConfirm}
                             secureTextEntry={!showPassword1}
                             onChangeText={(value) => setPasswordConfirm(value)}
@@ -169,14 +169,14 @@ const Signup = () => {
                     {passwordConfirmError && (<Text style={{ color: 'red', fontFamily: 'GeneralMedium' }}>{passwordConfirmError}</Text>)}
                 </View>
 
-                <Text style={styles.text2}>By signing up you agree to our <Text style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Terms, Privacy Policy, and Cookie Use</Text></Text>
+                <Text style={styles.text2}>Bằng cách đăng ký, bạn đồng ý với chúng tôi <Text style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Điều khoản, Chính sách bảo mật và Sử dụng Cookie</Text></Text>
 
                 <Pressable
                     style={[styles.Pressable, { marginTop: 30 }]}
                     onPress={handleRegister}
                     className={`w-full ${isLoading ? 'bg-primary-200' : 'bg-primary-900'}`}
                     disabled={isLoading}>
-                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Loading...' : "Register"}</Text>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Loading...' : "Đăng Ký"}</Text>
                 </Pressable>
 
                 <View className='flex-row items-center mb-5 mt-5'>
@@ -186,20 +186,20 @@ const Signup = () => {
                 </View>
 
                 <TouchableOpacity style={[styles.Pressable]}>
-                    <Text style={{ fontSize: 16, textAlign: 'center' }}>Sign Up with Google</Text>
+                    <Text style={{ fontSize: 16, textAlign: 'center' }}>Đăng nhập bằng Google</Text>
                     <Image
                         source={require("../../assets/icons/logo-google-icon.png")}
                         style={{ marginEnd: 10 }} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={[styles.Pressable, { backgroundColor: '#1877F2', marginTop: 10 }]}>
-                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Sign Up with Facebook</Text>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>Đăng nhập bằng Facebook</Text>
                     <Image
                         source={require("../../assets/icons/logo-facebook-icon.png")}
                         style={{ marginEnd: 10 }} />
                 </TouchableOpacity>
 
-                <Text style={[styles.text2, { textAlign: 'center', marginTop: 20, marginBottom: 50 }]} className='mb-5'>Already have an account? <Link href={('/(auth)/sign-in')} style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Log In</Link></Text>
+                <Text style={[styles.text2, { textAlign: 'center', marginTop: 20, marginBottom: 50 }]} className='mb-5'>Bạn đã có tài khoản? <Link href={('/(auth)/sign-in')} style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Đăng nhập</Link></Text>
             </ScrollView>
         </SafeAreaView >
     );
