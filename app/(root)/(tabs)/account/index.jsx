@@ -30,24 +30,10 @@ const Account = () => {
         </View>
         <Image style = {styles.iconback} source={require('../../../../assets/icons/Arrow.png')}/>
       </TouchableOpacity>
-      <TouchableOpacity style = {styles.card}>
+      <TouchableOpacity style = {styles.card} onPress={()=> router.push('/(root)/(tabs)/account/address')}>
         <View style={{flexDirection:'row', justifyContent:'space-between', width:'100',height:'50', alignItems: 'center'}}>
         <Image style = {styles.icons} source={require('../../../../assets/icons/Address.png')}/>
         <Text style = {styles.text}>Address Book</Text>
-        </View>
-        <Image style = {styles.iconback} source={require('../../../../assets/icons/Arrow.png')}/>
-      </TouchableOpacity>
-      <TouchableOpacity style = {styles.card}>
-        <View style={{flexDirection:'row', justifyContent:'space-between', width:'100',height:'50', alignItems: 'center'}}>
-        <Image style = {styles.icons} source={require('../../../../assets/icons/Card.png')}/>
-        <Text style = {styles.text}>Payment Methods</Text>
-        </View>
-        <Image style = {styles.iconback} source={require('../../../../assets/icons/Arrow.png')}/>
-      </TouchableOpacity>
-      <TouchableOpacity style = {styles.card} onPress={()=> router.push('/(root)/(tabs)/account/notifications')}>
-        <View style={{flexDirection:'row', justifyContent:'space-between', width:'100',height:'50', alignItems: 'center'}}>
-        <Image style = {styles.icons} source={require('../../../../assets/icons/Bell.png')}/>
-        <Text style = {styles.text}>Notification</Text>
         </View>
         <Image style = {styles.iconback} source={require('../../../../assets/icons/Arrow.png')}/>
       </TouchableOpacity>
@@ -58,7 +44,7 @@ const Account = () => {
         </View>
         <Image style = {styles.iconback} source={require('../../../../assets/icons/Arrow.png')}/>
       </TouchableOpacity>
-      <TouchableOpacity style = {styles.card} >
+      <TouchableOpacity style = {styles.card} onPress={()=> router.push('/(root)/(tabs)/account/help')}>
         <View style={{flexDirection:'row', justifyContent:'space-between', width:'100',height:'50', alignItems: 'center'}}>
         <Image style = {styles.icons} source={require('../../../../assets/icons/Headphones.png')}/>
         <Text style = {styles.text}>Help Center</Text>

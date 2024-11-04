@@ -26,19 +26,9 @@ const _layout = () => {
         options={{ title: "Help Center", headerShown: false }}
       /> 
       <Stack.Screen
-        name="notifications"
-        options={{ title: "Notification", headerShown: false }}
-      />
-      {/* <Stack.Screen
         name="address"
         options={{ title: "Address Book", headerShown: false }}
       />
-      <Stack.Screen
-        name="payment"
-        options={{ title: "Payment Methods", headerShown: false }}
-      />
-      
-      */}
     </Stack>
   );
 };

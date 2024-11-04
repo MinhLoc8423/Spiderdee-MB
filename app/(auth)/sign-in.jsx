@@ -39,7 +39,7 @@ const SingIn = () => {
 
         try {
             const userData = await login(email, password);
-                await AsyncStorage.setItem('accessTokenUser', userData.token);
+                await AsyncStorage.setItem('accessTokenUser', userData.data.token);
                 router.replace('/(tabs)/home');
         } catch (error) {
             if (error.status === 401) {
