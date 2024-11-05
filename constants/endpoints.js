@@ -20,5 +20,13 @@ export const API_ENDPOINTS = {
   WISHLIST: '/api/wish-list/',
   WISHLISTGETUSER: '/api/wish-list/user/',
 
+  //Order endpoints
+  ORDER: '/api/orders/',
+
+  //Payment endpoints
+  PAYMENT: '/api/payment/',
+
+  //Address endpointsshipping
+  ADDRESS: '/api/address/',
 };
 

@@ -12,13 +12,14 @@ const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const { addToCart } = useContext(CartContext);
   const { wishList, addToWishlist, removeFromWishlist } = useContext(SaveItemContext);
+  const [price, setPrice] = useState();
   const isInWishlist = wishList.some(
     (wishItem) => wishItem?.product_id?._id === product._id
   );
 
   const fetchData = async () => {
     const response = await getProductById(id.id);
-    response.data.price = response.data.price.toLocaleString();
+    setPrice(response.data.price.toLocaleString());
     setProduct(response.data);
   };
 
@@ -236,7 +237,7 @@ const ProductDetails = () => {
               Price
             </Text>
             <Text style={{ fontSize: 20, fontFamily: "GeneralSemibold" }}>
-              ${product.price}
+              {price}
             </Text>
           </View>
           <TouchableOpacity

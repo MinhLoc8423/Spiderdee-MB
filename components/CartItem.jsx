@@ -16,7 +16,7 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
           <Text style={styles.itemName}>{item.name}</Text>
           <Text style={styles.itemSize}>Size: {item.size}</Text>
         </View>
-        <Text style={styles.itemPrice}>{item.price} VNĐ</Text>
+        <Text style={styles.itemPrice}>{Number(item.price).toLocaleString()} VNĐ</Text>
       </View>
 
       {/* Actions (Quantity and Delete) */}

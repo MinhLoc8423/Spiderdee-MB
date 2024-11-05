@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../store/contexts/AuthContext';
 import { AuthProvider } from '../store/providers/AuthProvider';
 import { CartProvider } from '../store/providers/CartProvider';
+import { AddressProvider } from '../store/providers/AddressProvider';
 import { SaveItemProvider } from "../store/providers/SaveItemProvider";
 import * as SplashScreen from 'expo-splash-screen';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -51,6 +52,9 @@ const RootLayout = () => {
       <Stack.Screen name="(root)/(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="(root)/product-details/[id]" options={{ headerShown: false }} />
       <Stack.Screen name="(root)/reviews/[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="(root)/checkout-address/check-out" options={{ headerShown: false }} />
+      <Stack.Screen name="(root)/checkout-address/address" options={{ headerShown: false }} />
+      <Stack.Screen name="(root)/checkout-address/new-address" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
@@ -60,7 +64,9 @@ export default () => (
   <AuthProvider>
     <SaveItemProvider>
       <CartProvider>
-        <RootLayout />
+        <AddressProvider>
+          <RootLayout />
+        </AddressProvider>
       </CartProvider>
     </SaveItemProvider>
   </AuthProvider>

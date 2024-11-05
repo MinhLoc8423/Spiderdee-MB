@@ -7,15 +7,14 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CartContext } from "../../../store/contexts/CartContext";
 import Header from "@/components/Header";
 import CartItem from "@/components/CartItem";
+import { router } from "expo-router";
 
 const MyCartScreen = () => {
   const { cartList, updateQuantity, removeFromCart } = useContext(CartContext);
-  console.log("Cart List:", cartList);
   const shippingFee = 200000;
   const vatPercentage = 10;
 
@@ -37,7 +36,7 @@ const MyCartScreen = () => {
 
   const calculateSubtotal = () => {
     return cartList.reduce((sum, item) => {
-      const price = parseFloat(item.price.replace(/,/g, ""));
+      const price = parseFloat(item.price);
       const quantity = parseInt(item.quantity, 10);
       return sum + price * quantity;
     }, 0);
@@ -54,6 +53,22 @@ const MyCartScreen = () => {
     return subtotal + vat + shippingFee;
   };
 
+  const renderEmptyResults = () => (
+    <View className="flex-1 justify-center items-center">
+      <Image
+        source={require("../../../assets/icons/cart-duotone-icon.png")}
+        className="w-24 h-24 mb-4"
+        tintColor={"#B3B3B3"}
+      />
+      <Text className="text-lg font-bold text-gray-800">
+        Your Cart Is Empty!
+      </Text>
+      <Text className="text-base text-gray-600 text-center mx-8">
+        When you add products, they’ll appear here.
+      </Text>
+    </View>
+  );
+
   const renderItem = ({ item }) => (
     <CartItem
       item={item}
@@ -66,50 +81,58 @@ const MyCartScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header title={"Cart"} />
-      <FlatList
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        data={cartList}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        contentContainerStyle={styles.listContent}
-      />
-
-      <View style={styles.summaryContainer}>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryText}>Tổng tiền hàng</Text>
-          <Text style={styles.summaryText}>
-            {calculateSubtotal().toLocaleString() + " VNĐ"}
-          </Text>
+      {cartList.length === 0 ? (
+        renderEmptyResults()
+      ) : (
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          data={cartList}
+          renderItem={renderItem}
+          keyExtractor={(item) => item._id}
+          contentContainerStyle={styles.listContent}
+        />
+      )}
+      {cartList.length == 0 ? (
+        <></>
+      ) : (
+        <View>
+          <View style={styles.summaryContainer}>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryText}>Tổng tiền hàng</Text>
+              <Text style={styles.summaryText}>
+                {calculateSubtotal().toLocaleString() + " VNĐ"}
+              </Text>
+            </View>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryText}>VAT {vatPercentage}%</Text>
+              <Text style={styles.summaryText}>
+                {calculateVAT().toLocaleString() + " VNĐ"}
+              </Text>
+            </View>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryText}>Phí vận chuyển</Text>
+              <Text style={styles.summaryText}>
+                {shippingFee.toLocaleString()} VNĐ
+              </Text>
+            </View>
+            <View style={styles.totalRow}>
+              <Text style={styles.totalText}>Tổng thanh toán</Text>
+              <Text style={styles.totalText}>
+                {calculateTotal().toLocaleString() + " VNĐ"}
+              </Text>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.checkoutButton}
+            onPress={() => {
+              router.push("/(root)/checkout-address/check-out");
+            }}
+          >
+            <Text style={styles.checkoutText}>Đi đến thanh toán</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryText}>VAT {vatPercentage}%</Text>
-          <Text style={styles.summaryText}>
-            {calculateVAT().toLocaleString() + " VNĐ"}
-          </Text>
-        </View>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryText}>Phí vận chuyển</Text>
-          <Text style={styles.summaryText}>
-            {shippingFee.toLocaleString()} VNĐ
-          </Text>
-        </View>
-        <View style={styles.totalRow}>
-          <Text style={styles.totalText}>Tổng thanh toán</Text>
-          <Text style={styles.totalText}>
-            {calculateTotal().toLocaleString() + " VNĐ"}
-          </Text>
-        </View>
-      </View>
-
-      <TouchableOpacity
-        style={styles.checkoutButton}
-        onPress={() => {
-          /* Navigate to the checkout screen */
-        }}
-      >
-        <Text style={styles.checkoutText}>Đi đến thanh toán</Text>
-      </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };
