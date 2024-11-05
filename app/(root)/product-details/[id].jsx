@@ -5,6 +5,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { getProductById } from "../../../api/product";
 import { CartContext } from "../../../store/contexts/CartContext";
 import { SaveItemContext } from "../../../store/contexts/SaveItemContext";
+import NotiModal from '../../../components/NotiModal';
 
 const ProductDetails = () => {
   const id = useLocalSearchParams();
@@ -17,6 +18,12 @@ const ProductDetails = () => {
     (wishItem) => wishItem?.product_id?._id === product._id
   );
 
+  // Modal
+  const [showNotiModal, setShowNotiModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [forUsr, setForUsr] = useState("warning");
+
   const fetchData = async () => {
     const response = await getProductById(id.id);
     setPrice(response.data.price.toLocaleString());
@@ -26,9 +33,15 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     if (selectedSize) {
       addToCart(product, selectedSize);
-      alert("Đã thêm thành công vào giỏ hàng");
+      setForUsr('success');
+      setTitle("Thành công");
+      setMessage("Vui lòng xem giỏ hàng");
+      setShowNotiModal(true);
     } else {
-      alert("Vui lòng chọn kích thước");
+      setForUsr('warning');
+      setTitle("Cảnh báo");
+      setMessage("Vui lý chọn kích thước");
+      setShowNotiModal(true);
     }
   };
 
@@ -253,6 +266,14 @@ const ProductDetails = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <NotiModal
+        visible={showNotiModal}
+        onClose={() => setShowNotiModal(false)}
+        title={title}
+        forUse={forUsr}
+        message={message}
+      />
     </SafeAreaView>
   );
 };
