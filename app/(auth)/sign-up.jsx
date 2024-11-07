@@ -5,7 +5,7 @@ import { Link, router } from 'expo-router';
 import axios from 'axios';
 import InputComponent from '../../components/CustomInput';
 import { validateEmail, validatePassword, validatePhoneNumber } from '../../helpers/validate';
-import { register } from '../../api/auth';
+import { register } from '../../api/authAPIs';
 
 const Signup = () => {
 

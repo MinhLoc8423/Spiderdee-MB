@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
-import { searchProducts } from "../../../api/product";
+import { searchProducts } from "../../../api/productAPIs";
 import Header from "../../../components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CartSearch } from "../../../components/CardSearch";

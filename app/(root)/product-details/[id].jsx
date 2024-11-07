@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
-import { getProductById } from "../../../api/product";
+import { getProductById } from "../../../api/productAPIs";
 import { CartContext } from "../../../store/contexts/CartContext";
 import { SaveItemContext } from "../../../store/contexts/SaveItemContext";
 import NotiModal from '../../../components/NotiModal';
@@ -273,6 +273,8 @@ const ProductDetails = () => {
         title={title}
         forUse={forUsr}
         message={message}
+        redirect={true}
+        redirectTo="/(root)/(tabs)/home"
       />
     </SafeAreaView>
   );

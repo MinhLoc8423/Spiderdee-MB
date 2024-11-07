@@ -15,7 +15,7 @@ import { router } from "expo-router";
 
 const MyCartScreen = () => {
   const { cartList, updateQuantity, removeFromCart } = useContext(CartContext);
-  const shippingFee = 200000;
+  const shippingFee = 0;
   const vatPercentage = 10;
 
   const handleIncreaseQuantity = (id) => {
@@ -100,19 +100,19 @@ const MyCartScreen = () => {
           <View style={styles.summaryContainer}>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryText}>Tổng tiền hàng</Text>
-              <Text style={styles.summaryText}>
+              <Text style={[styles.summaryText, { color: "#1a1a1a", fontWeight: "bold" }]}>
                 {calculateSubtotal().toLocaleString() + " VNĐ"}
               </Text>
             </View>
             <View style={styles.summaryRow}>
-              <Text style={styles.summaryText}>VAT {vatPercentage}%</Text>
-              <Text style={styles.summaryText}>
+              <Text style={styles.summaryText}>VAT ({vatPercentage}%)</Text>
+              <Text style={[styles.summaryText, { color: "#1a1a1a", fontWeight: "bold" }]}>
                 {calculateVAT().toLocaleString() + " VNĐ"}
               </Text>
             </View>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryText}>Phí vận chuyển</Text>
-              <Text style={styles.summaryText}>
+              <Text style={[styles.summaryText, { color: "#1a1a1a", fontWeight: "bold" }]}>
                 {shippingFee.toLocaleString()} VNĐ
               </Text>
             </View>
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#ddd",
     justifyContent: "space-between",
     marginVertical: 16,
-    marginBottom: 50,
+    marginBottom: 30,
     paddingTop: 8,
   },
   totalText: {

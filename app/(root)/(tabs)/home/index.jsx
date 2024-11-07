@@ -9,8 +9,8 @@ import {
   Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getAllCategories } from "../../../../api/category";
-import { getAllProducts, searchProducts } from "../../../../api/product";
+import { getAllCategories } from "../../../../api/categoryAPIs";
+import { getAllProducts, searchProducts } from "../../../../api/productAPIs";
 import { router } from "expo-router";
 import { AuthContext } from "../../../../store/contexts/AuthContext";
 import ProductItem from "../../../../components/ProductItem";
@@ -124,6 +124,7 @@ const HomePage = () => {
       </View>
 
       <FlatList
+        
         data={[{ _id: "", name: "Tất cả" }, ...categories]}
         keyExtractor={(category) => category._id}
         className="h-9"

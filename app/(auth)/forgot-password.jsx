@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { router } from 'expo-router';
 import { validateEmail } from '../../helpers/validate';
 import InputComponent from '../../components/CustomInput';
-import { sendOTP } from '../../api/auth';
+import { sendOTP } from '../../api/authAPIs';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('minhlocworkemail@gmail.com');

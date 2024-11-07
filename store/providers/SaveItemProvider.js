@@ -3,7 +3,7 @@ import {
   getWishListByUser,
   addProductToWishlist,
   removeProductFromWishlist,
-} from "../../api/wishList";
+} from "../../api/wishListAPIs";
 import { AuthContext } from "../contexts/AuthContext";
 import { SaveItemContext } from "../contexts/SaveItemContext";
 import { initialStateReducer, saveItemReducer } from "../reducers/saveItemReducer";

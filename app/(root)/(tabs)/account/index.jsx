@@ -24,27 +24,27 @@ const AccountScreen = ({ navigation }) => {
         </View>
 
         {/* Options List */}
-        <View className="border-t px-6 border-gray-200">
-          <TouchableOpacity onPress={() => router.push('/(root)/(tabs)/account/order')} className="flex-row items-center px-6 py-[25] border-b border-gray-200">
+        <View className="border-t border-gray-200">
+          <TouchableOpacity onPress={() => router.push('/(root)/(tabs)/account/my-order')} className="flex-row items-center px-6 py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/box-icon.png")} />
             <Text className="flex-1 ml-4 text-base">My Orders</Text>
             <MaterialIcons name="chevron-right" size={24} color="#B3B3B3" />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push('/(root)/(tabs)/account/my-detail')} className="flex-row items-center px-6 py-[25] border-b border-gray-200">
+          <TouchableOpacity onPress={() => router.push('/(root)/(tabs)/account/my-detail')} className="flex-row items-center px-6  py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/details-icon.png")} />
             <Text className="flex-1 ml-4 text-base">My Details</Text>
             <MaterialIcons name="chevron-right" size={24} color="#B3B3B3" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-row items-center px-6 py-[25] border-b border-gray-200">
+          <TouchableOpacity onPress={() => router.push('/(root)/checkout-address/address')} className="flex-row items-center px-6 py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/address-icon.png")} />
             <Text className="flex-1 ml-4 text-base">Address Book</Text>
             <MaterialIcons name="chevron-right" size={24} color="#B3B3B3" />
           </TouchableOpacity>
 
           {/* Additional options with gray separator */}
-          <View className="h-3 bg-gray-100" />
+          <View className="h-3 px-[-24] bg-gray-100" />
 
           <TouchableOpacity className="flex-row items-center px-6 py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/question-icon.png")} />

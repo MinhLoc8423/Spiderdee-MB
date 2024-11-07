@@ -13,7 +13,7 @@ import {
 import React, { useState, useContext } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loginLocal } from "../../api/auth";
+import { loginLocal } from "../../api/authAPIs";
 import { validateEmail, validatePassword } from "../../helpers/validate";
 import { AuthContext } from '../../store/contexts/AuthContext';
 

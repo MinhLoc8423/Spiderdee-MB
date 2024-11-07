@@ -2,7 +2,7 @@ import { Alert, Button, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, 
 import React, { useState } from 'react'
 import { Link, router, useLocalSearchParams } from 'expo-router'
 import { validatePassword } from '../../helpers/validate';
-import { resetPassword } from '../../api/auth';
+import { resetPassword } from '../../api/authAPIs';
 
 const ResetPassword = () => {
 

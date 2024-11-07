@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, Image, View, ScrollView, SafeAreaView, TextInput, Alert } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
-import { sendOTP, verifyOTP } from '../../api/auth';
+import { sendOTP, verifyOTP } from '../../api/authAPIs';
 import { router, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

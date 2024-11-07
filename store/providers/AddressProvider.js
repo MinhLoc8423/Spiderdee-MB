@@ -1,7 +1,7 @@
 // AddressProvider.js
 import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import { addressReducer, initialAddress } from '../reducers/addressReducer';
-import { getAddressByUser, createAddress, updateAddressAPI } from '../../api/address';
+import { getAddressByUser, createAddress, updateAddressAPI } from '../../api/addressAPIs';
 import { AddressContext } from '../contexts/AddressContext';
 import { AuthContext } from '../contexts/AuthContext';
 
