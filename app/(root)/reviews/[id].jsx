@@ -1,189 +1,122 @@
-import { router } from 'expo-router';
-import React from 'react';
-import { Image, SafeAreaView, TouchableOpacity } from 'react-native';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, Text, ScrollView, FlatList } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Header from "../../../components/Header";
+import { useLocalSearchParams } from "expo-router";
+import moment from "moment";
+import "moment/locale/vi";
 
-const App = () => {
-  return (
-    <SafeAreaView style={styles.container}>
-        {/* Header */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: 38,
-            paddingBottom: 23,
-          }}
-        >
-          <TouchableOpacity onPress={() => router.back()}>
-            <Image
-              source={require("../../../assets/icons/arrow-icon.png")}
-              style={{ width: 24, height: 24 }}
-            />
-          </TouchableOpacity>
-          <Text style={{ fontSize: 24, fontFamily: "GeneralSemibold" }}>
-            Reviews
-          </Text>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/icons/bell-icon.png")}
-              style={{ width: 24, height: 24 }}
-            />
-          </TouchableOpacity>
+const ReviewsScreen = () => {
+  const { id, reviews } = useLocalSearchParams();
+  const parsedReviews = JSON.parse(reviews);
+  const [rating, setRating] = useState();
+  const [review, setReview] = useState();
+  moment.locale("vi");
+
+  const caculateRatings = (start) => {
+    const totalRatings = parsedReviews.length;
+    const starRatings = parsedReviews.filter(
+      (rating) => rating.rating === start
+    ).length;
+    const percentage = (starRatings / totalRatings) * 100;
+    return percentage.toFixed(1);
+  };
+
+  const fetchData = async () => {
+    const averageRating =
+      parsedReviews.length > 0
+        ? (
+            parsedReviews.reduce((sum, review) => sum + review.rating, 0) /
+            parsedReviews.length
+          ).toFixed(1)
+        : 0.0;
+    setRating(averageRating);
+    setReview(parsedReviews.length);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [parsedReviews]);
+
+  const RatingSummary = () => (
+    <View className="py-4">
+      <View className="flex-row items-center mb-2">
+        <Text className="text-6xl font-bold text-black">{rating}</Text>
+        <View className="ml-3 flex-col items-start">
+          <View className="flex-row space-x-[6]">
+            {[...Array(5)].map((_, index) => (
+              <FontAwesome
+                key={index}
+                name={index < rating ? "star" : "star"}
+                size={24}
+                color={index < rating ? "#FFA928" : "#E6E6E6"}
+              />
+            ))}
+          </View>
+          <Text className="text-primary-500 text-base">Xếp hạng</Text>
         </View>
-      {/* Phần hiển thị điểm đánh giá trung bình */}
-      <View style={styles.header}>
-        <Text style={styles.ratingText}>4.0</Text>
-        <View style={{left:10}}>
-        <View style={styles.starsRow}>
-          <Text style={styles.star}>★</Text>
-          <Text style={styles.star}>★</Text>
-          <Text style={styles.star}>★</Text>
-          <Text style={styles.star}>★</Text>
-          <Text style={styles.starEmpty}>★</Text>
-        </View>
-          <Text style={styles.totalRatings}>1034 Ratings</Text>
-        </View>
-        
       </View>
 
-      {/* Phần biểu đồ sao */}
-      <View style={styles.breakdownContainer}>
-        {[
-          { stars: 5, percentage: '60%' },
-          { stars: 4, percentage: '30%' },
-          { stars: 3, percentage: '5%' },
-          { stars: 2, percentage: '3%' },
-          { stars: 1, percentage: '2%' },
-        ].map((item) => (
-          <View key={item.stars} style={styles.breakdownRow}>
-            <Text>{item.stars} stars</Text>
-            <View style={styles.bar}>
-              <View style={[styles.fillBar, { width: item.percentage }]} />
-            </View>
+      {[5, 4, 3, 2, 1].map((star, index) => (
+        <View key={index} className="flex-row items-center my-1">
+          <View className="flex-row items-center space-x-[6]">
+            {[...Array(star)].map((_, i) => (
+              <FontAwesome key={i} name="star" size={17} color="#FFA928" />
+            ))}
+            {[...Array(5 - star)].map((_, i) => (
+              <FontAwesome key={i} name="star" size={17} color="#E6E6E6" />
+            ))}
           </View>
+          <View className="flex-1 bg-gray-300 h-1 mx-3 rounded-full overflow-hidden">
+            <View
+              className={`bg-black h-full`}
+              style={{ width: `${caculateRatings(star)}%` }}
+            />
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+
+  const ReviewItem = ({ review }) => (
+    <View className="py-4 border-b border-primary-100">
+      <View className="flex-row items-center mb-1">
+        {[...Array(5)].map((_, i) => (
+          <FontAwesome
+            key={i}
+            name={i < review.rating ? "star" : "star-o"}
+            size={16}
+            color="#FFA928"
+          />
         ))}
       </View>
+      <Text className="text-primary-500 mb-1">{review.comment}</Text>
+      <Text className="text-gray-500 font-normal">
+        <Text className="font-bold text-black">
+          {review.user_id.first_name}
+        </Text>{" "}
+        • {moment(review.createdAt).fromNow()}
+      </Text>
+    </View>
+  );
 
-      {/* Danh sách các đánh giá */}
-      <View style={styles.reviewsContainer}>
-        <Text style={styles.reviewsTitle}>45 Reviews</Text>
-
-        <View style={styles.review}>
-          <View style={styles.starsRow}>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-          </View>
-          <Text style={styles.reviewText}>
-            The item is very good, my son likes it very much and plays every day.
-          </Text>
-          <Text style={styles.authorText}>Wade Warren • 6 days ago</Text>
-        </View>
-
-        <View style={styles.review}>
-          <View style={styles.starsRow}>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.starEmpty}>★</Text>
-          </View>
-          <Text style={styles.reviewText}>
-            The seller is very fast in sending packet, I just bought it and the item arrived in just 1 day!
-          </Text>
-          <Text style={styles.authorText}>Guy Hawkins • 1 week ago</Text>
-        </View>
-
-        <View style={styles.review}>
-          <View style={styles.starsRow}>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.star}>★</Text>
-            <Text style={styles.starEmpty}>★</Text>
-          </View>
-          <Text style={styles.reviewText}>
-            I just bought it and the stuff is really good! I highly recommend it!
-          </Text>
-          <Text style={styles.authorText}>Robert Fox • 2 weeks ago</Text>
-        </View>
-      </View>
+  return (
+    <SafeAreaView className="px-6 flex-1 bg-white">
+      <Header title="Đánh giá" />
+      <View className="border-b border-primary-100"></View>
+      <RatingSummary />
+      <View className="border-b border-primary-100"></View>
+      <FlatList
+        data={parsedReviews}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => <ReviewItem review={item} />}
+        ListHeaderComponent={
+          <Text className="text-lg font-bold mt-4 mb-1">{review} Đánh giá</Text>
+        }
+      />
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1, backgroundColor: "white", paddingHorizontal: 24
-  },
-  header: {
-    marginBottom: 20,
-    flexDirection:'row'
-  },
-  ratingText: {
-    fontSize: 48,
-    fontWeight: 'bold',
-  },
-  starsRow: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  
-  star: {
-    fontSize: 30,
-    color: '#FFD700',
-  },
-  starEmpty: {
-    fontSize: 30,
-    color: '#E0E0E0',
-  },
-  totalRatings: {
-    fontSize: 16,
-    color: 'gray',
-    marginTop: 4,
-  },
-  breakdownContainer: {
-    marginVertical: 5,
-  },
-  breakdownRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  bar: {
-    flex: 1,
-    height: 8,
-    backgroundColor: '#E0E0E0',
-    marginLeft: 10,
-  },
-  fillBar: {
-    height: '100%',
-    backgroundColor: '#FFD700',
-  },
-  reviewsContainer: {
-    flex: 1,
-  },
-  reviewsTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  review: {
-    marginBottom: 20,
-  },
-  reviewText: {
-    fontSize: 16,
-    marginTop: 4,
-  },
-  authorText: {
-    fontSize: 14,
-    color: 'gray',
-    marginTop: 4,
-  },
-});
-
-export default App;
+export default ReviewsScreen;

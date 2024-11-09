@@ -10,6 +10,7 @@ import * as Linking from "expo-linking";
 import { router, useLocalSearchParams } from "expo-router";
 import { createLinkPayment, getOrderByById } from "../../../api/orderAPIs";
 import * as WebBrowser from 'expo-web-browser';
+import { ORDER_STATUS } from "../../../constants/orderConstans";
 
 const PaymentWaitingScreen = () => {
   const { order_id } = useLocalSearchParams();
@@ -56,7 +57,7 @@ const PaymentWaitingScreen = () => {
         const result = response.data;
         console.log("Result received: ", result);
 
-        if (result.order.status == "Confirmed") {
+        if (result.order.status == ORDER_STATUS.PAYMENT_CONFIRMED) {
           setIsPaid(true);
           clearInterval(interval);
         }

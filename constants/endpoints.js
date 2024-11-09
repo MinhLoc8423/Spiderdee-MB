@@ -34,5 +34,10 @@ export const API_ENDPOINTS = {
 
   // User endpoints
   USER: '/api/users/',
+
+  // Comment endpoints
+  REVIEW: '/api/reviews/',
+  REVIEWORDERDETAIL: '/api/reviews/order-detail/',
+  REVIEWPRODUCT: '/api/reviews/product/',
 };
 
