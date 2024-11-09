@@ -11,36 +11,72 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../../../components/Header";
-import SuccessModal from "../../../components/SuccessModal";
+import NotiModal from "../../../components/NotiModal.jsx";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CartContext } from "../../../store/contexts/CartContext";
 import { AuthContext } from "../../../store/contexts/AuthContext";
-import { createOrder, createLinkPayment } from "../../../api/order.js";
+import { createOrder, createLinkPayment } from "../../../api/orderAPIs";
 import { AddressContext } from "../../../store/contexts/AddressContext";
 import { router } from "expo-router";
+<<<<<<< HEAD
+import NotiModal from '../../../components/NotiModal';
+=======
+import { ORDER_STATUS, PAYMENT_METHOD } from "../../../constants/orderConstans.js"
 
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
 const Checkout = () => {
   const { cartList, clearCart } = useContext(CartContext);
   const { addresses } = useContext(AddressContext);
   const user = useContext(AuthContext);
-  const [address, setAddress] = useState();
+  const [address, setAddress] = useState([]);
 
   useEffect(() => {
     const addressDefault = addresses.find(
       (address) => address.isDefault === true
     );
-    setAddress(addressDefault.address);
+    setAddress(addressDefault);
   }, [addresses]);
 
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
-  const [shippingFee, setShippingFee] = useState(200000);
+  const [shippingFee, setShippingFee] = useState(0);
   const [vat, setVat] = useState(10);
   const [subTotal, setSubTotal] = useState();
   const [total, setTotal] = useState();
   const [promoApplied, setPromoApplied] = useState(false);
   const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
+
+<<<<<<< HEAD
+  const [showNotiModal, setShowNotiModal] = useState(false);
+    const [title, setTitle] = useState("");
+    const [message, setMessage] = useState("");
+    const [forUsr, setForUsr] = useState("warning");
+=======
+  //Modal dialog
+  const [showNotiModal, setShowNotiModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [forUsr, setForUsr] = useState("warning");
+  const [redirectTo, setRedirectTo] = useState("");
+  const [params, setParams] = useState({});
+
+  const hanldTurnOnModal = (
+    show,
+    title,
+    message,
+    forUsr,
+    redirectTo,
+    params
+  ) => {
+    setShowNotiModal(show);
+    setTitle(title);
+    setMessage(message);
+    setForUsr(forUsr);
+    setRedirectTo(redirectTo);
+    setParams(params);
+  };
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
 
   const calculateSubtotal = () => {
     return cartList.reduce((sum, item) => {
@@ -75,7 +111,10 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     if (!selectedPaymentMethod) {
-      alert("Vui lòng chọn phương thức thanh toán.");
+      setForUsr('warning');
+      setTitle("Thanh toàn không thành công");
+      setMessage("Vui lòng chọn phương thức thanh toán!");
+      setShowNotiModal(true);
       return;
     }
     try {
@@ -85,9 +124,27 @@ const Checkout = () => {
         selectedPaymentMethod,
         cartList
       );
-      if (data.status == 201) {
-        setSuccessModalVisible(true);
+      if (data.status == 201 && data.data.payment_method == "Cash") {
         clearCart();
+        hanldTurnOnModal(
+          true,
+          "Đặt hàng thành công",
+          "Vui lòng chờ hàng đến tay bạn.",
+          "success",
+          "/(root)/(tabs)/account/my-order",
+          {}
+        );
+      }
+      if (data.status == 201 && data.data.payment_method == "ZaloPay") {
+        clearCart();
+        hanldTurnOnModal(
+          true,
+          "Đặt hàng thành công",
+          "Vui lòng chờ hàng đến tay bạn.",
+          "success",
+          "/(root)/checkout-address/payment",
+          { order_id: data.data._id }
+        );
       }
     } catch (error) {
       console.error(error);
@@ -98,7 +155,7 @@ const Checkout = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         {/* Tiêu đề */}
-        <Header title={"Payment Method"} />
+        <Header title={"Phương thức thanh toán"} />
 
         {/* Phần Địa chỉ giao hàng */}
         <View style={styles.section}>
@@ -111,9 +168,9 @@ const Checkout = () => {
           </TouchableOpacity>
           <View style={styles.address}>
             <Ionicons name="location-outline" size={18} />
-            <Text style={styles.addressText}>Nhà riêng</Text>
+            <Text style={styles.addressText}>{address.name}</Text>
           </View>
-          <Text style={styles.addressDetail}>{address}</Text>
+          <Text style={styles.addressDetail}>{address.address}</Text>
         </View>
 
         {/* Phần Phương thức thanh toán */}
@@ -123,10 +180,10 @@ const Checkout = () => {
             <TouchableOpacity
               style={[
                 styles.paymentMethod,
-                selectedPaymentMethod === "Cash" &&
+                selectedPaymentMethod === PAYMENT_METHOD.CASH &&
                   styles.selectedPaymentMethod,
               ]}
-              onPress={() => setSelectedPaymentMethod("Cash")}
+              onPress={() => setSelectedPaymentMethod(PAYMENT_METHOD.CASH)}
             >
               <Ionicons name="cash-outline" size={18} />
               <Text style={styles.paymentText}>Tiền mặt</Text>
@@ -134,10 +191,10 @@ const Checkout = () => {
             <TouchableOpacity
               style={[
                 styles.paymentMethod,
-                selectedPaymentMethod === "ZaloPay" &&
+                selectedPaymentMethod === PAYMENT_METHOD.ZALOPAY &&
                   styles.selectedPaymentMethod,
               ]}
-              onPress={() => setSelectedPaymentMethod("ZaloPay")}
+              onPress={() => setSelectedPaymentMethod(PAYMENT_METHOD.ZALOPAY)}
             >
               <Image
                 className="w-6 h-6"
@@ -205,10 +262,25 @@ const Checkout = () => {
           <Text style={styles.placeOrderText}>Đặt hàng</Text>
         </TouchableOpacity>
 
-        <SuccessModal
-          visible={isSuccessModalVisible}
-          onClose={() => setSuccessModalVisible(false)}
+        <NotiModal
+          visible={showNotiModal}
+          onClose={() => setShowNotiModal(false)}
+          title={title}
+          forUse={forUsr}
+          message={message}
+          redirect={true}
+          redirectTo={redirectTo}
+          params={params}
         />
+         <NotiModal
+                    visible={showNotiModal}
+                    onClose={() => setShowNotiModal(false)}
+                    title={title}
+                    forUse={forUsr}
+                    message={message}
+                    redirect={false}
+                    redirectTo="(auth)/sign-in"
+                />
       </ScrollView>
     </SafeAreaView>
   );

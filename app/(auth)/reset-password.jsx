@@ -2,7 +2,12 @@ import { Alert, Button, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, 
 import React, { useState } from 'react'
 import { Link, router, useLocalSearchParams } from 'expo-router'
 import { validatePassword } from '../../helpers/validate';
+<<<<<<< HEAD
 import { resetPassword } from '../../api/auth';
+import NotiModal from '../../components/NotiModal';
+=======
+import { resetPassword } from '../../api/authAPIs';
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
 
 const ResetPassword = () => {
 
@@ -20,6 +25,14 @@ const ResetPassword = () => {
     const [isFocused1, setIsFocused1] = useState(false);
     const [isLoading, setLoading] = useState(false);
 
+
+    const [showNotiModal, setShowNotiModal] = useState(false);
+    const [title, setTitle] = useState("");
+    const [message, setMessage] = useState("");
+    const [button, setButton] = useState("");
+
+    const [forUsr, setForUsr] = useState("warning");
+
     const handleResetPassword = async () => {
         let hasError = false;
         setLoading(true);
@@ -27,12 +40,12 @@ const ResetPassword = () => {
         setPasswordConfirmError("");
 
         if (!validatePassword(password)) {
-            setPasswordError("Please enter a valid password.");
+            setPasswordError("Vui lòng nhập mật khẩu hợp lệ.");
             hasError = true;
         }
 
         if (!validatePassword(passwordConfirm)) {
-            setPasswordConfirmError("Please enter a valid password confirm.");
+            setPasswordConfirmError("Vui lòng nhập mật khẩu hợp lệ xác nhận.");
             hasError = true;
         }
 
@@ -50,8 +63,12 @@ const ResetPassword = () => {
         try {
             console.log(password, otpToken);
             const userData = await resetPassword(password, otpToken);
-            Alert.alert('Đã thay đổi mật khẩu thành công!');
-            router.replace('/(auth)/sign-in');
+            setForUsr('success');
+            setTitle("Thành công");
+            setMessage("");
+            setButton("Đăng nhập")
+            setShowNotiModal(true);
+           
         } catch (error) {
             if (error.status === 400) {
                 Alert.alert(error.message);
@@ -76,14 +93,14 @@ const ResetPassword = () => {
                     <Image source={require('../../assets/icons/arrow-icon.png')} className="w-6 h-6" />
                 </Text>
                 <Text className="text-4xl mt-3" style={{ fontFamily: 'GeneralSemibold' }}>
-                Đặt lại mật khẩu
+                    Đặt lại mật khẩu
                 </Text>
                 <Text style={{ fontFamily: 'GeneralRegular', color: '#808080', marginBottom: 15, marginTop: 5, fontSize: 16 }}>
-                Đặt mật khẩu mới cho tài khoản của bạn để bạn có thể đăng nhập và truy cập tất cả các tính năng.
+                    Đặt mật khẩu mới cho tài khoản của bạn để bạn có thể đăng nhập và truy cập tất cả các tính năng.
                 </Text>
 
                 <View className='my-1.5 '>
-                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Password</Text>
+                    <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>Mật khẩu</Text>
                     <View className={`flex-row items-center border rounded-xl h-[50] px-5 ${isFocused ? 'border-primary-900' : (passwordError ? 'border-danger' : 'border-primary-100')}`}>
                         <TextInput
                             style={{ fontFamily: 'GeneralMedium', flex: 1 }} // Make TextInput take remaining space
@@ -136,6 +153,16 @@ const ResetPassword = () => {
                 >
                     <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>{isLoading ? 'Đang tải...' : "Đặt lại mật khẩu"}</Text>
                 </Pressable>
+                <NotiModal
+                    visible={showNotiModal}
+                    onClose={() => setShowNotiModal(false)}
+                    title={title}
+                    forUse={forUsr}
+                    message={message}
+                    redirect={true}
+                    button={button}
+                    redirectTo="(auth)/sign-in"
+                />
             </ScrollView>
         </SafeAreaView>
     )

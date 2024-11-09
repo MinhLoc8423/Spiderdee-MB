@@ -31,7 +31,7 @@ const ProductItem = ({ item }) => {
         />
         <Text className="mt-2 text-base font-semibold">{item.name}</Text>
         <Text className="mt-1 text-gray-600 text-xs">
-          ${item.price.toLocaleString()}
+          {item.price.toLocaleString()} VNĐ
         </Text>
         <TouchableOpacity
           disabled={isLoading}

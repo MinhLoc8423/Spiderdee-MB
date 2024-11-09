@@ -13,7 +13,7 @@ import {
 import React, { useState, useContext } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loginLocal } from "../../api/auth";
+import { loginLocal } from "../../api/authAPIs";
 import { validateEmail, validatePassword } from "../../helpers/validate";
 import { AuthContext } from '../../store/contexts/AuthContext';
 
@@ -35,12 +35,12 @@ const SingIn = () => {
     setPasswordError("");
 
     if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address.");
+      setEmailError("Vui lòng nhập địa chỉ email hợp lệ.");
       hasError = true;
     }
 
     if (!validatePassword(password)) {
-      setPasswordError("Please enter a valid password.");
+      setPasswordError("Vui lòng nhập mật khẩu hợp lệ.");
       hasError = true;
     }
 
@@ -55,10 +55,10 @@ const SingIn = () => {
     } catch (error) {
       console.log(error);
       if (error.status === 401) {
-        setEmailError("Email or password is incorrect.");
-        setPasswordError("Email or password is incorrect.");
+        setEmailError("Email hoặc mật khẩu không đúng.");
+        setPasswordError("Email hoặc mật khẩu không đúng.");
       } else {
-        Alert.alert("An unexpected error occurred. Please try again later.");
+        Alert.alert("Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.");
       }
     } finally {
       setLoading(false);
@@ -176,7 +176,7 @@ const SingIn = () => {
           disabled={isLoading}
         >
           <Text style={{ fontSize: 16, textAlign: "center", color: "#FFFFFF" }}>
-            {isLoading ? "Loading..." : "Đăng Nhập"}
+            {isLoading ? "Đang tải..." : "Đăng Nhập"}
           </Text>
         </Pressable>
 

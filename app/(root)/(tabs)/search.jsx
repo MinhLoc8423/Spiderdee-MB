@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
-import { searchProducts } from "../../../api/product";
+import { searchProducts } from "../../../api/productAPIs";
 import Header from "../../../components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CartSearch } from "../../../components/CardSearch";
@@ -15,7 +15,7 @@ import { CartSearch } from "../../../components/CardSearch";
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [recentSearches, setRecentSearches] = useState(["Sofa", "Gường", "Thảm", "Tủ", "Bàn ghế", "Gương"]);
+  const [recentSearches, setRecentSearches] = useState(["Sofa", "Giường", "Thảm", "Tủ", "Bàn ghế", "Gương"]);
   const inputRef = useRef(null);
 
   const handleSearch = (query) => {

@@ -5,7 +5,12 @@ import { Link, router } from 'expo-router';
 import axios from 'axios';
 import InputComponent from '../../components/CustomInput';
 import { validateEmail, validatePassword, validatePhoneNumber } from '../../helpers/validate';
+<<<<<<< HEAD
 import { register } from '../../api/auth';
+import NotiModal from '../../components/NotiModal';
+=======
+import { register } from '../../api/authAPIs';
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
 
 const Signup = () => {
 
@@ -34,6 +39,11 @@ const Signup = () => {
     const [isFocused1, setIsFocused1] = useState(false);
     const [isLoading, setLoading] = useState(false);
 
+    const [showNotiModal, setShowNotiModal] = useState(false);
+    const [title, setTitle] = useState("");
+    const [message, setMessage] = useState("");
+    const [forUsr, setForUsr] = useState("warning");
+
     const handleRegister = async () => {
         let hasError = false;
         setLoading(true);
@@ -58,7 +68,7 @@ const Signup = () => {
         }
 
         if (!validateEmail(email)) {
-            setEmailError("Vui lòng nhập địa chỉ email hợp lệ.");
+            setEmailError("Vui lòng nhập địa chỉ e-mail hợp lệ.");
             hasError = true;
         }
 
@@ -89,15 +99,21 @@ const Signup = () => {
             if (!userData) {
                 setEmailError("E-mail đã tồn tại");
             } else {
-                // await AsyncStorage.setItem('accessTokenUser', userData.token);
-                router.replace('/(auth)/sign-in');
-            }
+               
+               
+                    router.replace('/(auth)/sign-in');
+                }
+            
         } catch (error) {
             if (error.status === 400) {
                 setEmailError("E-mail đã tồn tại");
+
             }
-            else{
-                Alert.alert('Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.');
+            else {
+                setForUsr('success');
+                setTitle("Đăng ký thành công");
+                // setMessage("Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.");
+                setShowNotiModal(true);
             }
         } finally {
             setLoading(false);
@@ -200,6 +216,13 @@ const Signup = () => {
                 </TouchableOpacity>
 
                 <Text style={[styles.text2, { textAlign: 'center', marginTop: 20, marginBottom: 50 }]} className='mb-5'>Bạn đã có tài khoản? <Link href={('/(auth)/sign-in')} style={{ color: '#1A1A1A', fontWeight: 600, textDecorationLine: 'underline' }}>Đăng nhập</Link></Text>
+                <NotiModal
+                    visible={showNotiModal}
+                    onClose={() => setShowNotiModal(false)}
+                    title={title}
+                    forUse={forUsr}
+                    message={message}
+                />
             </ScrollView>
         </SafeAreaView >
     );

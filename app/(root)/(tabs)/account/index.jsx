@@ -20,41 +20,41 @@ const AccountScreen = ({ navigation }) => {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <View className="px-6">
-          <Header title="Account" />
+          <Header title="Tài khoản" />
         </View>
 
         {/* Options List */}
-        <View className="border-t px-6 border-gray-200">
-          <TouchableOpacity onPress={() => router.push('/(root)/(tabs)/account/order')} className="flex-row items-center px-6 py-[25] border-b border-gray-200">
+        <View className="border-t border-gray-200">
+          <TouchableOpacity onPress={() => router.push('/(root)/(tabs)/account/my-order')} className="flex-row items-center px-6 py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/box-icon.png")} />
-            <Text className="flex-1 ml-4 text-base">My Orders</Text>
+            <Text className="flex-1 ml-4 text-base">Đơn hàng</Text>
             <MaterialIcons name="chevron-right" size={24} color="#B3B3B3" />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push('/(root)/(tabs)/account/my-detail')} className="flex-row items-center px-6 py-[25] border-b border-gray-200">
+          <TouchableOpacity onPress={() => router.push('/(root)/(tabs)/account/my-detail')} className="flex-row items-center px-6  py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/details-icon.png")} />
-            <Text className="flex-1 ml-4 text-base">My Details</Text>
+            <Text className="flex-1 ml-4 text-base">Chi tiết</Text>
             <MaterialIcons name="chevron-right" size={24} color="#B3B3B3" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-row items-center px-6 py-[25] border-b border-gray-200">
+          <TouchableOpacity onPress={() => router.push('/(root)/checkout-address/address')} className="flex-row items-center px-6 py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/address-icon.png")} />
-            <Text className="flex-1 ml-4 text-base">Address Book</Text>
+            <Text className="flex-1 ml-4 text-base">Địa chỉ</Text>
             <MaterialIcons name="chevron-right" size={24} color="#B3B3B3" />
           </TouchableOpacity>
 
           {/* Additional options with gray separator */}
-          <View className="h-3 bg-gray-100" />
+          <View className="h-3 px-[-24] bg-gray-100" />
 
           <TouchableOpacity className="flex-row items-center px-6 py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/question-icon.png")} />
-            <Text className="flex-1 ml-4 text-base">FAQs</Text>
+            <Text className="flex-1 ml-4 text-base">Câu hỏi thường gặp</Text>
             <MaterialIcons name="chevron-right" size={24} color="#B3B3B3" />
           </TouchableOpacity>
 
           <TouchableOpacity className="flex-row items-center px-6 py-[25] border-b border-gray-200">
             <Image className="w-6 h-6" source={require("../../../../assets/icons/headphones-icon.png")} />
-            <Text className="flex-1 ml-4 text-base">Help Center</Text>
+            <Text className="flex-1 ml-4 text-base">Trung tâm trợ giúp</Text>
             <MaterialIcons name="chevron-right" size={24} color="#B3B3B3" />
           </TouchableOpacity>
 
@@ -64,7 +64,7 @@ const AccountScreen = ({ navigation }) => {
             onPress={() => setModalVisible(true)}
           >
             <MaterialIcons name="logout" size={24} color="red" style={{ transform: [{ scaleX: -1 }] }} />
-            <Text className="flex-1 ml-4 text-base text-red-500">Logout</Text>
+            <Text className="flex-1 ml-4 text-base text-red-500">Đăng xuất</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -81,20 +81,20 @@ const AccountScreen = ({ navigation }) => {
             <View className="items-center mb-4">
               {/* Warning Icon Placeholder */}
               <MaterialIcons name="error-outline" size={48} color="red" />
-              <Text className="text-lg font-bold mt-2">Logout?</Text>
-              <Text className="text-gray-500 mt-1">Are you sure you want to logout?</Text>
+              <Text className="text-lg font-bold mt-2">Đăng xuất?</Text>
+              <Text className="text-gray-500 mt-1">Bạn có chắc chắn muốn đăng xuất không?</Text>
             </View>
             <TouchableOpacity
               className="bg-red-500 rounded-lg py-3 mt-4"
               onPress={handleLogout}
             >
-              <Text className="text-center text-white font-bold">Yes, Logout</Text>
+              <Text className="text-center text-white font-bold">Có, Đăng xuất</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="bg-gray-200 rounded-lg py-3 mt-2"
               onPress={() => setModalVisible(false)}
             >
-              <Text className="text-center text-gray-700 font-bold">No, Cancel</Text>
+              <Text className="text-center text-gray-700 font-bold">Không, Hủy bỏ</Text>
             </TouchableOpacity>
           </View>
         </View>

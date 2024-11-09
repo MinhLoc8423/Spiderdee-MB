@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 const SuccessModal = ({
   visible,
   onClose,
+  forUse = "checkmark-circle",
   title = "Thành công!",
   message = "Bạn đã đặt hàng thành công.",
 }) => {
@@ -14,7 +15,11 @@ const SuccessModal = ({
     <Modal transparent={true} visible={visible} animationType="fade">
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Ionicons name="checkmark-circle" size={64} color="green" />
+        {forUse === "warning" ? (
+              <Ionicons name="warning" size={48} color="orange" />
+            ) : (
+              <Ionicons name="checkmark-circle" size={48} color="#0C9409" />
+            )}
           <Text style={styles.modalTitle}>{title}</Text>
           <Text style={styles.modalMessage}>{message}</Text>
           <TouchableOpacity style={styles.modalButton} onPress={onClose}>
@@ -51,15 +56,19 @@ const styles = {
     marginVertical: 10,
   },
   modalButton: {
+    width: "100%",
     backgroundColor: "#000",
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
+    
   },
   modalButtonText: {
+    textAlign:'center',
     color: "#fff",
     fontSize: 14,
     fontWeight: "bold",
+    
   },
 };
 

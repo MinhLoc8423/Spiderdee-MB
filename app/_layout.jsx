@@ -55,6 +55,8 @@ const RootLayout = () => {
       <Stack.Screen name="(root)/checkout-address/check-out" options={{ headerShown: false }} />
       <Stack.Screen name="(root)/checkout-address/address" options={{ headerShown: false }} />
       <Stack.Screen name="(root)/checkout-address/new-address" options={{ headerShown: false }} />
+      <Stack.Screen name="(root)/checkout-address/payment" options={{ headerShown: false }} />
+      <Stack.Screen name="(root)/track-order/[id]" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

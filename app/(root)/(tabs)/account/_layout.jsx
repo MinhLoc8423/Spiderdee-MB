@@ -6,7 +6,7 @@ const AccountLayout = () => {
   return (
    <Stack>
     <Stack.Screen name="index" options={{ title: "Account", headerShown: false }} />
-    <Stack.Screen name="order" options={{ title: "Account", headerShown: false }} />
+    <Stack.Screen name="my-order" options={{ title: "Account", headerShown: false }} />
     <Stack.Screen name="my-detail" options={{ title: "Account", headerShown: false }} />
    </Stack>
   )

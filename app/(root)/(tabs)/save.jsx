@@ -16,9 +16,9 @@ const SavedItemsScreen = () => {
         className="w-24 h-24 mb-4"
         tintColor={"#B3B3B3"}
       />
-      <Text className="text-lg font-bold text-gray-800">No Saved Items!</Text>
+      <Text className="text-lg font-bold text-gray-800">Không có mục nào được lưu!</Text>
       <Text className="text-base text-gray-600 text-center mx-8">
-        You don’t have any saved items. Go to home and add some.
+      Bạn không có mục nào đã lưu. Hãy vào trang chủ và thêm một số mục.
       </Text>
     </View>
   );
@@ -29,7 +29,7 @@ const SavedItemsScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-primary-0 px-6">
-      <Header title="Saved Items" />
+      <Header title="Yêu thích" />
       {items.length === 0 ? (
         renderEmptyResults()
       ) : (

@@ -23,10 +23,21 @@ export const API_ENDPOINTS = {
   //Order endpoints
   ORDER: '/api/orders/',
 
+  //Order detail endpoints
+  ORDERDETAILBYUSER: '/api/order-details/user/',
+
   //Payment endpoints
   PAYMENT: '/api/payment/',
 
   //Address endpointsshipping
   ADDRESS: '/api/address/',
+
+  // User endpoints
+  USER: '/api/users/',
+
+  // Comment endpoints
+  REVIEW: '/api/reviews/',
+  REVIEWORDERDETAIL: '/api/reviews/order-detail/',
+  REVIEWPRODUCT: '/api/reviews/product/',
 };
 

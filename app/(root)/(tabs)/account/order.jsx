@@ -139,10 +139,10 @@ export default function MyOrdersScreen() {
         <StyledView className="flex-1 items-center justify-center mt-10">
           <Image className="w-16 h-16" source={require("../../../../assets/icons/box-icon.png")} />
           <StyledText className="text-lg font-semibold text-gray-700 mt-4">
-            No Completed Orders!
+          Chưa có đơn hàng nào hoàn tất!
           </StyledText>
           <StyledText className="text-sm text-gray-500 mt-2">
-            You don’t have any completed orders at this time.
+          Hiện tại bạn chưa có đơn hàng nào hoàn tất.
           </StyledText>
         </StyledView>
       )}

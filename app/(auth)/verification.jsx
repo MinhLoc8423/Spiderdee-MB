@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, Image, View, ScrollView, SafeAreaView, TextInput, Alert } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
-import { sendOTP, verifyOTP } from '../../api/auth';
+import { sendOTP, verifyOTP } from '../../api/authAPIs';
 import { router, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -74,7 +74,7 @@ const ForgotPassword = () => {
       setCanResend(false); // Đặt trạng thái không cho phép resend
       setCountdown(180); // Đặt thời gian đếm ngược 3 phút (180 giây)
     } catch (error) {
-      Alert.alert('An unexpected error occurred. Please try again later.');
+      Alert.alert('Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.');
     } finally {
       setLoading(false);
     }
@@ -99,7 +99,7 @@ const ForgotPassword = () => {
 
     // Kiểm tra xem tất cả các trường đã được điền chưa
     if (Object.values(otp).some((digit) => digit === '')) {
-      setOtpError('Please fill in all digits.');
+      setOtpError('Vui lòng điền đầy đủ tất cả các chữ số.');
       hasError = true;
     }
 
@@ -120,7 +120,7 @@ const ForgotPassword = () => {
       if (error.status === 400) {
         setOtpError(error.message);
       } else {
-        Alert.alert('An unexpected error occurred. Please try again later.');
+        Alert.alert('Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.');
       }
     } finally {
       setLoading(false);
@@ -139,10 +139,12 @@ const ForgotPassword = () => {
         </Text>
 
         <Text className="text-4xl mt-3" style={{ fontFamily: 'GeneralSemibold' }}>
-          Enter 4 Digit Code
+        Nhập mã 4 chữ số
+
         </Text>
         <Text style={{ fontFamily: 'GeneralRegular', color: '#808080', marginBottom: 15, marginTop: 5, fontSize: 16 }}>
-          Enter the 4 digit code that you receive on your email (<Text style={{ color: '#1A1A1A', fontFamily: 'GeneralRegular' }}>{email}</Text>).
+        Nhập mã gồm 4 chữ số mà bạn nhận được qua email của mình
+        (<Text style={{ color: '#1A1A1A', fontFamily: 'GeneralRegular' }}>{email}</Text>).
         </Text>
 
         <View style={styles.otpContainer}>
@@ -164,14 +166,14 @@ const ForgotPassword = () => {
         {otpError ? <Text style={styles.errorText}>{otpError}</Text> : null}
 
         <Text style={{ fontFamily: 'GeneralRegular', color: '#808080', marginBottom: 15, marginTop: 5, textAlign: 'center' }}>
-          Email not received?
+        Email không nhận được?
           <Text
             onPress={handleSendOTP}
             className={`text-primary-900 underline ${canResend ? '' : 'opacity-50'}`}
             style={{ color: canResend ? '#1A1A1A' : '#808080' }}
             disabled={!canResend}
           >
-            {canResend ? ' Resend code' : ` Resend code (${Math.floor(countdown / 60)}:${countdown % 60 < 10 ? '0' : ''}${countdown % 60})`}
+            {canResend ? ' Gửi lại' : ` Gửi lại  (${Math.floor(countdown / 60)}:${countdown % 60 < 10 ? '0' : ''}${countdown % 60})`}
           </Text>
         </Text>
 
@@ -182,7 +184,8 @@ const ForgotPassword = () => {
           disabled={isLoading}
         >
           <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>
-            {isLoading ? 'Loading...' : 'Verify OTP'}
+            {isLoading ? 'Đang tải...' : 'Xác minh OTP'}
+
           </Text>
         </Pressable>
       </ScrollView>

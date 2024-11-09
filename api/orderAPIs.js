@@ -22,3 +22,25 @@ export const createLinkPayment = async (order_id) => {
         throw error;
     }
 };
+
+export const getOrderByById = async (order_id) => {
+    try {
+        const response = await axiosInstance.get(API_ENDPOINTS.ORDER+`${order_id}`);
+        console.log('Get order by id response: ', response.data);
+        return response.data;
+    } catch (error) {
+        console.log('Get order by id error: ', error);
+        throw error;
+    }
+}   
+
+export const getOrderDetailsByUserId = async (user_id) => {
+    try {
+        const response = await axiosInstance.get(API_ENDPOINTS.ORDERDETAILBYUSER+`${user_id}`);
+        console.log('Get order by user id response: ', response.data);
+        return response.data;
+    } catch (error) {
+        console.log('Get order by user id error: ', error);
+        throw error;
+    }
+}   

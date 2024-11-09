@@ -2,17 +2,29 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
-import { getProductById } from "../../../api/product";
+import { getProductById } from "../../../api/productAPIs";
+import { getReviewByProductId } from "../../../api/reviewAPIs";
 import { CartContext } from "../../../store/contexts/CartContext";
 import { SaveItemContext } from "../../../store/contexts/SaveItemContext";
+<<<<<<< HEAD
 import NotiModal from '../../../components/NotiModal';
+import SuccessModal from "../../../components/SuccessModal";
+=======
+import NotiModal from "../../../components/NotiModal";
+import Header from "../../../components/Header";
+import { FontAwesome } from "@expo/vector-icons";
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
 
 const ProductDetails = () => {
   const id = useLocalSearchParams();
   const [product, setProduct] = useState({});
+  const [rating, setRating] = useState();
+  const [reviews, setReviews] = useState();
+  const [dataReview, setDataReview] = useState();
   const [selectedSize, setSelectedSize] = useState(null);
   const { addToCart } = useContext(CartContext);
-  const { wishList, addToWishlist, removeFromWishlist } = useContext(SaveItemContext);
+  const { wishList, addToWishlist, removeFromWishlist } =
+    useContext(SaveItemContext);
   const [price, setPrice] = useState();
   const isInWishlist = wishList.some(
     (wishItem) => wishItem?.product_id?._id === product._id
@@ -22,26 +34,55 @@ const ProductDetails = () => {
   const [showNotiModal, setShowNotiModal] = useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
+  const [button, setButton] = useState("");
   const [forUsr, setForUsr] = useState("warning");
 
+  const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
+ 
   const fetchData = async () => {
     const response = await getProductById(id.id);
     setPrice(response.data.price.toLocaleString());
     setProduct(response.data);
   };
 
+  const fetchReview = async () => {
+    const responseReview = await getReviewByProductId(id.id);
+    const reviewsData = responseReview.data;
+    const averageRating =
+      reviewsData.length > 0
+        ? (
+            reviewsData.reduce((sum, review) => sum + review.rating, 0) /
+            reviewsData.length
+          ).toFixed(1)
+        : 0.0;
+    setRating(averageRating); // Chuyển chuỗi sang số thực
+    setReviews(reviewsData.length);
+    setDataReview(reviewsData);
+  };
+
+  useEffect(() => {
+    fetchReview();
+  }, [])
+
   const handleAddToCart = () => {
     if (selectedSize) {
       addToCart(product, selectedSize);
-      setForUsr('success');
+      setForUsr("success");
       setTitle("Thành công");
       setMessage("Vui lòng xem giỏ hàng");
+      setButton("Xem")
       setShowNotiModal(true);
     } else {
-      setForUsr('warning');
+<<<<<<< HEAD
+      setSuccessModalVisible(true);
+      setTitle("Thất bại");
+      setMessage("Vui lòng chọn kích thước");
+=======
+      setForUsr("warning");
       setTitle("Cảnh báo");
       setMessage("Vui lý chọn kích thước");
       setShowNotiModal(true);
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
     }
   };
 
@@ -62,6 +103,7 @@ const ProductDetails = () => {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
+<<<<<<< HEAD
         <View
           style={{
             flexDirection: "row",
@@ -78,7 +120,7 @@ const ProductDetails = () => {
             />
           </TouchableOpacity>
           <Text style={{ fontSize: 24, fontFamily: "GeneralSemibold" }}>
-            Details
+            Chi tiết sản phẩm
           </Text>
           <TouchableOpacity>
             <Image
@@ -87,6 +129,9 @@ const ProductDetails = () => {
             />
           </TouchableOpacity>
         </View>
+=======
+        <Header title={"Chi tiết sản phảm"} />
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
 
         {/* Product Image */}
         <View style={{ paddingVertical: 8 }}>
@@ -137,9 +182,12 @@ const ProductDetails = () => {
           </Text>
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}
-            onPress={() => router.push("/(root)/reviews/[id]", id.id)}
+            onPress={() => router.push({
+              pathname: "/(root)/reviews/[id]",
+              params: { id: product._id, reviews: JSON.stringify(dataReview) }
+            })}            
           >
-            <Text style={{ color: "#FBBF24" }}>⭐</Text>
+            <FontAwesome name="star" size={17} color="#FFA928" />
             <Text
               style={{
                 color: "#374151",
@@ -148,7 +196,7 @@ const ProductDetails = () => {
                 fontFamily: "GeneralMedium",
               }}
             >
-              4.0/5
+              {rating}/5
             </Text>
             <Text
               style={{
@@ -157,7 +205,7 @@ const ProductDetails = () => {
                 marginLeft: 4,
               }}
             >
-              (45 reviews)
+              ({reviews} reviews)
             </Text>
           </TouchableOpacity>
 
@@ -179,7 +227,7 @@ const ProductDetails = () => {
               marginTop: 16,
             }}
           >
-            Choose size
+            Kích thước
           </Text>
           <View style={{ flexDirection: "row", marginTop: 8 }}>
             {Array.isArray(product.size) && product.size.length > 0 ? (
@@ -247,7 +295,7 @@ const ProductDetails = () => {
                 color: "black",
               }}
             >
-              Price
+              Giá
             </Text>
             <Text style={{ fontSize: 20, fontFamily: "GeneralSemibold" }}>
               {price}
@@ -260,19 +308,44 @@ const ProductDetails = () => {
               paddingHorizontal: 59,
               paddingVertical: 16,
               borderRadius: 10,
+              flexDirection: "row", // This makes the text and image align horizontally
+              alignItems: "center", // Centers items vertically
+              justifyContent: "center", // Centers items horizontally within TouchableOpacity
             }}
           >
+<<<<<<< HEAD
+            <Text style={{ color: "white", fontSize: 16 }}>Thêm giỏ hàng</Text>
+=======
+            <Image
+              source={require("../../../assets/icons/bag-icon.png")}
+              style={{ width: 24, height: 24, marginRight: 8 }} // Adds space between image and text
+              tintColor={"#FFFFFF"}
+            />
             <Text style={{ color: "white", fontSize: 16 }}>Add to Cart</Text>
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
           </TouchableOpacity>
         </View>
       </View>
-
+      <SuccessModal
+          visible={isSuccessModalVisible}
+          title={title}
+          message={message}
+          onClose={() => setSuccessModalVisible(false)}
+        />
       <NotiModal
         visible={showNotiModal}
         onClose={() => setShowNotiModal(false)}
         title={title}
         forUse={forUsr}
         message={message}
+<<<<<<< HEAD
+        button={button}
+        redirect={true}
+        redirectTo="/(root)/(tabs)/cart"
+=======
+        redirect={true}
+        redirectTo="/(root)/(tabs)/home"
+>>>>>>> 4b2c03462996ddaa391954bc53aa1098c48d8509
       />
     </SafeAreaView>
   );

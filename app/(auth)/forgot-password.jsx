@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { router } from 'expo-router';
 import { validateEmail } from '../../helpers/validate';
 import InputComponent from '../../components/CustomInput';
-import { sendOTP } from '../../api/auth';
+import { sendOTP } from '../../api/authAPIs';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('minhlocworkemail@gmail.com');
@@ -63,7 +63,7 @@ const ForgotPassword = () => {
         Nhập email của bạn để xác minh. Chúng tôi sẽ gửi mã gồm 4 chữ số đến email của bạn.
         </Text>
 
-        <InputComponent label="Email" value={email} placeholder={'Please enter your email'} setValue={setEmail} error={emailError} />
+        <InputComponent label="Email" value={email} placeholder={'Vui lòng nhập email của bạn'} setValue={setEmail} error={emailError} />
 
         <Pressable
           style={[styles.Pressable, { marginTop: 20 }]}

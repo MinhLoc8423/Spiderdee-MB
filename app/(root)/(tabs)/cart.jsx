@@ -15,7 +15,7 @@ import { router } from "expo-router";
 
 const MyCartScreen = () => {
   const { cartList, updateQuantity, removeFromCart } = useContext(CartContext);
-  const shippingFee = 200000;
+  const shippingFee = 0;
   const vatPercentage = 10;
 
   const handleIncreaseQuantity = (id) => {
@@ -61,10 +61,10 @@ const MyCartScreen = () => {
         tintColor={"#B3B3B3"}
       />
       <Text className="text-lg font-bold text-gray-800">
-        Your Cart Is Empty!
+      Giỏ hàng của bạn trống!
       </Text>
       <Text className="text-base text-gray-600 text-center mx-8">
-        When you add products, they’ll appear here.
+      Khi bạn thêm sản phẩm, chúng sẽ xuất hiện ở đây.
       </Text>
     </View>
   );
@@ -80,7 +80,7 @@ const MyCartScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={"Cart"} />
+      <Header title={"Giỏ hàng"} />
       {cartList.length === 0 ? (
         renderEmptyResults()
       ) : (
@@ -100,19 +100,19 @@ const MyCartScreen = () => {
           <View style={styles.summaryContainer}>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryText}>Tổng tiền hàng</Text>
-              <Text style={styles.summaryText}>
+              <Text style={[styles.summaryText, { color: "#1a1a1a", fontWeight: "bold" }]}>
                 {calculateSubtotal().toLocaleString() + " VNĐ"}
               </Text>
             </View>
             <View style={styles.summaryRow}>
-              <Text style={styles.summaryText}>VAT {vatPercentage}%</Text>
-              <Text style={styles.summaryText}>
+              <Text style={styles.summaryText}>VAT ({vatPercentage}%)</Text>
+              <Text style={[styles.summaryText, { color: "#1a1a1a", fontWeight: "bold" }]}>
                 {calculateVAT().toLocaleString() + " VNĐ"}
               </Text>
             </View>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryText}>Phí vận chuyển</Text>
-              <Text style={styles.summaryText}>
+              <Text style={[styles.summaryText, { color: "#1a1a1a", fontWeight: "bold" }]}>
                 {shippingFee.toLocaleString()} VNĐ
               </Text>
             </View>
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#ddd",
     justifyContent: "space-between",
     marginVertical: 16,
-    marginBottom: 50,
+    marginBottom: 30,
     paddingTop: 8,
   },
   totalText: {
