@@ -5,17 +5,18 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "spiderdee",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.project.spiderdee"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "spiderdee.com"
+      "package": "com.project.spiderdee"
     },
     "web": {
       "bundler": "metro",
@@ -23,9 +24,13 @@
       "favicon": "./assets/images/icon.png"
     },
     "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.669733563945-ae3t4v27heq0i3bljqac2k2g4rsr1pks"
+        }
+      ]
+    ],  
     "experiments": {
       "typedRoutes": true
     },

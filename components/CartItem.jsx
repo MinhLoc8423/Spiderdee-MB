@@ -1,85 +1,120 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native'
-import React, { useState } from 'react'
-import FomFontAwesome from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import React from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
-    return (
-        <View style={styles.container}>
-            <View style={styles.viewContainerProcduct}>
-                <Image
-                    source={require("../assets/images/table-image.jpg")}
-                    style={{ width: 83, height: 79, marginStart: 10, marginTop: 13 }}
-                />
-                <View style={[styles.CardContent, { marginStart: 10, marginTop: 13 }]}>
-                    <Text
-                        style={{ fontSize: 14, fontWeight: '600', color: '#1A1A1A' }}
-                    >{item.name}</Text>
-                    <Text
-                        style={{ fontSize: 12, fontWeight: '400', color: '#808080', paddingTop: 5 }}
-                    >Size {item.size}</Text>
+  return (
+    <View style={styles.itemContainer}>
+      {/* Product Image */}
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: item.image }} style={styles.image} />
+      </View>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 15 }}>
-                        <Text
-                            style={{ fontSize: 14, fontWeight: '600' }}
-                        >${item.price}</Text>
-
-                        <View style={{ flexDirection: 'row' }}>
-
-                            <TouchableOpacity >
-                                <AntDesign name={"minussquareo"} size={20}
-                                    onPress={() => onDecrease(item.id)}
-                                    style={{ right: 10 }} />
-                            </TouchableOpacity>
-
-                            <Text>{item.quantity}</Text>
-
-                            <TouchableOpacity>
-                                <AntDesign name={"plussquareo"} size={20}
-                                    onPress={() => onIncrease(item.id)}
-                                    style={{ left: 10 }} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-                <TouchableOpacity>
-                    <FomFontAwesome name={"trash-o"} color={"red"} size={20}
-                        style={{ marginEnd: 10, marginTop: 13, right:9 }}
-                        // onPress={() => handleRemoveItem(item.id)}
-                        onPress={() => onRemove(item.id)}
-                    />
-                </TouchableOpacity>
-            </View>
+      {/* Product Details */}
+      <View style={styles.detailsContainer}>
+        <View style={styles.textContainer}>
+          <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+            {item.name}
+          </Text>
+          <Text style={styles.itemSize}>Kích thước: {item.size}</Text>
         </View>
-    );
-}
+        <Text style={styles.itemPrice}>
+          {Number(item.price).toLocaleString()} VNĐ
+        </Text>
+      </View>
 
+      {/* Actions (Quantity and Delete) */}
+      <View style={styles.actionsContainer}>
+        {/* Delete Button */}
+        <TouchableOpacity onPress={() => onRemove(item._id)}>
+          <Ionicons name="trash-outline" size={24} color="#ED1010" />
+        </TouchableOpacity>
 
-
-export default CartItem
+        {/* Quantity Controls */}
+        <View style={styles.quantityContainer}>
+          <TouchableOpacity
+            className="border border-primary-200 rounded-md"
+            onPress={() => onDecrease(item._id)}
+          >
+            <Ionicons name="remove-outline" size={24} color="#000" />
+          </TouchableOpacity>
+          <Text style={styles.quantityText}>{item.quantity}</Text>
+          <TouchableOpacity
+            className="border border-primary-200 rounded-md"
+            onPress={() => onIncrease(item._id)}
+          >
+            <Ionicons name="add-outline" size={24} color="#000" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        marginStart: 20,
-        marginEnd: 20,
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+    maxHeight: 120,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#E6E6E6",
+    borderRadius: 10,
+  },
+  imageContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 4,
+    overflow: "hidden",
+    minHeight: 100,
+    marginRight: 16,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  detailsContainer: {
+    flex: 1,
+    height: "100%",
+    justifyContent: "space-between",
+  },
+  textContainer: {
+    justifyContent: "center",
+  },
+  itemName: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  itemSize: {
+    fontSize: 16,
+    color: "#888",
+  },
+  itemPrice: {
+    fontSize: 12,
+    color: "#000",
+    fontWeight: "bold",
+    alignSelf: "flex-start",
+  },
+  actionsContainer: {
+    height: "100%",
+    flexDirection: "column",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    marginTop: 8,
+  },
+  quantityText: {
+    color: "#1A1A1A",
+    fontSize: 12,
+    marginHorizontal: 8,
+    marginBottom: 5,
+  },
+});
 
-    },
-    viewContainerProcduct: {
-        height: 107,
-        width: '100%',
-        borderWidth: 1,
-        margin: 5,
-        borderColor: '#E6E6E6',
-        borderRadius: 10,
-        flexDirection: 'row'
-    },
-    CardContent: {
-        flex: 1,
-    },
-    priceContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginStart: 10,
-        marginTop: 10
-    },
-})
+export default CartItem;

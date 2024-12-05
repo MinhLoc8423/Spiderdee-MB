@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_BASE_URL } from '../constants/endpoints';
+import { API_BASE_URL } from '../constants/endPoints';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const axiosInstance = axios.create({

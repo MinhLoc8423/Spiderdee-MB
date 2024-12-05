@@ -1,8 +1,10 @@
-import { Pressable, StyleSheet, Text, Image, View, ScrollView, SafeAreaView, TextInput, Alert } from 'react-native';
+import { Pressable, StyleSheet, Text, Image, View, ScrollView, TextInput } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
-import { sendOTP, verifyOTP } from '../../api/auth';
+import { sendOTP, verifyOTP } from '../../api/authAPIs';
 import { router, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import NotiModal from "@/components/NotiModal";
 
 const ForgotPassword = () => {
   const { email } = useLocalSearchParams();
@@ -24,6 +26,21 @@ const ForgotPassword = () => {
     digit2: useRef(null),
     digit3: useRef(null),
     digit4: useRef(null),
+  };
+
+  //Modal dialog
+  const [showNotiModal, setShowNotiModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [forUsr, setForUsr] = useState("warning");
+  const [button, setButton] = useState("");
+
+  const hanldTurnOnModal = (show, title, message, forUsr, button) => {
+    setShowNotiModal(show);
+    setTitle(title);
+    setMessage(message);
+    setForUsr(forUsr);
+    setButton(button);
   };
 
   const handleChange = (value, field) => {
@@ -74,7 +91,14 @@ const ForgotPassword = () => {
       setCanResend(false); // Đặt trạng thái không cho phép resend
       setCountdown(180); // Đặt thời gian đếm ngược 3 phút (180 giây)
     } catch (error) {
-      Alert.alert('An unexpected error occurred. Please try again later.');
+      hanldTurnOnModal(
+        true,
+        "Thông báo",
+        "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+        "error",
+        "Đóng"
+      );
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -99,7 +123,7 @@ const ForgotPassword = () => {
 
     // Kiểm tra xem tất cả các trường đã được điền chưa
     if (Object.values(otp).some((digit) => digit === '')) {
-      setOtpError('Please fill in all digits.');
+      setOtpError('Vui lòng điền vào tất cả các chữ số.');
       hasError = true;
     }
 
@@ -118,9 +142,21 @@ const ForgotPassword = () => {
       });
     } catch (error) {
       if (error.status === 400) {
-        setOtpError(error.message);
+        if (error.message === 'OTP has expired. Please request a new code.') {
+          setOtpError('Mã OTP đã hết hạn. Vui lòng gửi lại mã OTP.');
+        }
+        if (error.message === 'Invalid OTP') {
+          setOtpError('Mã OTP không hợp lệ.');
+        }
       } else {
-        Alert.alert('An unexpected error occurred. Please try again later.');
+        hanldTurnOnModal(
+          true,
+          "Thông báo",
+          "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+          "error",
+          "Đóng"
+        );
+        console.log(error);
       }
     } finally {
       setLoading(false);
@@ -134,15 +170,15 @@ const ForgotPassword = () => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       >
-        <Text className="text-3xl mt-5" style={{ fontFamily: 'GeneralSemibold' }} onPress={() => router.back()}>
+        <Text className="text-3xl" onPress={() => router.back()}>
           <Image source={require('../../assets/icons/arrow-icon.png')} className="w-6 h-6" />
         </Text>
 
-        <Text className="text-4xl mt-3" style={{ fontFamily: 'GeneralSemibold' }}>
-          Enter 4 Digit Code
+        <Text className="text-4xl mt-3 font-bold">
+          Nhập Mã 4 Số
         </Text>
-        <Text style={{ fontFamily: 'GeneralRegular', color: '#808080', marginBottom: 15, marginTop: 5, fontSize: 16 }}>
-          Enter the 4 digit code that you receive on your email (<Text style={{ color: '#1A1A1A', fontFamily: 'GeneralRegular' }}>{email}</Text>).
+        <Text style={{ fontWeight: 'regular', color: '#808080', marginBottom: 15, marginTop: 5, fontSize: 16 }}>
+        Nhập mã 4 chữ số mà bạn nhận được trong email của bạn (<Text style={{ color: '#1A1A1A', fontWeight: "regular" }}>{email}</Text>).
         </Text>
 
         <View style={styles.otpContainer}>
@@ -163,15 +199,15 @@ const ForgotPassword = () => {
 
         {otpError ? <Text style={styles.errorText}>{otpError}</Text> : null}
 
-        <Text style={{ fontFamily: 'GeneralRegular', color: '#808080', marginBottom: 15, marginTop: 5, textAlign: 'center' }}>
-          Email not received?
+        <Text style={{ fontWeight: 'regular', color: '#808080', marginBottom: 15, marginTop: 5, textAlign: 'center' }}>
+        Không nhận được email?
           <Text
             onPress={handleSendOTP}
             className={`text-primary-900 underline ${canResend ? '' : 'opacity-50'}`}
             style={{ color: canResend ? '#1A1A1A' : '#808080' }}
             disabled={!canResend}
           >
-            {canResend ? ' Resend code' : ` Resend code (${Math.floor(countdown / 60)}:${countdown % 60 < 10 ? '0' : ''}${countdown % 60})`}
+            {canResend ? ' Gửi lại mã' : ` Gửi lại mã (${Math.floor(countdown / 60)}:${countdown % 60 < 10 ? '0' : ''}${countdown % 60})`}
           </Text>
         </Text>
 
@@ -182,10 +218,18 @@ const ForgotPassword = () => {
           disabled={isLoading}
         >
           <Text style={{ fontSize: 16, textAlign: 'center', color: '#FFFFFF' }}>
-            {isLoading ? 'Loading...' : 'Verify OTP'}
+            {isLoading ? 'Chờ...' : 'Xác thực OTP'}
           </Text>
         </Pressable>
       </ScrollView>
+      <NotiModal
+        visible={showNotiModal}
+        onClose={() => setShowNotiModal(false)}
+        title={title}
+        forUse={forUsr}
+        message={message}
+        button={button}
+      />
     </SafeAreaView>
   );
 };
@@ -208,7 +252,7 @@ const styles = StyleSheet.create({
     width: 62,
     height: 60,
     borderWidth: 1,
-    borderColor: '#E6E6E6',
+    borderColor: '#B3B3B3',
   },
   otpInput: {
     fontSize: 40,

@@ -6,11 +6,10 @@ const InputComponent = ({ label, value, placeholder, setValue, error, keyboardTy
 
     return (
         <View className='my-1.5'>
-            <Text style={{ fontFamily: 'GeneralMedium' }} className='w-80 text-base'>{label}</Text>
+            <Text className='font-medium w-80 text-base'>{label}</Text>
             <View className={`flex-row items-center border rounded-xl h-[50] px-5 ${isFocused ? 'border-primary-900' : (error ? 'border-danger' : 'border-primary-100')}`}>
                 <TextInput
-                    style={{ fontFamily: 'GeneralMedium', flex: 1 }} // Make TextInput take remaining space
-                    className='text-sm'
+                    className='text-sm font-medium flex-1'
                     placeholder={placeholder}
                     value={value}
                     onChangeText={(value) => setValue(value)}
@@ -29,7 +28,7 @@ const InputComponent = ({ label, value, placeholder, setValue, error, keyboardTy
                     </View>
                 )}
             </View>
-            {error && ( <Text style={{ color: 'red', fontFamily: 'GeneralMedium' }}>{error}</Text>)}
+            {error && ( <Text style={{ color: 'red', fontWeight: 'medium' }}>{error}</Text>)}
         </View>
     );
 };
