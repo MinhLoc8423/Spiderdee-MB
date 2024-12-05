@@ -23,9 +23,9 @@ export const getProductById = async (product_id) => {
     }
 };
 
-export const searchProducts = async (name, category, min_price, max_price) => {
+export const searchProducts = async (name, category, min_price, max_price, sort_by) => {
     try {
-        const response = await axiosInstance.get(API_ENDPOINTS.PRODUCTSSEARCH+`?name=${name}&category=${category}&min_price=${min_price}&max_price=${max_price}`);
+        const response = await axiosInstance.get(API_ENDPOINTS.PRODUCTSSEARCH+`?name=${name}&category=${category}&min_price=${min_price}&max_price=${max_price}&sort_by=${sort_by}`);
         console.log('Search products response: ', response.data);
         return response.data;
     } catch (error) {

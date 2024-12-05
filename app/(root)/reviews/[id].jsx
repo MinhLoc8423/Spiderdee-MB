@@ -7,6 +7,7 @@ import { useLocalSearchParams } from "expo-router";
 import moment from "moment";
 import "moment/locale/vi";
 
+
 const ReviewsScreen = () => {
   const { id, reviews } = useLocalSearchParams();
   const parsedReviews = JSON.parse(reviews);
@@ -62,13 +63,13 @@ const ReviewsScreen = () => {
         <View key={index} className="flex-row items-center my-1">
           <View className="flex-row items-center space-x-[6]">
             {[...Array(star)].map((_, i) => (
-              <FontAwesome key={i} name="star" size={17} color="#FFA928" />
+              <FontAwesome key={i} name="star" size={18} color="#FFA928" />
             ))}
             {[...Array(5 - star)].map((_, i) => (
-              <FontAwesome key={i} name="star" size={17} color="#E6E6E6" />
+              <FontAwesome key={i} name="star" size={18} color="#E6E6E6" />
             ))}
           </View>
-          <View className="flex-1 bg-gray-300 h-1 mx-3 rounded-full overflow-hidden">
+          <View className="flex-1 bg-gray-300 h-2 mx-3 rounded-full overflow-hidden">
             <View
               className={`bg-black h-full`}
               style={{ width: `${caculateRatings(star)}%` }}

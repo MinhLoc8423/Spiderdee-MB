@@ -29,9 +29,13 @@ const ProductItem = ({ item }) => {
           source={{ uri: item.image }}
           className="w-full h-44 rounded-lg"
         />
-        <Text className="mt-2 text-base font-semibold">{item.name}</Text>
+        <Text 
+        className="mt-2 text-base font-semibold"
+        numberOfLines={1}
+        ellipsizeMode="tail" 
+        >{item.name}</Text>
         <Text className="mt-1 text-gray-600 text-xs">
-          ${item.price.toLocaleString()}
+          {item.price.toLocaleString()} VNĐ
         </Text>
         <TouchableOpacity
           disabled={isLoading}

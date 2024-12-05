@@ -38,6 +38,7 @@ export const SaveItemProvider = ({ children }) => {
   const removeFromWishlist = async (wishlistItemId) => {
     try {
       const data = await removeProductFromWishlist(wishlistItemId);
+      console.log(data);
       dispatch({ type: "REMOVE_FROM_SAVED_ITEMS", payload: data.data._id });
     } catch (error) {
       console.error("Error removing from wishlist:", error);

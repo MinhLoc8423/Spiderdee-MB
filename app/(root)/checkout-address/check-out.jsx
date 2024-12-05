@@ -47,24 +47,30 @@ const Checkout = () => {
   const [showNotiModal, setShowNotiModal] = useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
+  const [isRedirect, setIsRedirect] = useState(false);
   const [forUsr, setForUsr] = useState("warning");
   const [redirectTo, setRedirectTo] = useState("");
   const [params, setParams] = useState({});
+  const [button, setButton] = useState("");
 
   const hanldTurnOnModal = (
     show,
     title,
     message,
+    redirect,
     forUsr,
     redirectTo,
-    params
+    params,
+    button
   ) => {
     setShowNotiModal(show);
     setTitle(title);
     setMessage(message);
+    setIsRedirect(redirect);
     setForUsr(forUsr);
     setRedirectTo(redirectTo);
     setParams(params);
+    setButton(button)
   };
 
   const calculateSubtotal = () => {
@@ -87,92 +93,118 @@ const Checkout = () => {
   };
 
   const handleApplyPromoCode = () => {
-    if (promoCode.toLowerCase() === "save10") {
-      setDiscount(0.1);
-      const discountAmount = subTotal * 0.1;
-      setTotal(subTotal + shippingFee + vat - discountAmount);
-      setPromoApplied(true);
-      alert("Mã giảm giá đã được áp dụng!");
-    } else {
-      alert("Mã giảm giá không hợp lệ.");
-    }
-  };
+    hanldTurnOnModal(
+      true,
+      "Thống báo",
+      "Chương trình thêm mã giảm giá chưa được áp dụng trên hệ thống của chúng tôi.",
+      false,
+      "warning",
+      "",
+      {},
+      "Đóng"
+    );
+};
 
-  const handlePlaceOrder = async () => {
-    if (!selectedPaymentMethod) {
-      alert("Vui lòng chọn phương thức thanh toán.");
-      return;
-    }
-    try {
-      const data = await createOrder(
-        user.user.id,
-        address,
-        selectedPaymentMethod,
-        cartList
+const handlePlaceOrder = async () => {
+  if (!selectedPaymentMethod) {
+    hanldTurnOnModal(
+      true,
+      "Thống báo",
+      "Vui lòng chọn phuong thức thanh toán",
+      false,
+      "warning",
+      "",
+      {},
+      "Đóng"
+    );
+    return;
+  }
+  if (!address) {
+    hanldTurnOnModal(
+      true,
+      "Thống báo",
+      "Vui lòng chọn điểm giao hàng",
+      false,
+      "warning",
+      "",
+      {},
+      "Đóng"
+    );
+    return;
+  }
+  try {
+    const data = await createOrder(
+      user.user.id,
+      address,
+      selectedPaymentMethod,
+      cartList
+    );
+    if (data.status == 201 && data.data.payment_method == "Tiền mặt") {
+      clearCart();
+      hanldTurnOnModal(
+        true,
+        "Đặt hàng thành công",
+        "Vui lòng chờ hàng đến tay bạn.",
+        true,
+        "success",
+        "/(root)/(tabs)/account",
+        {},
+        "Đóng",
       );
-      if (data.status == 201 && data.data.payment_method == "Cash") {
-        clearCart();
-        hanldTurnOnModal(
-          true,
-          "Đặt hàng thành công",
-          "Vui lòng chờ hàng đến tay bạn.",
-          "success",
-          "/(root)/(tabs)/account/my-order",
-          {}
-        );
-      }
-      if (data.status == 201 && data.data.payment_method == "ZaloPay") {
-        clearCart();
-        hanldTurnOnModal(
-          true,
-          "Đặt hàng thành công",
-          "Vui lòng chờ hàng đến tay bạn.",
-          "success",
-          "/(root)/checkout-address/payment",
-          { order_id: data.data._id }
-        );
-      }
-    } catch (error) {
-      console.error(error);
     }
-  };
+    if (data.status == 201 && data.data.payment_method == "ZaloPay") {
+      clearCart();
+      hanldTurnOnModal(
+        true,
+        "Đặt hàng thành công",
+        "Vui lòng chờ hàng đến tay bạn.",
+        true,
+        "success",
+        "/(root)/checkout-address/payment",
+        { order_id: data.data._id, total: calculateTotal(), quantity: cartList.length },
+        "Thanh toán"
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        {/* Tiêu đề */}
-        <Header title={"Payment Method"} />
+return (
+  <SafeAreaView style={styles.container}>
+    <ScrollView>
+      {/* Tiêu đề */}
+      <Header title={"Phương thức thanh toán"} />
 
-        {/* Phần Địa chỉ giao hàng */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Địa chỉ giao hàng</Text>
-          <TouchableOpacity
-            onPress={() => router.push("(root)/checkout-address/address")}
-            style={styles.changeButton}
-          >
-            <Text style={styles.changeText}>Thay đổi</Text>
-          </TouchableOpacity>
-          <View style={styles.address}>
-            <Ionicons name="location-outline" size={18} />
-            <Text style={styles.addressText}>{address.name}</Text>
-          </View>
-          <Text style={styles.addressDetail}>{address.address}</Text>
+      {/* Phần Địa chỉ giao hàng */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Địa chỉ giao hàng</Text>
+        <TouchableOpacity
+          onPress={() => router.push("(root)/checkout-address/address")}
+          style={styles.changeButton}
+        >
+          <Text style={styles.changeText}>Thay đổi</Text>
+        </TouchableOpacity>
+        <View style={styles.address}>
+          <Ionicons name="location-outline" size={18} />
+          <Text style={styles.addressText}>{ !address ? "Tên trống": address?.name}</Text>
         </View>
+        <Text style={styles.addressDetail}>{!address ? "Địa điểm trống": address?.address}</Text>
+      </View>
 
-        {/* Phần Phương thức thanh toán */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Phương thức thanh toán</Text>
-          <View style={styles.paymentMethods}>
-            <TouchableOpacity
-              style={[
-                styles.paymentMethod,
-                selectedPaymentMethod === PAYMENT_METHOD.CASH &&
-                  styles.selectedPaymentMethod,
-              ]}
-              onPress={() => setSelectedPaymentMethod(PAYMENT_METHOD.CASH)}
-            >
-              <Ionicons name="cash-outline" size={18} />
-              <Text style={styles.paymentText}>Tiền mặt</Text>
+      {/* Phần Phương thức thanh toán */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Phương thức thanh toán</Text>
+        <View style={styles.paymentMethods}>
+          <TouchableOpacity
+            style={[
+              styles.paymentMethod,
+              selectedPaymentMethod === PAYMENT_METHOD.CASH &&
+                styles.selectedPaymentMethod,
+            ]}
+            onPress={() => setSelectedPaymentMethod(PAYMENT_METHOD.CASH)}
+          >
+            <Ionicons name="cash-outline" size={18} /><Text style={styles.paymentText}>Tiền mặt</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
@@ -254,9 +286,10 @@ const Checkout = () => {
           title={title}
           forUse={forUsr}
           message={message}
-          redirect={true}
+          redirect={isRedirect}
           redirectTo={redirectTo}
           params={params}
+          button={button}
         />
       </ScrollView>
     </SafeAreaView>
@@ -382,7 +415,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     marginLeft: 10,
-    backgroundColor: "#4caf50",
+    backgroundColor: "#1A1A1A",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -417,8 +450,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 18,fontWeight: "bold",
     marginBottom: 10,
   },
   modalMessage: {

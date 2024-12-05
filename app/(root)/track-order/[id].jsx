@@ -8,7 +8,6 @@ import {
   StyleSheet,
   TextInput,
   Modal,
-  Alert,
   TouchableWithoutFeedback,
 } from "react-native";
 import { styled } from "nativewind";
@@ -21,7 +20,7 @@ import {
 } from "../../../api/reviewAPIs";
 import { ORDER_STATUS, PAYMENT_METHOD } from "../../../constants/orderConstans";
 import { AuthContext } from "../../../store/contexts/AuthContext";
-
+import NotiModal from "@/components/NotiModal";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -44,6 +43,21 @@ const TrackOrderScreen = () => {
   const [currentProductId, setCurrentProductId] = useState(null);
   const [currentOrderDetailId, setCurrentOrderDetailId] = useState(null);
   const [reviews, setReviews] = useState({});
+
+  //Modal dialog
+  const [showNotiModal, setShowNotiModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [forUsr, setForUsr] = useState("warning");
+  const [button, setButton] = useState("");
+
+  const hanldTurnOnModal = (show, title, message, forUsr, button) => {
+    setShowNotiModal(show);
+    setTitle(title);
+    setMessage(message);
+    setForUsr(forUsr);
+    setButton(button);
+  };
 
   const openModal = (productId, orderDetailId) => {
     setCurrentProductId(productId);
@@ -75,7 +89,7 @@ const TrackOrderScreen = () => {
       setReviews(reviewsData); // Cập nhật state reviews
       console.log("Reviews:", reviews);
     } catch (error) {
-      console.error("Error fetching reviews:", error);
+      console.log("Error fetching reviews:", error);
     }
   };
 
@@ -87,7 +101,13 @@ const TrackOrderScreen = () => {
     try {
       console.log("Submit review:", currentProductId, currentOrderDetailId);
       if (rating === 0 || review === "") {
-        Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin");
+        hanldTurnOnModal(
+          true,
+          "Thông báo",
+          "Vui lòng điền đầy đủ thông tin.",
+          "warning",
+          "Đóng"
+        );
         return;
       }
 
@@ -105,9 +125,12 @@ const TrackOrderScreen = () => {
         setRating(0);
         setReview("");
         closeModal();
-        Alert.alert(
+        hanldTurnOnModal(
+          true,
           "Cảm ơn!",
-          "Đánh giá của bạn sẽ là góp phần giúp chúng tôi hoàn thiện hơn mỗi ngày"
+          "Đánh giá của bạn sẽ là góp phần giúp chúng tôi hoàn thiện hơn mỗi ngày",
+          "success",
+          "Đóng"
         );
       }
     } catch (error) {
@@ -141,7 +164,7 @@ const TrackOrderScreen = () => {
 
   const renderOrderItem = ({ item }) => {
     const review = reviews[item.order_detail_id]; // Lấy review cho sản phẩm hiện tại
-    console.log("Review 2131:", review);
+    console.log("Review 2131:", item);
 
     return (
       <View style={styles.itemContainer}>
@@ -150,7 +173,19 @@ const TrackOrderScreen = () => {
         </View>
         <View style={styles.detailsContainer}>
           <View style={styles.textContainer}>
-            <Text style={styles.itemName}>{item.name}</Text>
+            <Text
+              onPress={() =>
+                router.push({
+                  pathname: "/(root)/product-details/[id]",
+                  params: { id: item.product_id },
+                })
+              }
+              style={styles.itemName}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {item.name}
+            </Text>
             <Text style={styles.itemSize}>Size: {item.size}</Text>
           </View>
           <Text style={styles.itemPrice}>
@@ -341,6 +376,14 @@ const TrackOrderScreen = () => {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
+      <NotiModal
+        visible={showNotiModal}
+        onClose={() => setShowNotiModal(false)}
+        title={title}
+        forUse={forUsr}
+        message={message}
+        button={button}
+      />
     </SafeAreaView>
   );
 };

@@ -22,7 +22,7 @@ const Header = ({ title }) => {
           style={{ width: 24, height: 24 }}
         />
       </TouchableOpacity>
-      <Text style={{ fontSize: 24, fontFamily: "GeneralSemibold" }}>
+      <Text style={{ fontSize: 24, fontWeight:"700" }}>
         {title}
       </Text>
       <TouchableOpacity

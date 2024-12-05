@@ -1,6 +1,8 @@
 import { Tabs } from "expo-router";
 import { Image, Platform, StatusBar } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
+import { useEffect } from "react";
+import { setStatusBarStyle } from "expo-status-bar";
 
 export const unstable_settings = {
   initialRouteName: "home",

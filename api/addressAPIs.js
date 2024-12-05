@@ -4,7 +4,7 @@ import { API_ENDPOINTS } from '../constants/endPoints';
 
 export const getAddressByUser = async (user_id) => {
     try {
-        const response = await axiosInstance.get(API_ENDPOINTS.ADDRESS, { user_id });
+        const response = await axiosInstance.get(API_ENDPOINTS.ADDRESS+`user/${user_id}`);
         console.log('Get address response: ', response.data);
         return response.data;
     } catch (error) {
@@ -31,6 +31,17 @@ export const updateAddressAPI = async (id, name, address, user_id, isDefault) =>
         return response.data;
     } catch (error) {
         console.log('Update address error: ', error);
+        throw error;
+    }
+};
+
+export const deleteAddressAPI = async (id) => {
+    try {
+        const response = await axiosInstance.delete(API_ENDPOINTS.ADDRESS + id);
+        console.log('Delete address response: ', response.data);
+        return response.data;
+    } catch (error) {
+        console.log('Delete address error: ', error);
         throw error;
     }
 };

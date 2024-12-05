@@ -15,6 +15,7 @@ import { formattedDate } from "../../../../utils/formatDate";
 import { AuthContext } from "../../../../store/contexts/AuthContext";
 import { router } from "expo-router";
 import { ORDER_STATUS, PAYMENT_METHOD } from "../../../../constants/orderConstans";
+import { MotiView } from "moti"; // Import Moti for skeleton effect
 
 const StyledTouchableOpacity = styled(TouchableOpacity);
 const StyledView = styled(View);
@@ -26,6 +27,7 @@ export default function MyOrdersScreen() {
   const [ordersData, setOrdersData] = useState([]);
   const [orderData0, setOrderData0] = useState([]);
   const [orderData1, setOrderData1] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const hanldeGetData = async () => {
     try {
@@ -36,8 +38,10 @@ export default function MyOrdersScreen() {
       } else {
         setOrdersData([]);
       }
+      setLoading(false); // Stop loading after data is fetched
     } catch (error) {
       setOrdersData([]);
+      setLoading(false); // Stop loading on error
     }
   };
 
@@ -46,9 +50,12 @@ export default function MyOrdersScreen() {
   }, []);
 
   useEffect(() => {
-    // Filter orders based on status only when ordersData or selectedTab changes
-    const ongoingOrders = ordersData.filter(order => order.status !== ORDER_STATUS.DELIVERED);
-    const completedOrders = ordersData.filter(order => order.status == ORDER_STATUS.DELIVERED);
+    const ongoingOrders = ordersData.filter(
+      (order) => order.status !== ORDER_STATUS.DELIVERED
+    );
+    const completedOrders = ordersData.filter(
+      (order) => order.status == ORDER_STATUS.DELIVERED
+    );
     setOrderData0(ongoingOrders);
     setOrderData1(completedOrders);
   }, [ordersData, selectedTab]);
@@ -107,6 +114,30 @@ export default function MyOrdersScreen() {
     </View>
   );
 
+  // Skeleton for each order item
+  const renderOrderItemSkeleton = () => (
+    <MotiView
+      from={{ opacity: 0.5 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        type: "timing",
+        duration: 800,
+        loop: true,
+        repeatReverse: true,
+      }}
+      style={styles.itemContainer}
+    >
+      {/* Skeleton cho hình ảnh sản phẩm */}
+      <View style={styles.skeletonImage} />
+      {/* Skeleton cho chi tiết sản phẩm */}
+      <View style={styles.detailsContainer}>
+        <View style={styles.skeletonTextShort} />
+        <View style={styles.skeletonText} />
+      </View>
+      {/* Skeleton cho nút Theo dõi */}
+    </MotiView>
+  );
+
   const renderEmptyState = () => (
     <StyledView className="flex-1 items-center justify-center mt-10">
       <Image
@@ -114,10 +145,10 @@ export default function MyOrdersScreen() {
         source={require("../../../../assets/icons/box-icon.png")}
       />
       <StyledText className="text-lg font-semibold text-gray-700 mt-4">
-        No Ongoing Orders!
+        Không có đơn hàng nào!
       </StyledText>
       <StyledText className="text-sm text-gray-500 mt-2">
-        You don’t have any ongoing orders at this time.
+        Hiện tại bạn không có đơn hàng nào.
       </StyledText>
     </StyledView>
   );
@@ -143,14 +174,16 @@ export default function MyOrdersScreen() {
                   : "text-primary-400"
               }`}
             >
-              Ongoing
+              Đang xử lý
             </StyledText>
           </StyledTouchableOpacity>
 
           <StyledTouchableOpacity
             onPress={() => setSelectedTab(ORDER_STATUS.DELIVERED)}
             className={`px-4 py-2 w-1/2 rounded-lg ml-2 ${
-              selectedTab === ORDER_STATUS.DELIVERED ? "bg-primary-0" : "bg-primary-100"
+              selectedTab === ORDER_STATUS.DELIVERED
+                ? "bg-primary-0"
+                : "bg-primary-100"
             }`}
           >
             <StyledText
@@ -160,26 +193,70 @@ export default function MyOrdersScreen() {
                   : "text-primary-400"
               }`}
             >
-              Completed
+              Hoàn thành
             </StyledText>
           </StyledTouchableOpacity>
         </StyledView>
       </View>
 
-      <FlatList
-        data={selectedTab === ORDER_STATUS.DELIVERED ? orderData1 : orderData0}
-        keyExtractor={(item) => item.order_id}
-        renderItem={renderOrderItem}
-        ListEmptyComponent={renderEmptyState}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ padding: 16 }}
-      />
+      {loading ? (
+        // Hiển thị Skeleton khi dữ liệu đang tải
+        <FlatList
+          data={Array(6).fill({})} // Dummy data for skeleton items
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderOrderItemSkeleton}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ padding: 16 }}
+        />
+      ) : (
+        // Hiển thị nội dung thực nếu dữ liệu đã tải xong
+        <FlatList
+          data={selectedTab === ORDER_STATUS.DELIVERED ? orderData1 : orderData0}
+          keyExtractor={(item) => item.order_id}
+          renderItem={renderOrderItem}
+          ListEmptyComponent={renderEmptyState}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ padding: 16 }}
+        />
+      )}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  // Skeleton styles
+  skeletonImage: {
+    width: 85,
+    height: 85,
+    backgroundColor: "#E0E0E0",
+    borderRadius: 4,
+    marginRight: 16,
+  },
+  skeletonText: {
+    width: "40%",
+    height: 20,
+    paddingTop: 10,
+    backgroundColor: "#E0E0E0",
+    borderRadius: 4,
+    marginBottom: 8,
+    marginTop: -8,
+  },
+  skeletonTextShort: {
+    width: "100%",
+    height: 30,
+    backgroundColor: "#E0E0E0",
+    borderRadius: 4,
+    marginBottom: 8,
+    marginTop: 8,
+  },
+  skeletonReviewButton: {
+    width: 80,
+    height: 24,
+    backgroundColor: "#E0E0E0",
+    borderRadius: 4,
+  },
+  // Existing styles for order items
   itemContainer: {
     flexDirection: "row",
     alignItems: "center",

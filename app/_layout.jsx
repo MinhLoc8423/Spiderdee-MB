@@ -1,14 +1,15 @@
-import { Stack, router } from 'expo-router';
-import React, { useContext, useEffect } from 'react';
-import { AuthContext } from '../store/contexts/AuthContext';
-import { AuthProvider } from '../store/providers/AuthProvider';
-import { CartProvider } from '../store/providers/CartProvider';
-import { AddressProvider } from '../store/providers/AddressProvider';
+import { Stack, router } from "expo-router";
+import React, { useContext, useEffect } from "react";
+import { AuthContext } from "../store/contexts/AuthContext";
+import { AuthProvider } from "../store/providers/AuthProvider";
+import { CartProvider } from "../store/providers/CartProvider";
+import { AddressProvider } from "../store/providers/AddressProvider";
 import { SaveItemProvider } from "../store/providers/SaveItemProvider";
-import * as SplashScreen from 'expo-splash-screen';
-import * as NavigationBar from 'expo-navigation-bar';
-import { Platform } from 'react-native';
-import { useFonts } from 'expo-font';
+import * as SplashScreen from "expo-splash-screen";
+import * as NavigationBar from "expo-navigation-bar";
+import { Platform } from "react-native";
+import { useFonts } from "expo-font";
+import { setStatusBarStyle } from "expo-status-bar";
 
 const RootLayout = () => {
   const { user, isLoading } = useContext(AuthContext);
@@ -17,32 +18,26 @@ const RootLayout = () => {
     SplashScreen.preventAutoHideAsync();
   }, []);
 
-  const [fontsLoaded] = useFonts({
-    GeneralBold: require('../assets/fonts/GeneralSans-Bold.otf'),
-    GeneralBoldItalic: require('../assets/fonts/GeneralSans-BoldItalic.otf'),
-    GeneralExtralight: require('../assets/fonts/GeneralSans-Extralight.otf'),
-    GeneralItalic: require('../assets/fonts/GeneralSans-Italic.otf'),
-    GeneralLight: require('../assets/fonts/GeneralSans-Light.otf'),
-    GeneralLightItalic: require('../assets/fonts/GeneralSans-LightItalic.otf'),
-    GeneralMedium: require('../assets/fonts/GeneralSans-Medium.otf'),
-    GeneralRegular: require('../assets/fonts/GeneralSans-Regular.otf'),
-    GeneralSemibold: require('../assets/fonts/GeneralSans-Semibold.otf'),
-    GeneralSemiboldItalic: require('../assets/fonts/GeneralSans-SemiboldItalic.otf'),
-  });
-
   useEffect(() => {
-    if (!isLoading && fontsLoaded) {
+    setTimeout(() => {
+      setStatusBarStyle("dark");
+    }, 0);
+  }, []);
+  useEffect(() => {
+    console.log("User:", user);
+    console.log("isLoading:", isLoading);
+    if (!isLoading) {
       if (user) {
-        router.replace('/(root)/(tabs)/home');
+        router.replace("/(root)/(tabs)/home");
       } else {
-        router.replace('/(auth)/onboarding');
+        router.replace("/(auth)/onboarding");
       }
       SplashScreen.hideAsync(); // Chỉ gọi khi đã hoàn tất tải
     }
-  }, [user, isLoading, fontsLoaded]);
+  }, [user, isLoading]);
 
-  if (Platform.OS === 'android') {
-    NavigationBar.setBackgroundColorAsync('#1A1A1A');
+  if (Platform.OS === "android") {
+    NavigationBar.setBackgroundColorAsync("#1A1A1A");
   }
 
   return (
@@ -50,13 +45,38 @@ const RootLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(root)/(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)/product-details/[id]" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)/reviews/[id]" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)/checkout-address/check-out" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)/checkout-address/address" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)/checkout-address/new-address" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)/checkout-address/payment" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)/track-order/[id]" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(root)/product-details/[id]"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(root)/reviews/[id]"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(root)/checkout-address/check-out"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(root)/checkout-address/address"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(root)/checkout-address/new-address"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(root)/checkout-address/edit-address"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(root)/checkout-address/payment"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(root)/track-order/[id]"
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

@@ -1,5 +1,6 @@
 // export const API_BASE_URL = 'https://spiderdee-be.vercel.app/';
 export const API_BASE_URL = 'https://modern-cockatoo-musical.ngrok-free.app/';
+// export const API_BASE_URL = 'http://192.168.101.2:8423/';
 
 export const API_ENDPOINTS = {
   // Auth endpoints
@@ -39,5 +40,8 @@ export const API_ENDPOINTS = {
   REVIEW: '/api/reviews/',
   REVIEWORDERDETAIL: '/api/reviews/order-detail/',
   REVIEWPRODUCT: '/api/reviews/product/',
+
+  // Order status endpoints
+  ORDERSTATUS: '/api/check-status-order/',
 };
 

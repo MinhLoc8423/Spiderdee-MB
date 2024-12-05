@@ -44,7 +44,7 @@ const MyCartScreen = () => {
 
   const calculateVAT = () => {
     const subtotal = calculateSubtotal();
-    return (subtotal * vatPercentage) / 100; // Tính VAT
+    return (subtotal * vatPercentage) / 100;
   };
 
   const calculateTotal = () => {
@@ -60,11 +60,9 @@ const MyCartScreen = () => {
         className="w-24 h-24 mb-4"
         tintColor={"#B3B3B3"}
       />
-      <Text className="text-lg font-bold text-gray-800">
-        Your Cart Is Empty!
-      </Text>
+      <Text className="text-lg font-bold text-gray-800">Giỏ hàng của bạn trống!</Text>
       <Text className="text-base text-gray-600 text-center mx-8">
-        When you add products, they’ll appear here.
+        Khi bạn thêm sản phẩm, chúng sẽ xuất hiện tại đây.
       </Text>
     </View>
   );
@@ -80,7 +78,7 @@ const MyCartScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={"Cart"} />
+      <Header title={"Giỏ hàng"} />
       {cartList.length === 0 ? (
         renderEmptyResults()
       ) : (
@@ -148,61 +146,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: 16,
   },
-  itemContainer: {
-    flexDirection: "row",
-    borderRadius: 10,
-    borderWidth: 1,
-    padding: 7,
-    marginTop: 7,
-    marginBottom: 14,
-    borderColor: "#E6E6E6",
-    alignItems: "center",
-  },
-  imageContainer: {
-    width: 83,
-    height: 79,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
-  detailsContainer: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  itemDetails: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  itemName: {
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  itemSize: {
-    fontSize: 14,
-    color: "#666",
-  },
-  itemPrice: {
-    marginTop: 18,
-    fontSize: 14,
-    color: "#666",
-  },
-  quantityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  quantityButton: {
-    fontSize: 18,
-    paddingHorizontal: 10,
-    color: "#000",
-  },
-  quantityText: {
-    fontSize: 16,
-    marginHorizontal: 8,
-  },
   summaryContainer: {
     paddingTop: 16,
   },
@@ -239,15 +182,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  quantityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 8,
-  },
-  quantityText: {
-    fontSize: 16,
-    marginHorizontal: 8,
   },
 });
 

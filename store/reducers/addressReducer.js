@@ -16,15 +16,16 @@ export const addressReducer = (state, action) => {
     case 'UPDATE_ADDRESS':
       return state.map(address => {
         if (address._id === action.payload._id) {
-          return { ...address, isDefault: action.payload.isDefault };
-        } else {
-          return { ...address, isDefault: false };
+          return { ...address, ...action.payload }; // Cập nhật địa chỉ trùng ID
+        } else if (action.payload.isDefault) {
+          return { ...address, isDefault: false }; // Đặt các địa chỉ khác về isDefault: false
         }
+        return address; // Giữ nguyên các địa chỉ khác
       });
 
-    case 'REMOVE_ADDRESS':
+    case 'DELETE_ADDRESS':
       return state.filter(
-        address => address.shipment_id !== action.payload.shipment_id
+        address => address._id !== action.payload
       );
 
     case 'SET_DEFAULT_ADDRESS':

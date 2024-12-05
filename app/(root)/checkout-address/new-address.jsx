@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Switch,
   ScrollView,
-  Alert,
   Modal,
   FlatList,
 } from "react-native";
@@ -17,6 +16,7 @@ import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../components/Header";
 import { AddressContext } from "../../../store/contexts/AddressContext";
+import NotiModal from "../../../components/NotiModal.jsx";
 
 const NewAddressScreen = () => {
   const navigation = useNavigation();
@@ -26,18 +26,62 @@ const NewAddressScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isNicknameModalVisible, setNicknameModalVisible] = useState(false);
 
-  const { addresses, addAddress, setDefaultAddress } = useContext(AddressContext);
+  const { addresses, addAddress, setDefaultAddress } =
+    useContext(AddressContext);
+
+  //Modal dialog
+  const [showNotiModal, setShowNotiModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [forUsr, setForUsr] = useState("warning");
+  const [isRedirect, setIsRedirect] = useState(false);
+  const [redirectTo, setRedirectTo] = useState("");
+  const [button, setButton] = useState("");
+
+  const hanldTurnOnModal = (
+    show,
+    title,
+    isRedirect,
+    ridirectTo,
+    message,
+    forUsr,
+    button
+  ) => {
+    setShowNotiModal(show);
+    setTitle(title);
+    setMessage(message);
+    setIsRedirect(isRedirect);
+    setRedirectTo(ridirectTo);
+    setForUsr(forUsr);
+    setButton(button);
+  };
 
   const handleAddAddress = () => {
     if (!nickname || !fullAddress) {
-      Alert.alert("Thông báo", "Vui lòng nhập đầy đủ thông tin");
+      hanldTurnOnModal(
+        true,
+        "Thông báo",
+        false,
+        "",
+        "Vui lòng nhập đầy đủ thông tin",
+        "warning",
+        "Đóng"
+      );
       return;
     }
     const name = nickname;
     const address = fullAddress;
     addAddress(name, address, isDefault);
     setModalVisible(true);
-    router.push("/(root)/checkout-address/address");
+    hanldTurnOnModal(
+      true,
+      "Thông báo",
+      true,
+      "/(root)/checkout-address/address",
+      "Cập nhật địa chỉ thành công.",
+      "success",
+      "Đóng"
+    );
   };
 
   const closeModal = () => {
@@ -50,7 +94,7 @@ const NewAddressScreen = () => {
     setNicknameModalVisible(false); // Đóng modal sau khi chọn
   };
 
-  const nicknameOptions = ["Nhà riêng", "Văn phòng", "Căn hộ", "Nhà bố mẹ"];
+  const nicknameOptions = ["Nhà riêng", "Văn phòng", "Căn hộ"];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -95,7 +139,12 @@ const NewAddressScreen = () => {
           {/* Đặt làm địa chỉ mặc định */}
           <View style={styles.defaultContainer}>
             <Text style={styles.defaultText}>Đặt làm địa chỉ mặc định</Text>
-            <Switch value={isDefault} onValueChange={setIsDefault} />
+            <Switch
+              value={isDefault}
+              onValueChange={setIsDefault}
+              trackColor={{ false: "#767577", true: "#767577" }} // Màu nền khi bật/tắt
+              thumbColor={isDefault ? "#1A1A1A" : "#f4f3f4"}
+            />
           </View>
 
           {/* Nút Thêm */}
@@ -104,27 +153,6 @@ const NewAddressScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      {/* Modal Thông Báo Thành Công */}
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={isModalVisible}
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Ionicons name="checkmark-circle" size={64} color="green" />
-            <Text style={styles.modalTitle}>Chúc mừng!</Text>
-            <Text style={styles.modalMessage}>
-              Địa chỉ mới của bạn đã được thêm.
-            </Text>
-            <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
-              <Text style={styles.modalButtonText}>Cảm ơn</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
 
       {/* Modal Chọn Biệt Danh */}
       <Modal
@@ -157,6 +185,16 @@ const NewAddressScreen = () => {
           </View>
         </View>
       </Modal>
+      <NotiModal
+        visible={showNotiModal}
+        onClose={() => setShowNotiModal(false)}
+        title={title}
+        forUse={forUsr}
+        message={message}
+        redirect={isRedirect}
+        redirectTo={redirectTo}
+        button={button}
+      />
     </SafeAreaView>
   );
 };
@@ -237,7 +275,7 @@ const styles = StyleSheet.create({
   modalButton: {
     backgroundColor: "#000",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     borderRadius: 8,
   },
   modalButtonText: { color: "#fff", fontSize: 16 },
@@ -253,7 +291,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
   },
-  nicknameText: { fontSize: 16, color: "#333" },
+  nicknameText: { fontSize: 16, color: "#333", textAlign: "center" },
 });
 
 export default NewAddressScreen;

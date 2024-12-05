@@ -11,6 +11,7 @@ const NotiModal = ({
   message = "Bạn đã đặt hàng thành công.",
   forUse = "warning",
   redirect = false,
+  button = "đóng",
   redirectTo = "",
   params = {},
 }) => {
@@ -33,6 +34,8 @@ const NotiModal = ({
           <View style={styles.iconContainer}>
             {forUse === "warning" ? (
               <Ionicons name="warning" size={48} color="orange" />
+            ) : forUse === "error" ? (
+              <Ionicons name="close-circle" size={48} color="red" />
             ) : (
               <Ionicons name="checkmark-circle" size={48} color="#0C9409" />
             )}
@@ -40,7 +43,7 @@ const NotiModal = ({
             <Text style={styles.message}>{message}</Text>
           </View>
           <TouchableOpacity style={styles.button} onPress={handlePress}>
-            <Text style={styles.buttonText}>Quay lại</Text>
+            <Text style={styles.buttonText}>{button}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -87,11 +90,14 @@ const styles = StyleSheet.create({
   message: {
     color: "gray",
     marginTop: 4,
+    textAlign: "center",
+    fontWeight: "normal",
   },
   button: {
-    backgroundColor: "lightgray",
+    backgroundColor: "#1a1a1a",
     borderRadius: 10,
     paddingVertical: 10,
+    paddingHorizontal: 20,
     marginTop: 8,
     width: "100%",
   },

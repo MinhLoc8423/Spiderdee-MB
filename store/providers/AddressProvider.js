@@ -1,7 +1,7 @@
 // AddressProvider.js
 import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import { addressReducer, initialAddress } from '../reducers/addressReducer';
-import { getAddressByUser, createAddress, updateAddressAPI } from '../../api/addressAPIs';
+import { getAddressByUser, createAddress, updateAddressAPI, deleteAddressAPI } from '../../api/addressAPIs';
 import { AddressContext } from '../contexts/AddressContext';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -38,7 +38,6 @@ export const AddressProvider = ({ children }) => {
     };
 
     const setDefaultAddress = (shipmentId) => {
-
         dispatch({ type: "SET_DEFAULT_ADDRESS", payload: { shipment_id: shipmentId } });
     };
 
@@ -55,6 +54,16 @@ export const AddressProvider = ({ children }) => {
             console.error("Error updating address:", error?.message || error);
         }
     };
+
+    const deleteAddress = async (id) => {
+        try {
+            const data = await deleteAddressAPI(id);
+            console.log("Deleted address:", data.data);
+            dispatch({ type: "DELETE_ADDRESS", payload: id });
+        } catch (error) {
+            console.error("Error deleting address:", error?.message || error);
+        }
+    };
     
 
     return (
@@ -64,6 +73,7 @@ export const AddressProvider = ({ children }) => {
                 addAddress,
                 updateAddress,
                 setDefaultAddress,
+                deleteAddress,
             }}
         >
             {children}

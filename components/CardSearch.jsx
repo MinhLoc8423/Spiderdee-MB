@@ -22,8 +22,10 @@ export const CartSearch = ({ item }) => {
 
       {/* Chi tiết sản phẩm */}
       <View style={styles.productDetails}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productPrice}>${item.price}</Text>
+        <Text style={styles.productName} numberOfLines={1} ellipsizeMode="tail">
+          {item.name}
+        </Text>
+        <Text style={styles.productPrice}>{item.price.toLocaleString()} VNĐ</Text>
       </View>
 
       {/* Icon điều hướng */}
@@ -46,8 +48,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 16,
-    borderBottomWidth: 1, 
-    borderBottomColor: "#E6E6E6", 
+    borderBottomWidth: 1,
+    borderBottomColor: "#E6E6E6",
   },
   productImage: {
     width: 56,
@@ -61,27 +63,29 @@ const styles = StyleSheet.create({
   productName: {
     fontFamily: "GeneralSemibold",
     fontSize: 16,
+    marginBottom: 9,
     color: "#1A1A1A",
   },
   productPrice: {
     fontFamily: "GeneralMedium",
     fontSize: 14,
+    marginTop: 9,
     color: "#808080",
   },
   arrowContainer: {},
   arrow: {
     width: 24,
     height: 24,
-    transform: 'rotate(135deg)',
+    transform: "rotate(135deg)",
   },
   bottomLine: {
-    position: "absolute", 
+    position: "absolute",
     paddingStart: 16,
     paddingEnd: 16,
-    left: 0, 
-    right: 0, 
-    bottom: 0, 
-    height: 1, 
-    backgroundColor: "#E6E6E6", 
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 1,
+    backgroundColor: "#E6E6E6",
   },
 });

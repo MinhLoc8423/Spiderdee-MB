@@ -8,7 +8,8 @@ const AuthLayout = () => {
   }
   return (
     <>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF"
+       />
       <Stack>
         <Stack.Screen
           name="onboarding"

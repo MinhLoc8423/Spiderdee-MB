@@ -7,26 +7,98 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Alert,
   Linking,
 } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { loginLocal } from "../../api/authAPIs";
 import { validateEmail, validatePassword } from "../../helpers/validate";
-import { AuthContext } from '../../store/contexts/AuthContext';
+import { AuthContext } from "../../store/contexts/AuthContext";
+import { API_BASE_URL } from "../../constants/endPoints";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  isErrorWithCode,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+import axios from "axios";
+import NotiModal from "@/components/NotiModal";
+
+GoogleSignin.configure({
+  webClientId:
+    "669733563945-gc85geutgk7f9tapnv3uk58il2i7m00q.apps.googleusercontent.com",
+  scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
+  offlineAccess: true,
+  forceCodeForRefreshToken: true,
+  iosClientId:
+    "669733563945-ae3t4v27heq0i3bljqac2k2g4rsr1pks.apps.googleusercontent.com",
+});
 
 const SingIn = () => {
   const { login } = useContext(AuthContext);
-  const [email, setEmail] = useState("admin1@spiderdee.com");
-  const [password, setPassword] = useState("Passwordvtvn123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused1, setIsFocused1] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
+
+  //Modal dialog
+  const [showNotiModal, setShowNotiModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [forUsr, setForUsr] = useState("warning");
+  const [button, setButton] = useState("");
+
+  const hanldTurnOnModal = (show, title, message, forUsr, button) => {
+    setShowNotiModal(show);
+    setTitle(title);
+    setMessage(message);
+    setForUsr(forUsr);
+    setButton(button);
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    try {
+      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.signIn();
+      const tokens = await GoogleSignin.getTokens();
+      const ressponse = await axios.post(
+        `${API_BASE_URL}auth/login-with-google`,
+        {
+          token: tokens.accessToken,
+        }
+      );
+      console.log("Access Token:", ressponse.data.data.token);
+      if (ressponse.data.status === 200) {
+        login(ressponse.data.data.token);
+      } else {
+        hanldTurnOnModal(
+          true,
+          "Thông báo",
+          "Đăng nhập google thất bại.",
+          "warning",
+          "Đóng"
+        );
+      }
+    } catch (error) {
+      hanldTurnOnModal(
+        true,
+        "Thông báo",
+        "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+        "error",
+        "Đóng"
+      );
+      console.log("Google Signin Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = async () => {
     let hasError = false;
@@ -35,12 +107,12 @@ const SingIn = () => {
     setPasswordError("");
 
     if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address.");
+      setEmailError("Vui lòng nhập địa chỉ email hợp lệ.");
       hasError = true;
     }
 
     if (!validatePassword(password)) {
-      setPasswordError("Please enter a valid password.");
+      setPasswordError("Vui lòng nhập mật khẩu hợp lệ.");
       hasError = true;
     }
 
@@ -55,10 +127,17 @@ const SingIn = () => {
     } catch (error) {
       console.log(error);
       if (error.status === 401) {
-        setEmailError("Email or password is incorrect.");
-        setPasswordError("Email or password is incorrect.");
+        setEmailError("E-mail hoặc mật khẩu không đúng.");
+        setPasswordError("E-mail hoặc mật khẩu không đúng.");
       } else {
-        Alert.alert("An unexpected error occurred. Please try again later.");
+        hanldTurnOnModal(
+          true,
+          "Thông báo",
+          "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+          "error",
+          "Đóng"
+        );
+        console.log("Login Error:", error);
       }
     } finally {
       setLoading(false);
@@ -68,23 +147,15 @@ const SingIn = () => {
   return (
     <SafeAreaView className="flex-1 bg-primary-0">
       <ScrollView className="px-5 ">
-        <Text
-          style={{ fontFamily: "GeneralSemibold" }}
-          className="text-3xl mt-3"
-        >
+        <Text className="text-3xl mt-3 font-semibold">
           Đăng nhập vào tài khoản của bạn
         </Text>
         <Text style={styles.text1} className="mb-5">
-        Thật vui khi được gặp lại bạn.
+          Rất vui khi được gặp lại bạn.
         </Text>
 
         <View className="my-1 ">
-          <Text
-            style={{ fontFamily: "GeneralMedium" }}
-            className="w-80 text-base"
-          >
-            E-mail
-          </Text>
+          <Text className="w-80 text-base font-medium">E-mail</Text>
           <TextInput
             className={`border rounded-xl h-[50] px-5 text-sm ${
               isFocused
@@ -100,19 +171,12 @@ const SingIn = () => {
             onBlur={() => setIsFocused(false)}
           />
           {emailError && (
-            <Text style={{ color: "red", fontFamily: "GeneralMedium" }}>
-              {emailError}
-            </Text>
+            <Text className="text-danger font-medium">{emailError}</Text>
           )}
         </View>
 
         <View className="mt-1">
-          <Text
-            style={{ fontFamily: "GeneralMedium" }}
-            className="w-80 text-base"
-          >
-            Mật khẩu
-          </Text>
+          <Text className="w-80 text-base font-medium">Mật khẩu</Text>
           <View
             className={`flex-row items-center border rounded-xl h-[50] px-5 ${
               isFocused1
@@ -123,8 +187,7 @@ const SingIn = () => {
             }`}
           >
             <TextInput
-              style={{ fontFamily: "GeneralMedium", flex: 1 }} // Make TextInput take remaining space
-              className="text-sm"
+              className="text-sm flex-1 font-medium"
               placeholder="Vui lòng nhập mật khẩu"
               value={password}
               secureTextEntry={!showPassword}
@@ -147,14 +210,12 @@ const SingIn = () => {
             </TouchableOpacity>
           </View>
           {passwordError && (
-            <Text style={{ color: "red", fontFamily: "GeneralMedium" }}>
-              {passwordError}
-            </Text>
+            <Text className="text-danger font-medium">{passwordError}</Text>
           )}
         </View>
 
         <Text style={[styles.text2]}>
-        Quên mật khẩu?{" "}
+          Quên mật khẩu?{" "}
           <Link
             href={"/(auth)/forgot-password"}
             style={{
@@ -176,7 +237,7 @@ const SingIn = () => {
           disabled={isLoading}
         >
           <Text style={{ fontSize: 16, textAlign: "center", color: "#FFFFFF" }}>
-            {isLoading ? "Loading..." : "Đăng Nhập"}
+            {isLoading ? "Đang xử lý..." : "Đăng Nhập"}
           </Text>
         </Pressable>
 
@@ -186,9 +247,13 @@ const SingIn = () => {
           <View className="flex-1 h-px bg-gray-300" />
         </View>
 
-        <Pressable style={[styles.Pressable]} className="w-full">
+        <Pressable
+          style={[styles.Pressable]}
+          className="w-full"
+          onPress={handleGoogleLogin}
+        >
           <Text style={{ fontSize: 16, textAlign: "center" }}>
-          Đăng nhập bằng Google
+            Đăng nhập bằng Google
           </Text>
           <Image
             source={require("../../assets/icons/logo-google-icon.png")}
@@ -214,7 +279,7 @@ const SingIn = () => {
 
         <Link
           href={"/(auth)/sign-up"}
-          style={[styles.text2, { textAlign: "center", marginTop: 100 }]}
+          style={[styles.text2, { textAlign: "center", marginTop: 60 }]}
         >
           Bạn chưa có tài khoản?{" "}
           <Text
@@ -228,6 +293,14 @@ const SingIn = () => {
           </Text>
         </Link>
       </ScrollView>
+      <NotiModal
+        visible={showNotiModal}
+        onClose={() => setShowNotiModal(false)}
+        title={title}
+        forUse={forUsr}
+        message={message}
+        button={button}
+      />
     </SafeAreaView>
   );
 };
@@ -245,9 +318,8 @@ const styles = StyleSheet.create({
   },
   text1: {
     fontSize: 16,
-    fontFamily: "GeneralRegular",
     color: "#808080",
-    fontWeight: "200",
+    fontWeight: "regular",
   },
   TextInputName: {
     borderWidth: 1,
@@ -258,8 +330,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   text2: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: "200",
+    fontWeight: "regular",
     marginTop: 5,
   },
   Pressable: {

@@ -8,14 +8,14 @@ const OnboardingScreen = () => {
       {/* Image Section */}
       <View className='flex-1'>
         <Image
-          source={require('../../assets/images/onboarding-image.png')}  // Add your image path here
+          source={require('../../assets/images/onboarding-image.png')}  
           className='w-full h-full object-cover'
         />
       </View>
 
       {/* Text Section */}
       <View className='absolute top-20 left-5 right-5'>
-        <Text className='text-5xl font-bold text-black'>
+        <Text className='text-6xl font-bold text-black'>
         Hãy định nghĩa bản thân bạn{'\n'}theo cách độc đáo của bạn.
         </Text>
       </View>
@@ -26,7 +26,7 @@ const OnboardingScreen = () => {
           className='bg-black p-4 rounded-lg flex-row items-center justify-center'
           onPress={()=> router.push('/sign-in')}
         >
-          <Text className='text-white text-lg font-bold mr-2'>Bắt đầu</Text>
+          <Text className='text-white text-base font-medium mr-2'>Bắt đầu</Text>
           <Text className='text-white text-lg'>→</Text>
         </TouchableOpacity>
       </View>

@@ -13,10 +13,14 @@ const CartItem = ({ item, onIncrease, onDecrease, onRemove }) => {
       {/* Product Details */}
       <View style={styles.detailsContainer}>
         <View style={styles.textContainer}>
-          <Text style={styles.itemName}>{item.name}</Text>
-          <Text style={styles.itemSize}>Size: {item.size}</Text>
+          <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+            {item.name}
+          </Text>
+          <Text style={styles.itemSize}>Kích thước: {item.size}</Text>
         </View>
-        <Text style={styles.itemPrice}>{Number(item.price).toLocaleString()} VNĐ</Text>
+        <Text style={styles.itemPrice}>
+          {Number(item.price).toLocaleString()} VNĐ
+        </Text>
       </View>
 
       {/* Actions (Quantity and Delete) */}
@@ -109,8 +113,8 @@ const styles = StyleSheet.create({
     color: "#1A1A1A",
     fontSize: 12,
     marginHorizontal: 8,
-    marginBottom: 5, 
-  }
+    marginBottom: 5,
+  },
 });
 
 export default CartItem;
